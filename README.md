@@ -26,7 +26,19 @@ npm run dev        # http://localhost:5173
 
 Deployment runs automatically from GitHub Actions on every push to `main`.
 
-**One-time repo setup**
+### 1. Set the Pages source (required)
+
+Go to **Settings → Pages → Build and deployment → Source** and choose
+**GitHub Actions**.
+
+> **Why this step matters.** If the source is left on *"Deploy from a branch"*
+> (pointing at `main` / root), GitHub publishes the repository **as-is** with no
+> build. The raw `index.html` ships with its unrecompiled
+> `<script src="/src/main.tsx">` reference, the browser 404s on that path, and
+> you get a **blank page**. A green tick next to the deploy workflow does *not*
+> mean the site is live — check the Source setting, not just the Actions tab.
+
+### 2. One-time repo setup
 
 1. Create an empty GitHub repository (no README, no `.gitignore`).
 2. Point this folder at it and push:
@@ -36,10 +48,16 @@ Deployment runs automatically from GitHub Actions on every push to `main`.
    git push -u origin main
    ```
 
-3. In the repo go to **Settings → Pages → Build and deployment** and set
-   **Source** to **GitHub Actions**.
-
 The live site will be at `https://<user>.github.io/<repo>/`.
+
+### 3. Verify
+
+```bash
+node scripts/check-live.mjs
+```
+
+Prints the script and stylesheet URLs that are actually being served. If the
+script path ends in `/src/main.tsx`, the build step is not being used.
 
 **Optional — absolute canonical/social URLs**
 
