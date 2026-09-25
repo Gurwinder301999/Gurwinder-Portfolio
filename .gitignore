@@ -1,0 +1,51 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Local helpers, test tools, & temporary captures
+_tmp*
+_shots*
+_tools/
+preview_pid.txt
+dom_dump.html
+resume_*.txt
+raw_streams.txt
+shot_*.png
+extract*.js
+
+# Local environment overrides (may hold secrets)
+.env
+.env.*
+!.env.example
+
+# OS cruft
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Loose working copies that duplicate the canonical files in public/.
+# The site only ever loads the public/ versions, so these stay local.
+/GURWINDER SINGH Resume.pdf
+/profile pic.jpeg
+/refrende img.jpg
+

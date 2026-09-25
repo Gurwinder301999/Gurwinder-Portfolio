@@ -1,0 +1,277 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------ */
+/*  GLOBAL RESET + THEME                                              */
+/* ------------------------------------------------------------------ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root,
+#app-shell {
+  background: #0c0c0c;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: 'Kanit', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: #d7e2ea;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Long strings (emails, LinkedIn slugs, file names) must never force a
+   horizontal scrollbar on a phone. */
+p,
+li,
+h1,
+h2,
+h3,
+h4,
+a,
+span,
+button {
+  overflow-wrap: break-word;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Respect notches and rounded displays on mobile browsers. */
+#app-shell {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+section[id] {
+  scroll-margin-top: 96px;
+}
+
+::selection {
+  background: #b600a8;
+  color: #ffffff;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0c0c0c;
+}
+::-webkit-scrollbar-thumb {
+  background: #2b2b32;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3d3d46;
+}
+
+/* ------------------------------------------------------------------ */
+/*  HERO GRADIENT TEXT (from the 3D landing-page spec)                */
+/* ------------------------------------------------------------------ */
+/* The ramp starts at #8A9099 rather than near-black so the top of each
+   letterform still clears 6:1 against #0C0C0C instead of sinking to 3.5:1. */
+.hero-heading {
+  background: linear-gradient(180deg, #8a9099 0%, #c6d3dd 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.accent-gradient {
+  background: linear-gradient(123deg, #18011f 7%, #b600a8 37%, #7621b0 72%, #be4c00 100%);
+}
+
+.text-glow {
+  filter: drop-shadow(0 18px 40px rgba(118, 33, 176, 0.35));
+}
+
+/* ------------------------------------------------------------------ */
+/*  3D HELPERS                                                        */
+/* ------------------------------------------------------------------ */
+.perspective-1000 {
+  perspective: 1000px;
+}
+.perspective-1200 {
+  perspective: 1200px;
+}
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.grid-floor {
+  background-image: linear-gradient(rgba(215, 226, 234, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(215, 226, 234, 0.14) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: floor-scroll 2.8s linear infinite;
+}
+
+.dot-matrix {
+  background-image: radial-gradient(rgba(215, 226, 234, 0.35) 1px, transparent 1px);
+  background-size: 14px 14px;
+}
+
+/* ------------------------------------------------------------------ */
+/*  3D KEYFRAMES                                                      */
+/* ------------------------------------------------------------------ */
+@keyframes floor-scroll {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0 60px;
+  }
+}
+
+@keyframes ring-spin-a {
+  from {
+    transform: rotateX(74deg) rotateZ(0deg);
+  }
+  to {
+    transform: rotateX(74deg) rotateZ(360deg);
+  }
+}
+
+@keyframes ring-spin-b {
+  from {
+    transform: rotateY(66deg) rotateZ(360deg);
+  }
+  to {
+    transform: rotateY(66deg) rotateZ(0deg);
+  }
+}
+
+@keyframes ring-spin-c {
+  from {
+    transform: rotateX(32deg) rotateY(42deg) rotateZ(0deg);
+  }
+  to {
+    transform: rotateX(32deg) rotateY(42deg) rotateZ(360deg);
+  }
+}
+
+@keyframes cube-spin {
+  from {
+    transform: rotateX(-22deg) rotateY(0deg);
+  }
+  to {
+    transform: rotateX(-22deg) rotateY(360deg);
+  }
+}
+
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(0, -18px, 0) rotate(6deg);
+  }
+}
+
+@keyframes drift {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.15;
+  }
+  50% {
+    transform: translate3d(10px, -26px, 60px);
+    opacity: 0.75;
+  }
+  100% {
+    transform: translate3d(-6px, -52px, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-120%);
+  }
+  100% {
+    transform: translateY(420%);
+  }
+}
+
+.ring-a {
+  animation: ring-spin-a 20s linear infinite;
+}
+.ring-b {
+  animation: ring-spin-b 26s linear infinite;
+}
+.ring-c {
+  animation: ring-spin-c 32s linear infinite;
+}
+.cube-spin {
+  animation: cube-spin 18s linear infinite;
+}
+.float-soft {
+  animation: float-soft 7s ease-in-out infinite;
+}
+.glow-pulse {
+  animation: glow-pulse 7s ease-in-out infinite;
+}
+.scanline {
+  animation: scanline 3.6s linear infinite;
+}
+
+/* ------------------------------------------------------------------ */
+/*  FOCUS STATES                                                      */
+/* ------------------------------------------------------------------ */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #b600a8;
+  outline-offset: 3px;
+}
+
+/* ------------------------------------------------------------------ */
+/*  REDUCED MOTION                                                    */
+/* ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
