@@ -11,7 +11,9 @@
     "spellcheck": "node scripts/spellcheck.mjs",
     "prose": "node scripts/prose-check.mjs",
     "resume": "node scripts/build_resume.mjs",
-    "resume:pdf": "node scripts/build_resume.mjs --pdf"
+    "resume:pdf": "node scripts/build_resume.mjs --pdf",
+    "favicon": "node scripts/build_favicon.mjs",
+    "favicon:check": "python scripts/verify_favicon.py"
   },
   "dependencies": {
     "framer-motion": "^12.23.12",

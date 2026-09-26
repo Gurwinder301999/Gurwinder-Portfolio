@@ -23,6 +23,8 @@ npm run dev        # http://localhost:5173
 | `npm run prose` | Readability and passive-voice pass over the copy |
 | `npm run resume` | Rebuild `_resume/resume.html` from the data file |
 | `npm run resume:pdf` | Also print `public/Gurwinder-Singh-Resume.pdf` |
+| `npm run favicon` | Re-render the favicon rasters from `public/favicon.svg` |
+| `npm run favicon:check` | Assert the generated icons are well-formed |
 
 ### Prose checking
 
@@ -150,6 +152,36 @@ python scripts/make_profile_photo.py <source-image> public/profile-pic.jpeg
 It centre-crops to the `4:5` frame the portrait card uses, resizes to 800px
 wide, and writes an optimised progressive JPEG. Raw photo sources are
 gitignored — only the optimised version is committed.
+
+---
+
+## Favicon
+
+`public/favicon.svg` is the canonical mark: a **G** monogram in the site's
+accent gradient with a satellite orbiting it on a 3.6s SMIL loop, which
+Chrome, Edge, and Firefox animate directly in the tab. The rounded dark plate
+is baked in so the mark stays legible on light and dark tab strips.
+
+Because Safari and most bookmark bars will not animate an SVG, the stills are
+generated from the same file rather than redrawn:
+
+```bash
+npm run favicon        # favicon.ico, apple-touch-icon.png, icon-192/512.png
+npm run favicon:check  # asserts alpha handling and .ico structure
+```
+
+`build_favicon.mjs` drives headless Chrome, seeks the SMIL clock to freeze the
+satellite mid-orbit, and packs the rasters into a multi-size `.ico`. Two
+details it handles that are easy to get wrong:
+
+- Chrome paints an opaque white backdrop unless the default background is
+  explicitly overridden, so the rounded corners would come out white. The
+  script sets `Emulation.setDefaultBackgroundColorOverride` to keep them
+  transparent.
+- iOS ignores an alpha channel and renders transparency as black, so
+  `apple-touch-icon.png` is drawn full-bleed on the plate colour instead.
+
+Edit `public/favicon.svg` and re-run the command; never hand-edit the PNGs.
 
 ---
 

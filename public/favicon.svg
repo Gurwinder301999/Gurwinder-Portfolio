@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Gurwinder Singh">
+  <title>Gurwinder Singh</title>
+  <desc>Monogram G ringed by an orbiting satellite, echoing the portfolio's orbital hero.</desc>
+
+  <defs>
+    <!-- Same accent ramp as .accent-gradient in index.css: 123deg magenta -> violet -> ember. -->
+    <linearGradient id="g-mark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#B600A8" />
+      <stop offset="0.55" stop-color="#7621B0" />
+      <stop offset="1" stop-color="#BE4C00" />
+    </linearGradient>
+    <linearGradient id="g-track" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#D14AC0" stop-opacity="0.55" />
+      <stop offset="1" stop-color="#7621B0" stop-opacity="0.18" />
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded dark plate so the mark reads on both light and dark tab strips. -->
+  <rect x="0" y="0" width="64" height="64" rx="14" fill="#0C0C0C" />
+  <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="13.25" fill="none"
+        stroke="#D7E2EA" stroke-opacity="0.16" stroke-width="1.5" />
+
+  <!-- Orbit track -->
+  <circle cx="32" cy="32" r="25" fill="none" stroke="url(#g-track)" stroke-width="2" />
+
+  <!-- Monogram: a squared-off G drawn as a single open ring with a crossbar. -->
+  <path d="M42 21.5 A13 13 0 1 0 45 32 L34 32"
+        fill="none" stroke="url(#g-mark)" stroke-width="7.5"
+        stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- Satellite: the piece that makes the mark move. -->
+  <g>
+    <animateMotion dur="3.6s" repeatCount="indefinite" rotate="auto"
+                   path="M 32 7 A 25 25 0 1 1 31.99 7" keyPoints="0;1" keyTimes="0;1" calcMode="linear" />
+    <circle cx="32" cy="7" r="4.5" fill="#D14AC0" />
+    <circle cx="32" cy="7" r="2" fill="#0C0C0C" />
+  </g>
+</svg>
