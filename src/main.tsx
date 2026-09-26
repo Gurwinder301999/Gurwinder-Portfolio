@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+// Self-hosted Kanit, imported before index.css so the @font-face rules are
+// emitted ahead of the utilities that reference them.
+import './assets/fonts.css';
 import './index.css';
 
 const container = document.getElementById('root');
