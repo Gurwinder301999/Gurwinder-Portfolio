@@ -6,7 +6,6 @@ import SectionBadge from '../components/SectionBadge';
 import ContactButton from '../components/ContactButton';
 import LiveProjectButton from '../components/LiveProjectButton';
 import Cube3D from '../components/three-d/Cube3D';
-import ProfileCutout from '../components/ProfileCutout';
 
 type OrnamentProps = {
   x?: number;
@@ -132,15 +131,6 @@ export default function AboutSection() {
           </div>
 
           <div className="flex flex-col gap-6">
-            <FadeIn delay={0.05} y={26}>
-              <div className="flex items-end justify-center overflow-hidden rounded-[32px] border border-[#D7E2EA]/[0.12] bg-[linear-gradient(180deg,rgba(255,255,255,0.04),transparent_70%)] px-4 pt-6">
-                <ProfileCutout
-                  src={profile.fullBodyPhoto}
-                  alt={`Full-length photograph of ${profile.name}, ${profile.role}`}
-                />
-              </div>
-            </FadeIn>
-
             <div className="grid grid-cols-2 gap-4">
               {stats.map(({ value, label, icon: Icon }, index) => (
                 <FadeIn key={label} delay={index * 0.1} y={24}>
