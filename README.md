@@ -77,13 +77,58 @@ node scripts/check-live.mjs
 Prints the script and stylesheet URLs that are actually being served. If the
 script path ends in `/src/main.tsx`, the build step is not being used.
 
-**Optional — absolute canonical/social URLs**
+**Optional — override the canonical/social URL**
+
+Canonical and `og:image` tags are built as absolute URLs, defaulting to
+`https://gurwinder301999.github.io/Gurwinder-Portfolio`. This matters: search
+engines ignore a relative canonical and most social scrapers drop a relative
+`og:image` outright, so a relative fallback would emit markup that does
+nothing.
 
 Create a repository variable named `VITE_SITE_URL` under
-**Settings → Secrets and variables → Actions → Variables**, e.g.
-`https://user.github.io/repo`. The build substitutes it into the
-`canonical` and `og:image` tags. Without it the build stays fully relative,
-which still works — it just gives social platforms a relative image URL.
+**Settings → Secrets and variables → Actions → Variables** to override the
+default — required if you move to a custom domain.
+
+---
+
+## Security headers
+
+The page ships a Content-Security-Policy as a `<meta>` tag in `index.html`.
+
+**A meta tag is a compromise forced by the host.** GitHub Pages cannot send
+arbitrary response headers, and `<meta http-equiv>` is the only way to attach a
+policy from a static build. It is weaker than a real header in two ways worth
+knowing before you rely on it:
+
+- It applies only after the `<meta>` is parsed, so anything requested before
+  that point is not covered.
+- `frame-ancestors`, `report-uri`, and `sandbox` are **ignored** in meta form.
+  `frame-ancestors` in particular is the directive that stops clickjacking, and
+  it silently does nothing here.
+
+If you move to a host that can set headers — Cloudflare Pages, Netlify, Vercel,
+or CloudFront in front of the bucket — send the policy as a real header instead
+and delete the meta tag. The equivalent, tightened:
+
+```
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+Referrer-Policy: strict-origin-when-cross-origin
+```
+
+`style-src` needs `'unsafe-inline'` because the app sets element styles inline
+throughout; it is a real weakening and the next thing to remove if the styling
+ever moves to a static stylesheet. `script-src` stays strict — the build's
+safety-net script was moved out of an inline `<script>` block specifically so
+this could remain `'self'`.
+
+To confirm the policy is live and not just present in the source:
+
+```bash
+node scripts/perf-check.mjs https://gurwinder301999.github.io/Gurwinder-Portfolio/
+```
+
+The CONSOLE section reports any violation, and the request count shows the
+third-party origins still being contacted.
 
 ---
 
@@ -203,6 +248,26 @@ weight rather than from fading text out.
 
 ---
 
+## Fonts
+
+Kanit is self-hosted in `src/assets/fonts/` — six latin weights, ~19 KB each.
+The site's only typeface is the one thing a visitor sees on every pixel, so it
+is served from the same origin rather than trusting a third party's stylesheet.
+
+Regenerate with:
+
+```bash
+node scripts/fetch_fonts.mjs
+```
+
+It pins a version and writes only the latin subset. Do not add a weight to
+`src/assets/fonts.css` without adding the file too — a `@font-face` pointing at
+a missing file is a silent failure that only shows up as a flash of fallback
+type. Only the weights the page actually renders get fetched, so unused faces
+cost nothing at load time.
+
+---
+
 ## Project structure
 
 ```
@@ -213,5 +278,15 @@ src/
 ├─ pages/ProjectLandingPage.tsx
 ├─ components/             buttons, badges, 3D helpers
 ├─ hooks/useMediaQuery.ts  responsive breakpoint hook
+├─ assets/                 self-hosted fonts + @font-face rules
 └─ utils/navigation.ts     section ids + smooth scrolling
+
+scripts/
+├─ check-live.mjs          verify the deployed bundle is real
+├─ check-favicon-live.mjs  verify the icons are served
+├─ perf-check.mjs          FCP/LCP/CLS, third-party requests, CSP console
+├─ shot-navbar.mjs         wordmark + overflow at four widths
+├─ fetch_fonts.mjs         regenerate the self-hosted subset
+├─ spellcheck.mjs          project vocabulary
+└─ prose-check.mjs         wordy phrasing
 ```
