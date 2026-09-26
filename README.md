@@ -19,6 +19,22 @@ npm run dev        # http://localhost:5173
 | `npm run build` | Type-check, then build to `dist/` |
 | `npm run preview` | Serve the production build locally |
 | `npm run typecheck` | `tsc --noEmit` only |
+| `npm run spellcheck` | Misspellings, brand casing, US/UK consistency |
+| `npm run prose` | Readability and passive-voice pass over the copy |
+| `npm run resume` | Rebuild `_resume/resume.html` from the data file |
+| `npm run resume:pdf` | Also print `public/Gurwinder-Singh-Resume.pdf` |
+
+### Prose checking
+
+`spellcheck` catches typos. `prose` runs [write-good](https://github.com/write-good/write-good)
+and [alex](https://github.com/Krukow/alex) over the strings in
+`src/data/portfolio.ts` and reports weakeners, passive voice, and wordiness.
+
+Expect a fair number of hits and judge them rather than chasing them to zero.
+Both tools are tuned for consumer prose, so in *explanatory* technical writing a
+passive construction is often the accurate one — "voice traffic is separated onto
+its own VLAN" describes a system behaviour, not a weak sentence. Read each
+finding against the intent before changing the copy.
 
 ---
 
@@ -94,7 +110,7 @@ Almost everything lives in **`src/data/portfolio.ts`**:
 | --- | --- |
 | `profile` | Name, role, contact details, résumé link, hero copy |
 | `navLinks` | Navbar and footer links |
-| `projects` | The three case studies and their landing-page content |
+| `projects` | The case studies and their landing-page content |
 | `services` | The five service rows |
 | `skills` | Skill bars and proficiency levels |
 | `timeline` | Career and education entries |
@@ -106,7 +122,25 @@ Almost everything lives in **`src/data/portfolio.ts`**:
 `chart`, `topology`, `devices`, or `console`. The card, the landing page, and
 the prev/next navigator all pick it up automatically.
 
-**Swapping the résumé or photo:** replace `public/Gurwinder-Singh-Resume.pdf`.
+Each project also carries a `howItWorks` array: a numbered, plain-language
+walkthrough of the mechanics, shown on the landing page and summarised on the
+résumé. Write it for a technical reader who does not know this particular
+stack — explain *why* the mechanism exists and what breaks without it, rather
+than restating the tech list.
+
+**Regenerating the résumé:** the PDF is generated from `src/data/portfolio.ts`
+rather than edited by hand, so it can never drift from the website.
+
+```bash
+npm run resume        # writes _resume/resume.html for review
+npm run resume:pdf    # prints public/Gurwinder-Singh-Resume.pdf
+```
+
+It loads the data module through esbuild and stubs `lucide-react`, so the
+icons cost nothing in a printed document, then prints through headless Chrome
+or Edge. Edit the content in `portfolio.ts`, never in the HTML.
+
+**Swapping the résumé or photo by hand:** replace `public/Gurwinder-Singh-Resume.pdf`.
 For the photo, drop the new image in the project root and run:
 
 ```bash

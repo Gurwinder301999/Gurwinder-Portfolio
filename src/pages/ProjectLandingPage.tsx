@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
+  BookOpen,
   Calendar,
   CheckCircle2,
   ChevronRight,
@@ -250,6 +251,30 @@ export default function ProjectLandingPage({
                     {project.solution}
                   </p>
                 </div>
+              </div>
+
+              {/* How It Works — plain-language walkthrough of the mechanics */}
+              <div className="rounded-3xl border border-white/[0.08] bg-[#101013] p-6 sm:p-8">
+                <h4 className="flex items-center gap-2.5 text-base font-semibold uppercase tracking-wide text-white sm:text-lg">
+                  <BookOpen className="h-5 w-5 text-[#8BE9A7]" />
+                  How It Actually Works
+                </h4>
+                <p className="mt-2 text-xs font-light leading-relaxed text-[#D7E2EA]/60 sm:text-sm">
+                  The mechanics behind the build, explained for a technical reader
+                  who does not specialise in this stack.
+                </p>
+                <ol className="mt-6 space-y-4">
+                  {project.howItWorks.map((step, idx) => (
+                    <li key={idx} className="flex gap-4">
+                      <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-[#D14AC0]/30 bg-[#B600A8]/10 text-xs font-bold text-[#D14AC0]">
+                        {idx + 1}
+                      </span>
+                      <p className="text-xs leading-relaxed text-[#D7E2EA]/80 sm:text-sm">
+                        {step}
+                      </p>
+                    </li>
+                  ))}
+                </ol>
               </div>
 
               {/* Technical Highlights */}

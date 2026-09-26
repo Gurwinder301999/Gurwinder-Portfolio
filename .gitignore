@@ -26,6 +26,8 @@ dist-ssr
 _tmp*
 _shots*
 _tools/
+_frames/
+/_resume/
 preview_pid.txt
 dom_dump.html
 resume_*.txt

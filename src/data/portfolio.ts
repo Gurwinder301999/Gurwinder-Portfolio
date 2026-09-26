@@ -146,6 +146,12 @@ export type TimelineEntry = {
   place: string;
   detail: string;
   icon: LucideIcon;
+  /**
+   * Distinguishes the employment record from education. The site renders every
+   * entry in one list, but the resume needs them in separate sections, so this
+   * is the single source of truth for that split.
+   */
+  kind: 'work' | 'education';
 };
 
 export const timeline: TimelineEntry[] = [
@@ -156,6 +162,7 @@ export const timeline: TimelineEntry[] = [
     detail:
       'Support end users with desktops, laptops, printers, and network devices, plus VoIP server operations, user provisioning, preventive maintenance, and LAN/WAN troubleshooting.',
     icon: Building2,
+    kind: 'work',
   },
   {
     period: '2020 — 2024',
@@ -164,6 +171,7 @@ export const timeline: TimelineEntry[] = [
     detail:
       'Bachelor of Computer Applications with a specialization in AI Engineering, supported by a self-built home lab for LAN/WAN, firewall, and self-hosted VoIP experiments.',
     icon: GraduationCap,
+    kind: 'education',
   },
 ];
 
@@ -200,7 +208,7 @@ export const services: Service[] = [
     number: '02',
     name: 'Network Administration',
     description:
-      'LAN/WAN setup and monitoring, DHCP and DNS configuration, subnetting, switch and router fundamentals, and firewall basics — using Ping, Traceroute, and NSLookup to isolate faults quickly.',
+      'LAN/WAN setup and monitoring, DHCP and DNS configuration, subnetting, switch and router fundamentals, and firewall basics — using Ping, Traceroute, and NSLookup to narrow a fault down to its actual cause.',
   },
   {
     number: '03',
@@ -244,6 +252,13 @@ export type Project = {
   overview: string;
   challenge: string;
   solution: string;
+  /**
+   * Plain-language walkthrough of how the system actually works, written for a
+   * reader who is technical but not a specialist in this stack. Each entry
+   * explains one mechanism end to end, so the case study teaches rather than
+   * just asserts.
+   */
+  howItWorks: string[];
   architecture: string[];
   keyDeliverables: string[];
   highlights: string[];
@@ -265,13 +280,22 @@ export const projects: Project[] = [
     period: 'July 2026 — Present',
     location: 'Delhi, India',
     tagline: '30+ Endpoint VoIP Rollout, End to End',
-    summary: 'VoIP infrastructure deployment — 30+ IP phones connected to a configured call server.',
+    summary:
+      'VoIP infrastructure deployment — 30+ IP phones connected to a call server I configured, cabled, and commissioned.',
     overview:
       'I led the end-to-end VoIP deployment for Dalmia Bros., taking the project from structured cabling and hardware installation through server configuration to a live network of more than 30 IP phones. Every extension was provisioned, tested, and handed over with working call routing.',
     challenge:
       'The client needed to move off a limited legacy phone system onto a scalable internal telephony network without disrupting daily office communication, while keeping the existing desk layout and dial plan intact for staff.',
     solution:
       'I installed and cabled each desk endpoint, configured the call server and its provisioning settings, mapped extensions to users, and ran end-to-end call tests across every handset before sign-off.',
+    howItWorks: [
+      'An IP desk phone is not a traditional handset. It is a small computer with a network port, a speaker, and a numeric keypad, so it needs power and a data outlet rather than a dedicated copper pair back to a phone exchange.',
+      'When a call starts, the phone sends a SIP message to the call server asking to be connected. The server checks whether the number is an internal extension, a department ring group, or an outside line, then routes the call and tells both phones where to send their audio.',
+      'The audio itself never travels to the server as sound. It is converted into small packets and streamed directly between the two phones in real time, which is why latency, packet loss, and jitter matter more than raw bandwidth on a voice network.',
+      'Voice traffic is separated from office data onto its own VLAN. If someone starts a large download on the same wire, the phone traffic is prioritised so the call stays clear instead of breaking up.',
+      'Provisioning replaces manual configuration. Instead of setting up each phone by hand, the server delivers a configuration file to every handset automatically, so a change to the dial plan is pushed to the whole office in one step.',
+      'Because a phone that registers successfully may still route calls incorrectly, I tested every endpoint for outbound, inbound, internal, and transfer calls before marking it as handed over.',
+    ],
     architecture: [
       'An on-premises VoIP server handling call routing, extension registration, and dial plans',
       'Structured Cat6 cabling from the server room to each desk outlet, terminated and tested',
@@ -287,7 +311,7 @@ export const projects: Project[] = [
     ],
     highlights: [
       'Led the end-to-end installation and server configuration for the deployment.',
-      'Successfully connected a network of 30+ VoIP phones.',
+      'Connected a network of 30+ VoIP phones, with every extension tested and handed over.',
       'Delivered user training and post-deployment support.',
     ],
     stats: [
@@ -312,9 +336,17 @@ export const projects: Project[] = [
     overview:
       'At TDI Bhikaji Cama Place, I delivered an end-to-end IP telephony rollout that replaced legacy lines with a scalable, modern VoIP platform. I handled physical endpoint installation, VLAN segregation for voice traffic, automated extension provisioning, and a zero-downtime dial plan cutover.',
     challenge:
-      'The client needed a voice network that delivered jitter-free call quality, clear audio across multiple departments, and secure access for remote staff, all while keeping day-to-day business calls running without interruption.',
+      'The client needed a voice network that delivered consistent call quality, clear audio across departments, and secure access for remote staff, all while keeping day-to-day business calls running without interruption.',
     solution:
       'I configured dedicated voice VLANs with DHCP options 66 and 150 for automatic phone configuration, provisioned SIP endpoints, set up ring groups and IVR routing, and tested quality of service across every wired drop.',
+    howItWorks: [
+      'DHCP options 66 and 150 are the mechanism that makes a phone configure itself. When a handset plugs into a network outlet, it asks the DHCP server for an address, and those two options tell it where to fetch its configuration file from, so nobody has to touch the handset.',
+      'Quality of service works by giving voice traffic priority on the switch. Each packet carries a priority marker, and the switch forwards marked voice packets ahead of ordinary file and web traffic whenever the link gets busy.',
+      'A ring group is one number that several phones answer together, so a call to a department reaches whoever is available instead of one fixed desk. The interactive voice response menu sits in front of that group and collects the caller\'s choice before handing the call over.',
+      'A zero-downtime cutover means the new system runs in parallel with the old one, every extension is tested on the new platform, and only then is the legacy service withdrawn, so the office never loses the ability to make a call.',
+      'Call quality is measured rather than assumed. Latency is the delay, packet loss is audio dropping out, and the Mean Opinion Score combines them into a single 1 to 5 rating that reflects what a listener actually perceives.',
+      'SRTP encrypts the media stream in transit, so a call cannot be intercepted on the internal network the way an analogue conversation on a copper pair could be.',
+    ],
     architecture: [
       'A dedicated voice VLAN with DSCP and QoS prioritization (CoS 5 / EF) on managed gigabit switches',
       'A centralized IP-PBX controller handling call routing, extension mapping, and failover trunks',
@@ -357,6 +389,14 @@ export const projects: Project[] = [
       'The building required surveillance coverage, controlled entry, and reliable connectivity to run as one secure environment, with cameras, access readers, and network equipment unable to interfere with each other over shared cabling and power.',
     solution:
       'I ran a dedicated PoE backbone for the cameras, segmented the data network into isolated VLANs, deployed managed access points for full-building Wi-Fi coverage, and integrated the biometric readers onto the same controlled access domain.',
+    howItWorks: [
+      'Power over Ethernet removes the biggest cost in camera installations. A PoE switch sends electrical power and data down the same cable, so each camera needs one outlet instead of a data point and a separate power socket, which is what makes a whole-floor camera run practical to cable.',
+      'An IP camera is a small computer with a lens, so it records in digital form and sends video across the network rather than sending a signal to a tape machine. That is what makes live viewing, motion search, and remote playback possible from a phone or a browser.',
+      'Segmentation is what stops the systems interfering. Each camera, each office, and each access reader sits on its own VLAN, and traffic is only permitted between the segments that genuinely need to talk, so a fault or a flood of video traffic cannot take the access control offline.',
+      'Enterprise Wi-Fi differs from a home router because a single access point cannot cover a whole building. Overlapping managed access points are tuned by hand so a user walking between floors hands over from one to the next without dropping the connection.',
+      'A biometric reader does not open a door by itself. It captures the fingerprint or face, converts it into a mathematical template, and sends that template to a central controller, which alone decides whether to release the lock and records the entry for audit.',
+      'Running these as one build meant a single cable plan, a single addressing scheme, and one commissioning pass, rather than four vendors each adding their own infrastructure and leaving gaps between them.',
+    ],
     architecture: [
       'A PoE switch backbone supplying data and power to every IP camera on a single cable run',
       'VLAN-segmented data network isolating CCTV, office data, and access control from one another',
@@ -400,6 +440,14 @@ export const projects: Project[] = [
       'The client, a high-profile executive office, needed robust, fault-tolerant internal and external calling with strict Linux security auditing, no system freezes, and sustained 99.9% uptime under heavy concurrent use.',
     solution:
       'I built a hardened Rocky Linux environment running Asterisk with Fail2ban protection against SIP brute-force attempts, iptables firewall filtering, rotated journal logs, and real-time trunk monitoring.',
+    howItWorks: [
+      'Asterisk is software that replaces the hardware phone exchange. A PJSIP channel manages each registered handset, RTP carries the actual audio, and a dial plan is the set of rules that decides where any dialled number should go.',
+      'Because the server is a normal Linux machine, it is exposed to the same attack surface as any internet-facing host. Fail2ban watches the authentication log for repeated failed SIP logins and automatically adds the offending addresses to a block list.',
+      'The iptables ruleset decides what the server is allowed to accept. Locking it down to the specific ports telephony needs, and dropping everything else, means an exposed service is not reachable merely because it happened to be listening.',
+      'Kernel tuning matters because voice is timing-sensitive. Increasing the socket buffers and connection queue stops the server dropping packets under a burst of calls, which is what a human hears as a clipped or breaking call.',
+      'Systemd supervises the service rather than trusting it to stay up. If Asterisk stops unexpectedly, the watchdog restarts it automatically, and the daily log report surfaces disk pressure, failed registrations, and authentication attempts before they become an outage.',
+      'Failover trunks mean the office can still make and receive calls when the primary carrier path fails, because the server has a second route configured and moves to it automatically.',
+    ],
     architecture: [
       'An enterprise Rocky Linux host with tuned sysctl network buffers and persistent audit logs',
       'An Asterisk PBX engine handling PJSIP endpoints, RTP media streams, and custom dial plans',
@@ -443,6 +491,14 @@ export const projects: Project[] = [
       'Supporting more than 100 end users and network appliances demands fast diagnostic skills and a safe test bed where I can reproduce intermittent software failures, DNS conflicts, and voice packet latency without touching a client production network.',
     solution:
       'I built a hybrid physical and virtual lab that mirrors an enterprise topology: a pfSense firewall gateway, a Windows Server 2022 domain controller, Linux utility hosts, managed switch trunking, and remote administration benches.',
+    howItWorks: [
+      'A lab earns its value by letting a change be tested before it reaches a client. Anything I plan to deploy, whether a firewall rule, a subnet, or a dial plan, is built and broken on purpose here first, so the failure costs me a Saturday instead of a production incident.',
+      'Two network cards on the firewall are what make the lab behave like a real site. One faces an isolated subnet standing in for the internet, the other faces the internal network, and the rules between them are the same border controls a business would deploy.',
+      'Variable length subnetting is the discipline that keeps those networks from colliding. Each subnet is allocated to the size it genuinely needs, which is why a lab with a handful of hosts reserves a small management range and a larger one for servers and workstations.',
+      'Active Directory gives a group of Windows machines a shared identity. Users and computers join the domain once, and Group Policy then applies password rules, screen lock settings, and software restrictions to every machine without visiting each desk.',
+      'Network level authentication makes remote access safe to expose. Instead of trusting the network the machine happens to be on, it verifies the user\'s credentials directly against the domain controller before granting a session.',
+      'Wireshark is where the lab turns from a box of devices into a teaching tool. Capturing a real handshake and SIP registration makes visible what the documentation describes, and it is how the intermittent problems from the service desk become reproducible faults I can actually fix.',
+    ],
     architecture: [
       'A dual-NIC firewall router simulating WAN and LAN border security, NAT, and stateful packet inspection',
       'Windows Server Active Directory Domain Services (AD DS) managing Group Policy Objects',

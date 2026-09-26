@@ -7,7 +7,11 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit --project tsconfig.json"
+    "typecheck": "tsc --noEmit --project tsconfig.json",
+    "spellcheck": "node scripts/spellcheck.mjs",
+    "prose": "node scripts/prose-check.mjs",
+    "resume": "node scripts/build_resume.mjs",
+    "resume:pdf": "node scripts/build_resume.mjs --pdf"
   },
   "dependencies": {
     "framer-motion": "^12.23.12",
@@ -19,10 +23,12 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
+    "alex": "^11.0.1",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.6.3",
-    "vite": "^5.4.11"
+    "vite": "^5.4.11",
+    "write-good": "^1.0.8"
   }
 }
