@@ -49,3 +49,8 @@ desktop.ini
 /profile pic.jpeg
 /refrende img.jpg
 
+# Raw photo sources. The site serves the optimised 4:5 JPEG in public/, so the
+# full-size PNG originals are not worth storing in the repo.
+/Image1.png
+/image2.png
+

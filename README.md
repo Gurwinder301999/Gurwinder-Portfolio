@@ -106,9 +106,16 @@ Almost everything lives in **`src/data/portfolio.ts`**:
 `chart`, `topology`, `devices`, or `console`. The card, the landing page, and
 the prev/next navigator all pick it up automatically.
 
-**Swapping the résumé or photo:** replace `public/Gurwinder-Singh-Resume.pdf`
-and `public/profile-pic.jpeg`. The loose copies in the project root are
-gitignored working files.
+**Swapping the résumé or photo:** replace `public/Gurwinder-Singh-Resume.pdf`.
+For the photo, drop the new image in the project root and run:
+
+```bash
+python scripts/make_profile_photo.py <source-image> public/profile-pic.jpeg
+```
+
+It centre-crops to the `4:5` frame the portrait card uses, resizes to 800px
+wide, and writes an optimised progressive JPEG. Raw photo sources are
+gitignored — only the optimised version is committed.
 
 ---
 
