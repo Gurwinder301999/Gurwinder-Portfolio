@@ -26,6 +26,12 @@ body,
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  /* The navbar is `fixed`, so a bare fragment jump puts the target's first
+     line underneath it — measured at 88px on desktop and mobile alike. Without
+     this the hash changes and the page looks like it did nothing, which is why
+     the mobile menu links appeared to be dead. Applies to native anchor
+     navigation and to scrollIntoView() alike, so both paths stay in sync. */
+  scroll-padding-top: var(--nav-height, 88px);
 }
 
 body {

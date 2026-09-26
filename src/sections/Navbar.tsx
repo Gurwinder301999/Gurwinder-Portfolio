@@ -1,19 +1,81 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, Terminal, X } from 'lucide-react';
 import { navLinks, profile } from '../data/portfolio';
 import ContactButton from '../components/ContactButton';
+import { scrollToSection, type SectionId } from '../utils/navigation';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeHref, setActiveHref] = useState('#home');
+  const pendingScroll = useRef<SectionId | null>(null);
+
+  // Tapping a sheet link must not rely on the browser's fragment navigation.
+  //
+  // setMenuOpen(false) unmounts the sheet, and React flushes discrete events
+  // synchronously, so the anchor is detached from the DOM before the browser
+  // gets to follow its href. The navigation is silently cancelled: the URL
+  // never changes and the page never moves. The default is prevented and the
+  // scroll is deferred to the effect below, which runs after the sheet is gone
+  // and its body-scroll lock has been released.
+  const handleSheetClick = (event: ReactMouseEvent<HTMLElement>, href: string) => {
+    event.preventDefault();
+    pendingScroll.current = href.replace('#', '') as SectionId;
+    setMenuOpen(false);
+  };
+
+  // Runs after the close commit, on the next frame.
+  //
+  // The frame matters: the scroll lock's cleanup flips body.overflow back in
+  // the same commit, and doing that while a smooth scroll is still in flight
+  // resets the position to 0. The hash is set and nothing moves, which is the
+  // exact symptom of a dead link. Waiting a frame lets the lock fully settle
+  // before anything is scrolled.
+  useEffect(() => {
+    if (menuOpen) return;
+
+    const id = pendingScroll.current;
+    if (!id) return;
+    pendingScroll.current = null;
+
+    const frame = requestAnimationFrame(() => {
+      if (!scrollToSection(id)) {
+        window.location.hash = `#${id}`;
+      }
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [menuOpen]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Publish the real navbar height so CSS can scroll-clear it.
+  //
+  // The header is `fixed`, so a bare fragment jump puts the target's first
+  // line underneath it. Without this the hash changes and the page looks like
+  // it did nothing, which is why the mobile menu links appeared to be dead.
+  //
+  // Measure the nav row, not the header: the header also wraps the mobile
+  // sheet, so its height jumps to several hundred pixels while the menu is
+  // open and every anchor would overshoot by that much.
+  useEffect(() => {
+    const nav = document.querySelector('header nav');
+    if (!nav || typeof ResizeObserver === 'undefined') return;
+
+    const publish = () => {
+      const h = Math.ceil(nav.getBoundingClientRect().height);
+      if (h > 0) document.documentElement.style.setProperty('--nav-height', `${h}px`);
+    };
+
+    publish();
+    const observer = new ResizeObserver(publish);
+    observer.observe(nav);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -146,7 +208,7 @@ export default function Navbar() {
                   >
                     <a
                       href={link.href}
-                      onClick={() => setMenuOpen(false)}
+                      onClick={(event) => handleSheetClick(event, link.href)}
                       className="flex items-center justify-between rounded-xl px-3 py-3 text-base font-medium uppercase tracking-wider text-[#D7E2EA] transition-colors duration-200 hover:bg-white/[0.06]"
                     >
                       {link.label}
@@ -159,7 +221,7 @@ export default function Navbar() {
                     label="Hire Me"
                     href="#contact"
                     size="sm"
-                    onClick={() => setMenuOpen(false)}
+                    onClick={(event) => handleSheetClick(event, '#contact')}
                   />
                 </li>
               </ul>
