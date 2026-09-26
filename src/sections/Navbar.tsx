@@ -78,8 +78,10 @@ export default function Navbar() {
               <Terminal className="h-5 w-5 text-white" strokeWidth={2.2} />
             </span>
             <span className="flex flex-col leading-none">
-              <span className="text-sm font-semibold uppercase tracking-[0.22em] text-[#D7E2EA] sm:text-base">
-                Gurwinder
+              {/* Full name, taken from the data source. This was a hardcoded
+                  "Gurwinder", which silently dropped the surname. */}
+              <span className="whitespace-nowrap text-[0.82rem] font-semibold uppercase tracking-[0.14em] text-[#D7E2EA] xs:text-[0.9rem] xs:tracking-[0.18em] sm:text-base sm:tracking-[0.22em]">
+                {profile.name}
               </span>
               <span className="mt-1 text-[0.6rem] font-light uppercase tracking-[0.3em] text-[#D7E2EA]/65">
                 IT Support · Delhi
