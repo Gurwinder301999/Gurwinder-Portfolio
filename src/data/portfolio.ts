@@ -40,6 +40,17 @@ import {
 /* ------------------------------------------------------------------ */
 /*  PROFILE                                                            */
 /* ------------------------------------------------------------------ */
+export type ProfileCutoutProps = {
+  /** Path to the transparent, tightly-cropped PNG. */
+  src: string;
+  /** Descriptive alt text. */
+  alt: string;
+  /** Extra classes on the outer wrapper. */
+  className?: string;
+  /** Show the animated radial glow behind the figure. */
+  glow?: boolean;
+};
+
 export const profile = {
   name: 'Gurwinder Singh',
   firstName: 'Gurwinder',
@@ -55,6 +66,7 @@ export const profile = {
   // the site is served from a sub-path such as /portfolio/ on GitHub Pages.
   resumeUrl: `${import.meta.env.BASE_URL}Gurwinder-Singh-Resume.pdf`,
   photo: `${import.meta.env.BASE_URL}profile-pic.jpeg`,
+  fullBodyPhoto: `${import.meta.env.BASE_URL}full-body-cutout.png`,
   summary:
     "I'm an IT Support Engineer with 2+ years of hands-on experience in desktop support, network administration, VoIP deployment, and Windows and Linux system administration. I keep infrastructure monitored, documented, and online.",
   codeCard: [
