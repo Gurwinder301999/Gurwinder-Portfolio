@@ -43,7 +43,7 @@ function ProjectCard({ project, index, total, progress, onSelectProject }: Proje
       className="flex items-center justify-center py-6 first:pt-0 md:sticky md:top-32 md:h-[85vh] md:py-0"
     >
       <motion.article
-        style={{ scale, top: isDesktop ? `${index * 28}px` : 0 }}
+        style={{ scale, top: isDesktop ? `${index * 1.6}vh` : 0 }}
         className="relative flex h-full w-full max-w-[1400px] flex-col gap-3 overflow-hidden rounded-[40px] border-2 border-[#D7E2EA] bg-[#0C0C0C] p-4 shadow-[0_60px_140px_-70px_rgba(0,0,0,1)] sm:gap-4 sm:rounded-[50px] sm:p-6 md:rounded-[60px] md:p-8"
       >
         <header className="flex flex-wrap items-start justify-between gap-4">

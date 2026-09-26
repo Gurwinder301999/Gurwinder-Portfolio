@@ -258,8 +258,50 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    id: 'tdi-ip-phone',
+    id: 'dalmia-bros-voip',
     number: '01',
+    category: 'Client Deployment',
+    name: 'Dalmia Bros.',
+    period: 'July 2026 — Present',
+    location: 'Delhi, India',
+    tagline: '30+ Endpoint VoIP Rollout, End to End',
+    summary: 'VoIP infrastructure deployment — 30+ IP phones connected to a configured call server.',
+    overview:
+      'I led the end-to-end VoIP deployment for Dalmia Bros., taking the project from structured cabling and hardware installation through server configuration to a live network of more than 30 IP phones. Every extension was provisioned, tested, and handed over with working call routing.',
+    challenge:
+      'The client needed to move off a limited legacy phone system onto a scalable internal telephony network without disrupting daily office communication, while keeping the existing desk layout and dial plan intact for staff.',
+    solution:
+      'I installed and cabled each desk endpoint, configured the call server and its provisioning settings, mapped extensions to users, and ran end-to-end call tests across every handset before sign-off.',
+    architecture: [
+      'An on-premises VoIP server handling call routing, extension registration, and dial plans',
+      'Structured Cat6 cabling from the server room to each desk outlet, terminated and tested',
+      'Dedicated IP desk phones configured with extensions, codec settings, and QoS tags',
+      'Separate voice VLAN segmentation so voice traffic stays isolated from office data',
+    ],
+    keyDeliverables: [
+      'Installation, cabling, and testing of more than 30 IP phone endpoints across the office',
+      'Configuration of the VoIP server, extensions, dial plans, and provisioning templates',
+      'User, department, and floor-plan mapping so every extension reached the right handset',
+      'Call quality and connectivity testing on every endpoint before handover',
+      'Staff training on call handling, forwarding, and voicemail, plus written user notes',
+    ],
+    highlights: [
+      'Led the end-to-end installation and server configuration for the deployment.',
+      'Successfully connected a network of 30+ VoIP phones.',
+      'Delivered user training and post-deployment support.',
+    ],
+    stats: [
+      { label: 'IP Phones Connected', value: '30+' },
+      { label: 'Scope', value: 'End to End' },
+      { label: 'Deployment', value: 'On Schedule' },
+      { label: 'Status', value: 'Live' },
+    ],
+    tech: ['VoIP', 'IP-PBX', 'SIP', 'Structured Cabling', 'VLAN QoS', 'User Training'],
+    visuals: { leftTop: 'devices', leftBottom: 'terminal', right: 'chart' },
+  },
+  {
+    id: 'tdi-ip-phone',
+    number: '02',
     category: 'Client Deployment',
     name: 'TDI Bhikaji Cama Place',
     period: 'June 2026 — Present',
@@ -301,8 +343,50 @@ export const projects: Project[] = [
     visuals: { leftTop: 'devices', leftBottom: 'topology', right: 'console' },
   },
   {
+    id: 'chhattisgarh-bhawan-security',
+    number: '03',
+    category: 'Client Deployment',
+    name: 'Chhattisgarh Bhawan',
+    period: 'January 2026 — June 2026',
+    location: 'Chhattisgarh, India',
+    tagline: 'IP CCTV, Secure Data Networking, Enterprise Wi-Fi & Biometric Access Control',
+    summary: 'Integrated security and networking — IP CCTV, data networking, enterprise Wi-Fi, and biometric access control.',
+    overview:
+      'At Chhattisgarh Bhawan I deployed a comprehensive building-wide infrastructure covering physical security and network services together. The scope included IP CCTV surveillance, a secure segmented data network, enterprise-grade Wi-Fi coverage, and a biometric access control system, all commissioned and handed over as one coordinated build.',
+    challenge:
+      'The building required surveillance coverage, controlled entry, and reliable connectivity to run as one secure environment, with cameras, access readers, and network equipment unable to interfere with each other over shared cabling and power.',
+    solution:
+      'I ran a dedicated PoE backbone for the cameras, segmented the data network into isolated VLANs, deployed managed access points for full-building Wi-Fi coverage, and integrated the biometric readers onto the same controlled access domain.',
+    architecture: [
+      'A PoE switch backbone supplying data and power to every IP camera on a single cable run',
+      'VLAN-segmented data network isolating CCTV, office data, and access control from one another',
+      'Managed enterprise access points providing full-building Wi-Fi coverage with per-floor tuning',
+      'Biometric access readers wired back to a central controller on a dedicated security VLAN',
+    ],
+    keyDeliverables: [
+      'Deployment and commissioning of IP CCTV cameras with live viewing, recording, and playback',
+      'Structured cabling, PoE switch configuration, and port mapping for every camera and reader',
+      'Secure data networking with VLAN segmentation, DHCP, and controlled inter-VLAN routing',
+      'Enterprise Wi-Fi deployment across all floors, including SSID, security, and coverage tuning',
+      'Biometric access control installation, reader enrollment, and admin handover',
+    ],
+    highlights: [
+      'Deployed a comprehensive infrastructure covering IP CCTV, data networking, enterprise Wi-Fi, and biometric access control.',
+      'Segmented the network so CCTV, data, and access control systems operate independently.',
+      'Commissioned and handed over every system as one coordinated build.',
+    ],
+    stats: [
+      { label: 'Systems Delivered', value: '4' },
+      { label: 'Camera Type', value: 'IP / PoE' },
+      { label: 'Network Model', value: 'Segmented' },
+      { label: 'Entry Control', value: 'Biometric' },
+    ],
+    tech: ['IP CCTV', 'PoE Switching', 'VLAN', 'Enterprise Wi-Fi', 'Biometric Access', 'Structured Cabling'],
+    visuals: { leftTop: 'topology', leftBottom: 'devices', right: 'console' },
+  },
+  {
     id: 'lg-house-voip',
-    number: '02',
+    number: '04',
     category: 'Client Deployment',
     name: 'LG House, Civil Lines',
     period: 'May 2025 — June 2025',
@@ -345,7 +429,7 @@ export const projects: Project[] = [
   },
   {
     id: 'cromptech-service-desk',
-    number: '03',
+    number: '05',
     category: 'Personal Infrastructure',
     name: 'Service Desk & Home Lab',
     period: 'Ongoing — self-driven',
