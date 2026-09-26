@@ -213,7 +213,7 @@ function ConsoleVisual() {
         <div className="grid grid-cols-[1.2fr_0.9fr_0.9fr] gap-2 border-b border-white/[0.07] pb-2 text-[0.5rem] uppercase tracking-[0.2em] text-[#D7E2EA]/60 sm:text-[0.56rem]">
           <span>Account</span>
           <span>Group</span>
-          <span>Ticket SLA</span>
+          <span>Scope</span>
         </div>
         {rows.map((row) => (
           <div

@@ -84,7 +84,7 @@ export default function MarqueeSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-[#0C0C0C] pb-10 pt-20 sm:pt-24 md:pt-28"
+      className="relative overflow-hidden bg-[#0C0C0C] pb-8 pt-14 sm:pb-10 sm:pt-20 md:pt-24"
       aria-label="Tools and technologies"
     >
       <FadeIn delay={0} y={24} className="mx-auto mb-8 flex w-full max-w-[1600px] flex-col items-center gap-4 px-5 text-center sm:mb-12 sm:px-8 md:px-10">

@@ -173,7 +173,7 @@ export default function ProjectsSection({ onSelectProject }: ProjectsSectionProp
   return (
     <section
       id="projects"
-      className="relative z-10 -mt-10 rounded-t-[40px] bg-[#0C0C0C] pt-20 sm:-mt-12 sm:rounded-t-[50px] md:-mt-14 md:rounded-t-[60px] md:pt-28"
+      className="relative z-10 -mt-10 rounded-t-[40px] bg-[#0C0C0C] pt-16 sm:-mt-12 sm:rounded-t-[50px] md:-mt-14 md:rounded-t-[60px] md:pt-24"
     >
       <div className="mx-auto flex w-full max-w-[1400px] flex-col items-center gap-4 px-5 text-center sm:px-8 md:px-10">
         <FadeIn delay={0} y={20}>
@@ -202,7 +202,10 @@ export default function ProjectsSection({ onSelectProject }: ProjectsSectionProp
             onSelectProject={onSelectProject}
           />
         ))}
-        <div aria-hidden className="h-[18vh]" />
+        {/* Trailing runway for the sticky stack to resolve into. Desktop needs
+            room for the last card to unstick; on phones the cards flow
+            normally, so the spacer is removed to avoid dead space. */}
+        <div aria-hidden className="hidden h-[10vh] md:block" />
       </div>
     </section>
   );

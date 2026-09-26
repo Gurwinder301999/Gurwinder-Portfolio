@@ -8,6 +8,7 @@ import FadeIn from '../components/FadeIn';
 import ContactButton from '../components/ContactButton';
 import LiveProjectButton from '../components/LiveProjectButton';
 import { heroTech, profile } from '../data/portfolio';
+import { useIsTouchDevice } from '../hooks/useMediaQuery';
 
 function CodeLine({ line }: { line: string }) {
   const parts = line.split(/('.*?')/g);
@@ -31,6 +32,7 @@ function CodeLine({ line }: { line: string }) {
 
 export default function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
+  const isTouch = useIsTouchDevice();
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] });
 
   const contentY = useTransform(scrollYProgress, [0, 1], [0, 110]);
@@ -71,7 +73,13 @@ export default function HeroSection() {
       onPointerLeave={resetStage}
       className="relative flex min-h-screen flex-col overflow-x-clip pt-24 sm:pt-28 md:pt-32"
     >
-      <motion.div style={{ scale: sceneScale, rotateX: sceneRotate }} className="absolute inset-0">
+      {/* pointer-events-none is essential: this wrapper is an inset-0 overlay,
+          and on touch it would otherwise swallow taps meant for the buttons. */}
+      <motion.div
+        style={{ scale: sceneScale, rotateX: sceneRotate }}
+        className="pointer-events-none absolute inset-0"
+        aria-hidden
+      >
         <Hero3DScene />
       </motion.div>
 
@@ -79,12 +87,18 @@ export default function HeroSection() {
         style={{ y: contentY, opacity: contentOpacity }}
         className="relative z-10 mx-auto flex w-full max-w-[1600px] flex-1 flex-col px-5 sm:px-8 md:px-10"
       >
-        <div className="flex flex-1 items-center perspective-1200">
+        {/* Perspective and preserve-3d are desktop-only. On touch they make the
+            browser mis-hit-test the buttons nested inside this subtree. */}
+        <div className={`flex flex-1 items-center ${isTouch ? '' : 'perspective-1200'}`}>
           <motion.div
-            style={{ rotateX: stageRotateX, rotateY: stageRotateY, transformStyle: 'preserve-3d' }}
+            style={
+              isTouch
+                ? undefined
+                : { rotateX: stageRotateX, rotateY: stageRotateY, transformStyle: 'preserve-3d' }
+            }
             className="grid w-full items-center gap-12 py-6 lg:grid-cols-12 lg:gap-8"
           >
-            <div className="preserve-3d lg:col-span-7">
+            <div className={`lg:col-span-7 ${isTouch ? '' : 'preserve-3d'}`}>
               <FadeIn delay={0} y={-20}>
                 <span className="inline-flex items-center gap-2 rounded-full border border-[#D7E2EA]/20 bg-[#D7E2EA]/[0.05] px-4 py-2 text-[0.62rem] font-medium uppercase tracking-[0.28em] text-[#D7E2EA]/85 backdrop-blur-sm sm:text-xs">
                   <Sparkles className="h-3.5 w-3.5 text-[#D14AC0]" />
@@ -97,7 +111,7 @@ export default function HeroSection() {
                   Hi, I&apos;m
                 </p>
                 <h1
-                  style={{ transform: 'translateZ(60px)' }}
+                  style={isTouch ? undefined : { transform: 'translateZ(60px)' }}
                   className="hero-heading text-glow -mt-1 break-words text-[clamp(2.6rem,12vw,4rem)] font-black uppercase leading-[0.92] tracking-tight xs:text-[11vw] sm:text-[10.5vw] md:text-[9vw] lg:-mt-2 lg:text-[6.8vw] xl:text-[5.9vw]"
                 >
                   {profile.firstName}{' '}
@@ -142,7 +156,7 @@ export default function HeroSection() {
             </div>
 
             {/* portrait + floating code card, layered on the Z axis */}
-            <div className="preserve-3d lg:col-span-5">
+            <div className={`lg:col-span-5 ${isTouch ? '' : 'preserve-3d'}`}>
               <FadeIn delay={0.6} y={30}>
                 <Magnet
                   padding={150}
@@ -154,9 +168,9 @@ export default function HeroSection() {
                     max={12}
                     hoverLift={30}
                     glare
-                    className="preserve-3d relative mx-auto w-[min(76vw,400px)] lg:w-full lg:max-w-[430px]"
+                    className="relative mx-auto w-[min(76vw,400px)] lg:w-full lg:max-w-[430px]"
                   >
-                    <div className="preserve-3d relative">
+                    <div className="relative">
                       <div
                         aria-hidden
                         className="absolute -inset-6 rounded-[52px] bg-[radial-gradient(circle_at_50%_25%,rgba(118,33,176,0.6),rgba(182,0,168,0.2)_45%,transparent_72%)] blur-2xl"
@@ -193,7 +207,7 @@ export default function HeroSection() {
 
                       {/* floating code card, pushed forward on Z */}
                       <div
-                        style={{ transform: 'translateZ(90px)' }}
+                        style={isTouch ? undefined : { transform: 'translateZ(90px)' }}
                         className="absolute -bottom-6 left-0 w-[min(78%,248px)] overflow-hidden rounded-2xl border border-[#D7E2EA]/15 bg-[#0C0C0C]/90 p-3 shadow-[0_30px_60px_-24px_rgba(0,0,0,0.95)] backdrop-blur-xl sm:-bottom-8 sm:-left-8 sm:w-[286px] sm:p-4"
                       >
                         <div className="flex items-center gap-2 border-b border-white/10 pb-2">
@@ -220,7 +234,7 @@ export default function HeroSection() {
 
                       {/* floating stat chip */}
                       <div
-                        style={{ transform: 'translateZ(130px)' }}
+                        style={isTouch ? undefined : { transform: 'translateZ(130px)' }}
                         className="absolute right-0 top-4 rounded-2xl border border-[#D7E2EA]/15 bg-[#0C0C0C]/85 px-3 py-2 backdrop-blur-xl sm:-right-6 sm:top-6 sm:px-3.5 sm:py-2.5"
                       >
                         <p className="text-lg font-black leading-none text-[#D7E2EA] sm:text-xl">99.9%</p>

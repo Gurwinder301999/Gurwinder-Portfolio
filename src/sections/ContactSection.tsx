@@ -11,7 +11,7 @@ export default function ContactSection() {
   return (
     <section
       id="contact"
-      className="relative overflow-hidden px-5 py-20 sm:px-8 sm:py-24 md:px-10 md:py-32"
+      className="relative overflow-hidden px-5 py-16 sm:px-8 sm:py-20 md:px-10 md:py-24"
     >
       <div
         aria-hidden

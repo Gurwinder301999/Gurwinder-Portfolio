@@ -1,5 +1,6 @@
 import { useRef, type CSSProperties, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 import { motion, useMotionTemplate, useMotionValue, useSpring } from 'framer-motion';
+import { useIsTouchDevice } from '../../hooks/useMediaQuery';
 
 export type Tilt3DProps = {
   children: ReactNode;
@@ -19,6 +20,10 @@ export type Tilt3DProps = {
  * Mouse driven 3D tilt container: rotateX / rotateY are derived from the
  * pointer position and smoothed with springs, so children can be layered on
  * the Z axis with translateZ for a real depth effect.
+ *
+ * On touch devices the whole 3D treatment is dropped. A `preserve-3d`
+ * ancestor makes mobile browsers mis-hit-test descendants, so leaving it in
+ * place makes taps land on the wrong element (or nowhere at all).
  */
 export default function Tilt3D({
   children,
@@ -30,6 +35,7 @@ export default function Tilt3D({
   style,
 }: Tilt3DProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const isTouch = useIsTouchDevice();
 
   const rotateX = useSpring(0, { stiffness: 140, damping: 18, mass: 0.6 });
   const rotateY = useSpring(0, { stiffness: 140, damping: 18, mass: 0.6 });
@@ -67,6 +73,17 @@ export default function Tilt3D({
     glareX.set(50);
     glareY.set(50);
   };
+
+  // Touch devices get a plain, flat container so taps hit their real targets.
+  // `h-full` is required: callers pass a fixed height on the wrapper, and an
+  // auto-height inner box would collapse any `h-full` child to zero.
+  if (isTouch) {
+    return (
+      <div className={className} style={style}>
+        <div className="relative h-full w-full">{children}</div>
+      </div>
+    );
+  }
 
   return (
     <div ref={containerRef} className={className} style={{ perspective: `${perspective}px`, ...style }}>

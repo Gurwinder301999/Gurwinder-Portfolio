@@ -18,7 +18,7 @@ export default function ServicesSection() {
   return (
     <section
       id="services"
-      className="relative z-20 overflow-hidden rounded-t-[40px] border-t border-white/[0.08] bg-[#0C0C0C] px-5 pb-28 pt-16 sm:rounded-t-[50px] sm:px-8 sm:pb-32 sm:pt-20 md:rounded-t-[60px] md:px-10 md:pb-40 md:pt-24"
+      className="relative z-20 overflow-hidden rounded-t-[40px] border-t border-white/[0.08] bg-[#0C0C0C] px-5 pb-16 pt-14 sm:rounded-t-[50px] sm:px-8 sm:pb-20 sm:pt-16 md:rounded-t-[60px] md:px-10 md:pb-24 md:pt-20"
     >
       {/* Ambient accents keep the panel from reading as a flat block */}
       <div

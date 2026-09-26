@@ -34,6 +34,23 @@ body {
   overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Kills the ~300ms tap delay on mobile and stops double-tap zoom from
+     swallowing taps on buttons. */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(182, 0, 168, 0.25);
+}
+
+/* Interactive elements must never be inert on touch devices. */
+a,
+button,
+[role='button'] {
+  touch-action: manipulation;
+}
+
+/* Belt-and-braces: a transformed ancestor can create a hit-test quirk, so
+   make sure nothing decorative is ever capturable. */
+[aria-hidden='true'] {
+  pointer-events: none;
 }
 
 /* Long strings (emails, LinkedIn slugs, file names) must never force a

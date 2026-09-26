@@ -64,7 +64,7 @@ export default function SkillsSection() {
   }, []);
 
   return (
-    <section id="skills" className="relative overflow-hidden px-5 py-20 sm:px-8 sm:py-24 md:px-10 md:py-28">
+    <section id="skills" className="relative overflow-hidden px-5 py-16 sm:px-8 sm:py-20 md:px-10 md:py-24">
       <div
         aria-hidden
         className="glow-pulse pointer-events-none absolute left-1/2 top-0 h-[32rem] w-[32rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(118,33,176,0.28),transparent_66%)] blur-3xl"
@@ -81,7 +81,7 @@ export default function SkillsSection() {
         </FadeIn>
         <FadeIn delay={0.18} y={20}>
           <p className="max-w-[46rem] text-xs font-light uppercase tracking-[0.18em] text-[#D7E2EA]/62 sm:text-sm">
-            Windows and Linux administration, networking, telephony and the service desk tooling around them
+            Windows and Linux administration, networking, telephony, and the service desk tooling around them
           </p>
         </FadeIn>
       </div>

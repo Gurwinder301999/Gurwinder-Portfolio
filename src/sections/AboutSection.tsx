@@ -69,7 +69,7 @@ export default function AboutSection() {
   return (
     <section
       id="about"
-      className="relative flex min-h-screen flex-col justify-center overflow-hidden px-5 py-20 sm:px-8 md:px-10"
+      className="relative flex flex-col justify-center overflow-hidden px-5 py-16 sm:px-8 sm:py-20 md:px-10 md:py-24 lg:min-h-screen"
     >
       {/* On phones the copy spans the full column, so the ornaments live in the
           section's empty top/bottom padding bands; from `sm` up they return to the

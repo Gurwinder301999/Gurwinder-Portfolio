@@ -20,3 +20,14 @@ export default function useMediaQuery(query: string): boolean {
 
   return matches;
 }
+
+/**
+ * True on devices whose primary input is a finger rather than a mouse.
+ *
+ * Decorative 3D (perspective / preserve-3d / translateZ) is disabled for these
+ * devices: inside a preserve-3d subtree, mobile browsers frequently mis-hit-test
+ * descendants, which silently swallows taps on buttons and links.
+ */
+export function useIsTouchDevice(): boolean {
+  return useMediaQuery('(hover: none) and (pointer: coarse)');
+}
