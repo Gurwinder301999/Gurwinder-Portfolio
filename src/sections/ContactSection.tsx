@@ -1,4 +1,5 @@
 import { ArrowUpRight, Building2, Clock, Download } from 'lucide-react';
+import { legalDocs } from '../data/legal';
 import { contactChannels, profile } from '../data/portfolio';
 import FadeIn from '../components/FadeIn';
 import SectionBadge from '../components/SectionBadge';
@@ -70,14 +71,34 @@ export default function ContactSection() {
           <FadeIn delay={0.26} y={20}>
             <ul className="flex flex-wrap gap-x-6 gap-y-3 text-[0.65rem] font-light uppercase tracking-[0.2em] text-[#D7E2EA]/62 sm:text-[0.7rem]">
               <li className="inline-flex items-center gap-2">
-                <Clock className="h-3.5 w-3.5 text-[#D14AC0]" />
+                <Clock className="h-3.5 w-3.5 text-[#D14AC0]" aria-hidden />
                 Replies within a working day
               </li>
               <li className="inline-flex items-center gap-2">
-                <Building2 className="h-3.5 w-3.5 text-[#D14AC0]" />
+                <Building2 className="h-3.5 w-3.5 text-[#D14AC0]" aria-hidden />
                 Currently at Cromptech · Delhi
               </li>
             </ul>
+          </FadeIn>
+
+          {/* There is no form and nothing is transmitted by this site, so
+              there is no consent to collect. Saying so beats shipping an
+              unclicked checkbox that implies data collection is happening. If
+              a form is ever added, this becomes a required, pre-ticked-false
+              consent control and the privacy policy must be updated first. */}
+          <FadeIn delay={0.32} y={20}>
+            <p className="max-w-[36rem] text-[0.7rem] font-light leading-relaxed text-[#D7E2EA]/60">
+              These buttons open your own email or phone app. Nothing you type is sent through this
+              website, and the site stores no data. Please don&apos;t include passwords, ID numbers, or
+              payment details. See the{' '}
+              <a
+                href="#/legal/privacy"
+                className="underline decoration-[#B600A8] underline-offset-2 hover:text-[#D7E2EA]"
+              >
+                Privacy Policy
+              </a>
+              .
+            </p>
           </FadeIn>
         </div>
 
@@ -130,9 +151,51 @@ export default function ContactSection() {
                   </p>
                   <p className="mt-4 text-[0.68rem] font-light leading-relaxed text-[#D7E2EA]/65">
                     Desktops, network devices, Active Directory, Windows and Rocky Linux servers, and
-                    Asterisk-based VoIP telephony — all documented, monitored, and kept at 99.9% uptime.
+                    Asterisk-based VoIP telephony — all documented and monitored.
                   </p>
                 </div>
+              </div>
+
+              {/* Who runs the site, and how to make a data request. Required
+                  context for the privacy policy to be honest, and a real
+                  contact route for anyone exercising DPDP rights. */}
+              <div className="mt-6 rounded-3xl border border-[#D7E2EA]/[0.14] p-5">
+                <h3 className="text-[0.58rem] font-medium uppercase tracking-[0.28em] text-[#D7E2EA]/62">
+                  Site operator
+                </h3>
+                <dl className="mt-3 flex flex-col gap-2 text-xs text-[#D7E2EA]/75">
+                  <div className="flex flex-wrap gap-x-2">
+                    <dt className="text-[#D7E2EA]/55">Name</dt>
+                    <dd>{profile.business.legalName}</dd>
+                  </div>
+                  <div className="flex flex-wrap gap-x-2">
+                    <dt className="text-[#D7E2EA]/55">Status</dt>
+                    <dd>{profile.business.entityType}</dd>
+                  </div>
+                  <div className="flex flex-wrap gap-x-2">
+                    <dt className="text-[#D7E2EA]/55">Data requests</dt>
+                    <dd>
+                      <a
+                        href={`mailto:${profile.email}?subject=Data%20request`}
+                        className="underline decoration-[#B600A8] underline-offset-2"
+                      >
+                        {profile.email}
+                      </a>
+                    </dd>
+                  </div>
+                </dl>
+                <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-2">
+                  {legalDocs.map((doc) => (
+                    <li key={doc.slug}>
+                      <a
+                        href={`#/legal/${doc.slug}`}
+                        className="text-[0.6rem] font-medium uppercase tracking-[0.16em] text-[#D7E2EA]/70 underline decoration-transparent underline-offset-4 transition-colors duration-200 hover:text-[#D7E2EA] hover:decoration-[#B600A8]"
+                      >
+                        {doc.title}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           </Tilt3D>

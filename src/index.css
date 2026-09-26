@@ -276,11 +276,68 @@ section[id] {
 /* ------------------------------------------------------------------ */
 /*  FOCUS STATES                                                      */
 /* ------------------------------------------------------------------ */
+/* A keyboard user must be able to see where they are. The ring is drawn
+   with a two-tone box-shadow rather than `outline` alone: a plain 2px outline
+   is offset 3px away from controls that already carry their own 2px white
+   outline, and on the gradient CTAs a single-colour ring can be lost against
+   the fill. The white inner line keeps it visible on any background. */
 a:focus-visible,
-button:focus-visible {
+button:focus-visible,
+[tabindex]:focus-visible,
+summary:focus-visible {
   outline: 2px solid #b600a8;
   outline-offset: 3px;
+  box-shadow: 0 0 0 2px #0c0c0c, 0 0 0 5px #ffffff;
+  border-radius: 4px;
 }
+
+/* Never remove the ring outright — `outline: none` with no replacement is the
+   single most common keyboard-accessibility regression. */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ------------------------------------------------------------------ */
+/*  SKIP LINK                                                         */
+/* ------------------------------------------------------------------ */
+/* Off-screen until focused. Without it, a keyboard user has to tab through
+   the whole navbar on every page before reaching any content. */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  z-index: 100;
+  transform: translateY(-200%);
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  color: #0c0c0c;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 150ms ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* ------------------------------------------------------------------ */
+/*  CONTROL BORDERS                                                   */
+/* ------------------------------------------------------------------ */
+/* Card and control borders were white/14, which composites to 1.44:1 against
+   the canvas and is effectively invisible. WCAG 1.4.11 asks for 3:1 on the
+   boundary of a control; these do delimit clickable cards, so it applies.
+   Measured: white/35 is 2.79 and still short, white/40 is 3.41 and passes.
+   Non-interactive separators elsewhere stay subtle on purpose. */
+.border-white\/\[0\.14\] {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.border-\[\#D7E2EA\]\/\[0\.14\] {
+  border-color: rgba(215, 226, 234, 0.4);
+}
+
 
 /* ------------------------------------------------------------------ */
 /*  REDUCED MOTION                                                    */

@@ -1,5 +1,6 @@
-import { ArrowUp, Heart, Terminal } from 'lucide-react';
+import { ArrowUp, Terminal } from 'lucide-react';
 import { footerColumns, profile } from '../data/portfolio';
+import { legalDocs } from '../data/legal';
 import FadeIn from '../components/FadeIn';
 
 export default function Footer() {
@@ -56,17 +57,27 @@ export default function Footer() {
         <p className="text-[0.68rem] font-light uppercase tracking-[0.2em] text-[#D7E2EA]/60">
           © {year} {profile.name}. All rights reserved.
         </p>
-        <p className="flex items-center gap-2 text-[0.68rem] font-light uppercase tracking-[0.2em] text-[#D7E2EA]/60">
-          Built with React, Tailwind &amp; Framer Motion
-          <Heart className="h-3.5 w-3.5 text-[#D14AC0]" />
-        </p>
+        <nav aria-label="Legal">
+          <ul className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            {legalDocs.map((doc) => (
+              <li key={doc.slug}>
+                <a
+                  href={`#/legal/${doc.slug}`}
+                  className="text-[0.68rem] font-light uppercase tracking-[0.2em] text-[#D7E2EA]/70 underline decoration-transparent underline-offset-4 transition-colors duration-300 hover:text-[#D7E2EA] hover:decoration-[#B600A8]"
+                >
+                  {doc.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
         <a
           href="#home"
           className="group inline-flex items-center gap-2 text-[0.68rem] font-medium uppercase tracking-[0.2em] text-[#D7E2EA]/70 transition-colors duration-300 hover:text-[#D7E2EA]"
         >
           Back to top
           <span className="grid h-8 w-8 place-items-center rounded-full border border-[#D7E2EA]/25 transition-transform duration-300 group-hover:-translate-y-1">
-            <ArrowUp className="h-3.5 w-3.5" />
+            <ArrowUp className="h-3.5 w-3.5" aria-hidden />
           </span>
         </a>
       </div>

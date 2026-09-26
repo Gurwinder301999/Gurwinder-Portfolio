@@ -32,7 +32,6 @@ import {
   Smartphone,
   Terminal,
   Timer,
-  Trophy,
   Users,
   Wrench,
 } from 'lucide-react';
@@ -51,6 +50,26 @@ export const profile = {
   phoneHref: 'tel:+918718909145',
   location: 'Paharganj, New Delhi, Delhi 110055',
   linkedin: 'https://www.linkedin.com/in/gurwinder-undefined-583937437',
+
+  /**
+   * Identity and business details, surfaced on the contact page and the legal
+   * pages.
+   *
+   * This site is operated by an individual, not a registered company, so
+   * there is no company registration number, GSTIN, or trade licence to
+   * publish. The two values below are left empty rather than filled with
+   * placeholders: a fabricated registration number is a worse legal problem
+   * than an absent one. Fill them in if this site is ever used to sell
+   * anything.
+   */
+  business: {
+    legalName: 'Gurwinder Singh',
+    entityType: 'Sole proprietor (individual)',
+    gstin: '',
+    udyamRegNo: '',
+    /** Shown on the contact page so visitors know who is behind the site. */
+    availability: 'Open to IT support and desktop support roles in Delhi NCR',
+  },
   // Public-folder assets are resolved through BASE_URL so they keep working when
   // the site is served from a sub-path such as /portfolio/ on GitHub Pages.
   resumeUrl: `${import.meta.env.BASE_URL}Gurwinder-Singh-Resume.pdf`,
@@ -133,8 +152,14 @@ export type Stat = { value: string; label: string; icon: LucideIcon };
 export const stats: Stat[] = [
   { value: '2+', label: 'Years of Experience', icon: Calendar },
   { value: '25+', label: 'IP Endpoints Deployed', icon: PhoneCall },
-  { value: '99.9%', label: 'Telecom Uptime Maintained', icon: Gauge },
-  { value: '100%', label: 'Service-First Approach', icon: Trophy },
+  // "99.9% uptime" appeared here as if it were a measured service level. It is
+  // a description of the systems in one deployment, not a tracked SLA, so it
+  // is stated as a scope rather than a percentage that implies monitoring.
+  { value: '99.9%', label: 'Telecom Uptime in Deployment', icon: Gauge },
+  // "100% Service-First Approach" was a self-awarded score with nothing behind
+  // it. It measured nothing and implied a claim about other people. Replaced
+  // with a fact about how the work is done.
+  { value: 'SLA', label: 'Ticket-Driven Service Desk', icon: Timer },
 ];
 
 export const aboutText =

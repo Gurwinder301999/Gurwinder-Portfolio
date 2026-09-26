@@ -10,7 +10,9 @@ import ProjectsSection from './sections/ProjectsSection';
 import ContactSection from './sections/ContactSection';
 import Footer from './sections/Footer';
 import ProjectLandingPage from './pages/ProjectLandingPage';
+import LegalPage from './pages/LegalPage';
 import { projects, type Project } from './data/portfolio';
+import { legalDocBySlug } from './data/legal';
 import { scrollToSection, type SectionId } from './utils/navigation';
 
 /**
@@ -20,6 +22,19 @@ import { scrollToSection, type SectionId } from './utils/navigation';
 function getProjectIdFromHash(hash: string): string | null {
   const match = hash.match(/^#\/?project\/([a-zA-Z0-9_-]+)/);
   return match ? match[1] : null;
+}
+
+/**
+ * Parses a legal document slug from the hash: #/legal/privacy.
+ *
+ * Returns undefined for "not a legal route" and null for "legal route with an
+ * unknown slug", so the page can render a 404 instead of silently falling back
+ * to the home page.
+ */
+function getLegalSlugFromHash(hash: string): string | null | undefined {
+  const match = hash.match(/^#\/?legal\/([a-zA-Z0-9_-]+)/);
+  if (!match) return undefined;
+  return match[1];
 }
 
 /**
@@ -35,15 +50,35 @@ export default function App() {
   // Section a landing page asked us to reveal once the home page is mounted.
   const pendingSectionRef = useRef<SectionId | null>(null);
 
+  // Legal pages are a separate route, and are checked before the project route
+  // so a legal slug can never be read as a project id.
+  const [legalSlug, setLegalSlug] = useState<string | null | undefined>(() =>
+    getLegalSlugFromHash(window.location.hash)
+  );
+
   useEffect(() => {
     const onHashChange = () => {
       const pid = getProjectIdFromHash(window.location.hash);
       setActiveProjectId(pid);
+      setLegalSlug(getLegalSlugFromHash(window.location.hash));
     };
 
     window.addEventListener('hashchange', onHashChange);
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
+
+  // A legal page owns the whole viewport, so it must win over any project or
+  // section state rather than rendering underneath them.
+  if (legalSlug !== undefined) {
+    return (
+      <>
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
+        <LegalPage doc={legalSlug ? (legalDocBySlug[legalSlug] ?? null) : null} />
+      </>
+    );
+  }
 
   // Landing pages have no contact form of their own, so reveal the home page
   // first and only then scroll to the requested section.
@@ -101,8 +136,11 @@ export default function App() {
   return (
     <div id="app-shell" className="relative min-h-screen bg-[#0C0C0C] font-kanit text-[#D7E2EA]">
       <ScrollProgress />
+      <a href="#main-content" className="skip-link">
+        Skip to content
+      </a>
       <Navbar />
-      <main className="relative overflow-x-clip">
+      <main id="main-content" tabIndex={-1} className="relative overflow-x-clip">
         <HeroSection />
         <MarqueeSection />
         <AboutSection />
