@@ -285,6 +285,7 @@ scripts/
 ├─ check-live.mjs          verify the deployed bundle is real
 ├─ check-favicon-live.mjs  verify the icons are served
 ├─ perf-check.mjs          FCP/LCP/CLS, third-party requests, CSP console
+├─ check-mobile-nav.mjs    every nav link navigates, via the mobile sheet
 ├─ shot-navbar.mjs         wordmark + overflow at four widths
 ├─ fetch_fonts.mjs         regenerate the self-hosted subset
 ├─ spellcheck.mjs          project vocabulary
