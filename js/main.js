@@ -1,11 +1,4 @@
-/* =====================================================================
-   Site interactions — no dependencies
-   · sticky header, mobile nav
-   · scroll progress bar, active section highlighting
-   · reveal-on-scroll, animated stat counters (incl. decimals)
-   · portfolio filtering, "How it works" slider
-   · contact form validation (mail-app fallback), back-to-top, year
-   ===================================================================== */
+
 (() => {
   "use strict";
 
@@ -15,12 +8,12 @@
     ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
     : false;
 
-  /* ------------------------- 1. Sticky header ----------------------- */
+
   const header = $("#site-header");
   const toTop  = $("#to-top");
   const bar    = $("#progress");
 
-  /* ---------------- 2. Mobile navigation --------------------------- */
+
   const nav    = $("#primary-nav");
   const toggle = $("#nav-toggle");
 
@@ -44,7 +37,7 @@
     setNav(false);
   });
 
-  /* ------------- 3. Scroll progress + sticky state ------------------ */
+
   let scrollQueued = false;
 
   function onScroll() {
@@ -71,12 +64,9 @@
     });
   }
 
-  /* ---------------- 4. Active nav link ----------------------------- */
-  /* Position-based scroll spy. Every nav item points at its real target —
-     a section, or the contact panel that lives inside the services block —
-     and the item whose top has passed the 30% mark of the viewport wins.
-     Ties (the side-by-side services/contact panels share a top) fall to the
-     later item, and at the very bottom of the page the last item takes over. */
+
+
+
   const navLinks = $$(".nav a");
   const navTargets = navLinks
     .map((link) => ({
@@ -99,7 +89,7 @@
 
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     if (maxScroll > 0 && window.scrollY >= maxScroll - 2) {
-      setActive(navTargets[navTargets.length - 1].href);   // page end → Contact
+      setActive(navTargets[navTargets.length - 1].href);
       return;
     }
 
@@ -121,11 +111,11 @@
   window.addEventListener("scroll", requestNavSync, { passive: true });
   window.addEventListener("resize", requestNavSync, { passive: true });
   navTargets.forEach(({ link, href }) => {
-    link.addEventListener("click", () => setActive(href));   // instant feedback
+    link.addEventListener("click", () => setActive(href));
   });
   syncActiveNav();
 
-  /* ---------------- 5. Reveal on scroll ---------------------------- */
+
   const revealables = $$(".reveal");
 
   if (!("IntersectionObserver" in window) || reduceMotion) {
@@ -143,7 +133,7 @@
     revealables.forEach((el) => io.observe(el));
   }
 
-  /* ---------------- 6. Animated stat counters ---------------------- */
+
   const counters = $$("[data-count]");
 
   function runCounter(el) {
@@ -160,7 +150,7 @@
     function step(now) {
       if (!startTime) startTime = now;
       const p = Math.min((now - startTime) / duration, 1);
-      const eased = 1 - Math.pow(1 - p, 3);           // ease-out cubic
+      const eased = 1 - Math.pow(1 - p, 3);
       el.textContent = render(end * eased);
       if (p < 1) requestAnimationFrame(step);
     }
@@ -186,7 +176,7 @@
     }
   }
 
-  /* ---------------- 7. Portfolio filtering ------------------------- */
+
   const filterBtns = $$(".filter");
   const cards      = $$(".project");
 
@@ -196,7 +186,7 @@
       card.classList.toggle("is-out", !show);
       card.classList.remove("is-in");
       if (show && !reduceMotion) {
-        void card.offsetWidth;                       // restart the animation
+        void card.offsetWidth;
         card.style.animationDelay = (i % 6) * 45 + "ms";
         card.classList.add("is-in");
       }
@@ -214,7 +204,7 @@
     });
   });
 
-  /* ---------------- 8. "How it works" slider ----------------------- */
+
   const track = $("#quote-track");
 
   if (track) {
@@ -261,7 +251,7 @@
       quotes.addEventListener("focusin", () => window.clearInterval(timer));
     }
 
-    // Touch swipe
+
     let startX = null;
     track.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; }, { passive: true });
     track.addEventListener("touchend", (e) => {
@@ -274,7 +264,7 @@
     restart();
   }
 
-  /* ---------------- 9. Contact form -------------------------------- */
+
   const form = $("#contact-form");
 
   if (form) {
@@ -328,8 +318,7 @@
       const button = $("button[type='submit']", form);
       const labelNode = button ? $(".btn__label", button) : null;
       const label = labelNode ? labelNode.textContent : "Send Message";
-      // The button carries a hidden copy of its own content (the radial-reveal
-      // face), so swap the label text in both — never the button's innerHTML.
+
       const setLabel = (text) => {
         if (!button) return;
         $$(".btn__label", button).forEach((el) => { el.textContent = text; });
@@ -350,8 +339,7 @@
       };
 
       if (!endpoint) {
-        // No backend wired up: hand the message to the visitor's mail client
-        // pre-filled (mailto) rather than pretending it was delivered.
+
         const data    = Object.fromEntries(new FormData(form));
         const to      = form.dataset.mailto || "gursingh301999@gmail.com";
         const subject = encodeURIComponent(data.subject || "Portfolio enquiry");
@@ -377,30 +365,27 @@
     });
   }
 
-  /* ---------------- 10. Dynamic footer year ------------------------ */
+
   $$("[data-year]").forEach((el) => { el.textContent = new Date().getFullYear(); });
 
-  /* ---------------- 11. Radial reveal on every button --------------- */
-  /* Vanilla port of the Originkit "Radial Reveal Button". A clipped copy of
-     the button's own content sits on top; a circle that grows from the
-     pointer uncovers it, so both faces read the same. framer-motion's
-     numeric tween (animate(from → to, onUpdate)) becomes a small rAF lerp
-     with the same 0.45s easeInOut, and clip-path does the masking. */
+
+
+
   const REVEAL_DURATION = 450;
   const canHover = typeof window.matchMedia !== "function"
     || window.matchMedia("(hover: hover)").matches;
-  // Touch: the reveal would fire on tap and stick open, so build no faces.
+
   const revealTargets = canHover
     ? $$(".btn, .filter, .quotes__arrow, .to-top, .nav-toggle")
     : [];
 
   revealTargets.forEach((btn) => {
-    if ($(".btn__reveal", btn)) return;                       // already set up
+    if ($(".btn__reveal", btn)) return;
 
     const face = document.createElement("span");
     face.className = "btn__reveal";
     face.setAttribute("aria-hidden", "true");
-    face.innerHTML = btn.innerHTML;                           // identical second face
+    face.innerHTML = btn.innerHTML;
     btn.appendChild(face);
 
     const clip = { r: 0, x: 100, y: 100, max: 160 };
@@ -426,7 +411,7 @@
       );
       clip.x = (px / rect.width) * 100;
       clip.y = (py / rect.height) * 100;
-      clip.max = (far / unit) * 100 + 2;                      // 2% overshoot for the corners
+      clip.max = (far / unit) * 100 + 2;
     }
 
     function growTo(to) {
@@ -438,7 +423,7 @@
 
       function step(now) {
         const p = Math.min((now - started) / REVEAL_DURATION, 1);
-        const eased = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;   // easeInOut
+        const eased = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
         clip.r = from + (to - from) * eased;
         applyClip();
         rafId = p < 1 ? requestAnimationFrame(step) : 0;
@@ -453,7 +438,7 @@
     });
 
     btn.addEventListener("pointerleave", (event) => {
-      if (clip.r >= clip.max - 0.5) {                         // already open: collapse from here
+      if (clip.r >= clip.max - 0.5) {
         anchorTo(event);
         clip.r = clip.max;
         applyClip();
@@ -462,18 +447,9 @@
     });
   });
 
-  /* ---------------- 12. Name colour sweep (portrait) --------------- */
-  /* Vanilla port of the framer-motion "Text Colour Sweep": every character
-     of [data-sweep] starts in the wave colour and settles into its own
-     colour, staggered left-to-right. Web Animations API replaces useAnimate
-     + stagger(), so the site stays dependency-free.
-     Tuning (all optional, set on the element):
-       data-sweep-wave      start colour, default #ffa04d
-       data-sweep-stagger   seconds between characters, default 0.04
-       data-sweep-duration  seconds per character,   default 0.6
-       data-sweep-y         start offset in em,       default 0.3
-       data-sweep-spread    % of characters in the coloured band, default 100
-  ------------------------------------------------------------------ */
+
+
+
   $$("[data-sweep]").forEach((root) => {
     const source = $(".sweep-text", root) || root;
     const num = (v, fallback) => (v === undefined || v === "" ? fallback : parseFloat(v));
@@ -486,9 +462,8 @@
       spread:   Math.max(0, Math.min(100, num(root.dataset.sweepSpread, 100)))
     };
 
-    /* 1 · split every text node into .char spans, remembering the colour
-           each character has to end on (white for the first name, the
-           accent for the surname) */
+
+
     const chars = [];
     (function split(node) {
       Array.from(node.childNodes).forEach((child) => {
@@ -499,7 +474,7 @@
           Array.from(child.nodeValue).forEach((ch) => {
             const span = document.createElement("span");
             span.className = "char";
-            span.setAttribute("aria-hidden", "true");   // the sr-only text carries the name
+            span.setAttribute("aria-hidden", "true");
             span.textContent = ch === " " ? "\u00A0" : ch;
             span.dataset.color = finalColor;
             frag.appendChild(span);
@@ -514,10 +489,10 @@
 
     if (!chars.length) return;
 
-    /* No Web Animations (or reduced motion) → leave the name as plain text */
+
     if (reduceMotion || typeof source.animate !== "function") return;
 
-    /* 2 · hidden start state, mirroring the component's resetToHidden() */
+
     const total = chars.length;
     const affected = Math.round(total * (cfg.spread / 100));
     const middle = (total - 1) / 2;
@@ -531,7 +506,7 @@
       c.style.color = fromColors[i];
     });
 
-    /* 3 · play once, when the portrait comes into view */
+
     let played = false;
     function play() {
       if (played) return;
@@ -545,12 +520,12 @@
           {
             duration: cfg.duration,
             delay: i * cfg.stagger,
-            easing: "cubic-bezier(0.42, 0, 0.58, 1)",   // easeInOut, as the preset
+            easing: "cubic-bezier(0.42, 0, 0.58, 1)",
             fill: "backwards"
           }
         );
         anim.addEventListener("finish", () => {
-          anim.cancel();                               // hand styling back to CSS
+          anim.cancel();
           c.style.opacity = "";
           c.style.transform = "";
           c.style.color = "";

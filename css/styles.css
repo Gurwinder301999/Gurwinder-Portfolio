@@ -1,9 +1,6 @@
-/* =====================================================================
-   Gurwinder Singh — IT Support Engineer & Developer Portfolio
-   Design system + components
-   ===================================================================== */
 
-/* ---------- 1. Tokens ---------- */
+
+
 :root {
   --bg: #070707;
   --bg-2: #0e0e0e;
@@ -38,7 +35,7 @@
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-/* ---------- 2. Reset & base ---------- */
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html {
@@ -76,7 +73,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
   border-radius: 4px;
 }
 
-/* Scrollbar (visual polish, non-essential) */
+
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: #0b0b0b; }
 ::-webkit-scrollbar-thumb {
@@ -86,7 +83,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
 }
 ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
-/* ---------- 3. Layout helpers ---------- */
+
 .container {
   width: 100%;
   max-width: var(--container);
@@ -113,7 +110,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
   border: 0;
 }
 
-/* ---------- 4. Scroll-scrubbed video background ---------- */
+
 .bg-stage {
   position: fixed;
   inset: 0;
@@ -136,7 +133,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
 }
 #frame-canvas.visible { opacity: 0.5; transform: scale(1); }
 
-/* Dark scrim so foreground copy always stays legible over the video */
+
 .bg-scrim {
   position: absolute;
   inset: 0;
@@ -146,7 +143,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
                     rgba(7, 7, 7, 0.7) 62%, rgba(7, 7, 7, 0.94) 100%);
 }
 
-/* Faint dot grid, echoes the reference artwork */
+
 .bg-dots {
   position: absolute;
   inset: 0;
@@ -157,10 +154,10 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
   -webkit-mask-image: radial-gradient(110% 80% at 50% 40%, #000 20%, transparent 78%);
 }
 
-/* Everything the user reads sits above the video layer */
+
 .page { position: relative; z-index: 1; }
 
-/* ---------- 5. Preloader ---------- */
+
 .loader {
   position: fixed;
   inset: 0;
@@ -210,7 +207,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
 }
 .loader__label { font-variant-numeric: tabular-nums; }
 
-/* ---------- 6. Scroll progress + back to top ---------- */
+
 .progress {
   position: fixed;
   top: 0; left: 0;
@@ -244,7 +241,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
 .to-top:hover { background: var(--accent-2); transform: translateY(-3px); }
 .to-top svg { width: 18px; height: 18px; }
 
-/* ---------- 7. Header & navigation ---------- */
+
 .site-header {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -327,7 +324,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
 .nav-toggle[aria-expanded="true"] .icon-close { display: block; }
 .nav-toggle[aria-expanded="true"] .icon-menu { display: none; }
 
-/* ---------- 8. Buttons ---------- */
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -363,7 +360,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
 }
 .btn--outline:hover { background: var(--accent-soft); border-color: var(--accent); }
 
-/* Resume CTA — a third, quieter button so it never competes with "Hire Me" */
+
 .btn--resume {
   border: 1px dashed var(--accent-line);
   color: var(--accent-2);
@@ -375,11 +372,8 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
   border-style: solid;
 }
 
-/* ---------- 8b. Radial reveal (vanilla port of the Originkit button) --- */
-/* A clipped copy of the button's own content sits on top; a circle that
-   grows from the pointer uncovers it. Both faces carry identical content,
-   so nothing shifts or re-flows on hover. Colours come from two custom
-   properties, so each variant can pick its own reveal. */
+
+
 .btn,
 .filter,
 .quotes__arrow,
@@ -391,7 +385,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
   --btn-reveal-bg: var(--accent);
   --btn-reveal-fg: #140c04;
 }
-/* The solid orange button reveals to near-black, so it doesn't just glow */
+
 .btn--solid { --btn-reveal-bg: #0b0b0c; --btn-reveal-fg: #ffffff; }
 
 .btn__reveal {
@@ -413,7 +407,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
 .btn--sm { padding: 10px 18px; font-size: 11px; }
 .btn--block { width: 100%; }
 
-/* ---------- 9. Panel shell (card used across all sections) ---------- */
+
 .panel {
   position: relative;
   background: var(--panel);
@@ -426,7 +420,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
 }
 .panel--flush { padding: 26px 0 0; }
 
-/* Section title: icon chip + uppercase label + orange rule */
+
 .panel__head {
   display: flex;
   align-items: center;
@@ -462,7 +456,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
 }
 .panel__title--center { display: inline-block; }
 
-/* ---------- 10. Hero ---------- */
+
 .hero {
   padding-top: calc(var(--header-h) + 42px);
   padding-bottom: 34px;
@@ -571,7 +565,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
 }
 .social-link--on:hover { color: #140c04; }
 
-/* Portrait */
+
 .portrait {
   position: relative;
   display: grid;
@@ -607,7 +601,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
   border: 2px solid var(--accent);
   box-shadow: 0 30px 70px rgba(0, 0, 0, 0.65), 0 0 0 8px rgba(242, 118, 27, 0.07);
 }
-/* Contrast scrim so the name stays readable over any frame of the animation */
+
 .portrait__frame::after {
   content: "";
   position: absolute;
@@ -618,8 +612,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
     radial-gradient(circle at 24% 88%, rgba(4, 4, 4, 0.8), rgba(4, 4, 4, 0.44) 44%, transparent 64%);
 }
 
-/* Name lockup, bottom-left of the portrait.
-   Sized from the ring so it can never touch the circular crop. */
+
 .portrait__name {
   position: absolute;
   left: 12%;
@@ -642,7 +635,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
   font-style: normal;
   color: var(--accent);
 }
-/* Characters of the colour sweep: inline-block so each can move on its own */
+
 .portrait__name .char {
   display: inline-block;
   will-change: transform, opacity, color;
@@ -726,7 +719,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
   50%      { transform: translateY(4px); opacity: 1; }
 }
 
-/* ---------- 11. About Me ---------- */
+
 .about__lead {
   color: var(--text-2);
   font-size: 15px;
@@ -765,7 +758,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
   color: var(--text-3);
 }
 
-/* Experience + education rows (resume facts, under the About pillars) */
+
 .exp { display: grid; gap: 12px; margin-top: 22px; }
 .exp__row {
   padding: 15px 17px;
@@ -798,7 +791,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
 }
 .exp__desc { margin-top: 8px; font-size: 12.5px; line-height: 1.6; color: var(--text-3); }
 
-/* ---------- 12. Skills & Expertise ---------- */
+
 .skills__body {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
@@ -856,7 +849,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
 .tool__badge--f2b { background: #3f3d56; color: #d8e6ff; }
 .tool__badge--cdp { background: linear-gradient(135deg, #6f4ff2, #b07bff); color: #f7f2ff; }
 
-/* ---------- 13. Portfolio ---------- */
+
 .filters {
   display: flex;
   flex-wrap: wrap;
@@ -940,8 +933,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
   border-bottom: 2px solid rgba(242, 118, 27, 0.8);
 }
 
-/* Placeholder artwork — one gradient per project theme. Swap for
-   <img class="project__img"> as soon as you have real screenshots. */
+
 .thumb--voip {
   background:
     radial-gradient(circle at 70% 26%, rgba(242, 118, 27, 0.62), transparent 55%),
@@ -1049,7 +1041,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
   to   { opacity: 1; transform: none; }
 }
 
-/* ---------- 14. Client highlights (stats) ---------- */
+
 .stats {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1088,7 +1080,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
   color: var(--text-2);
 }
 
-/* ---------- 15. How-it-works notes slider ---------- */
+
 .quotes { position: relative; }
 .quote-viewport { overflow: hidden; }
 .quote-track {
@@ -1169,7 +1161,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
 .split--stretch > .panel { display: flex; flex-direction: column; }
 .split--stretch .panel__grow { flex: 1; }
 
-/* ---------- 16. Services ---------- */
+
 .services {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1198,7 +1190,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
 }
 .service p { margin-top: 4px; font-size: 12px; line-height: 1.5; color: var(--text-3); }
 
-/* ---------- 17. Contact ---------- */
+
 .contact__info { display: grid; gap: 11px; margin-bottom: 20px; }
 .contact__row {
   display: flex;
@@ -1290,7 +1282,7 @@ a.contact__row:hover { color: var(--accent); }
   color: #ff9a9d;
 }
 
-/* ---------- 18. Footer ---------- */
+
 .site-footer {
   position: relative;
   z-index: 1;
@@ -1327,7 +1319,7 @@ a.contact__row:hover { color: var(--accent); }
 .footer-top-link:hover { color: var(--accent); }
 .footer-top-link svg { width: 14px; height: 14px; }
 
-/* ---------- 19. Reveal on scroll ---------- */
+
 .reveal {
   opacity: 0;
   transform: translateY(26px);
@@ -1336,7 +1328,7 @@ a.contact__row:hover { color: var(--accent); }
 }
 .reveal.is-visible { opacity: 1; transform: none; }
 
-/* ---------- 20. Responsive ---------- */
+
 @media (max-width: 1080px) {
   .projects { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1358,8 +1350,7 @@ a.contact__row:hover { color: var(--accent); }
   .portrait__tag { right: -26px; }
 }
 
-/* Tablet in landscape: keep the horizontal nav, but tighten it so six
-   items plus the CTA still fit without wrapping */
+
 @media (max-width: 900px) {
   .nav { gap: 2px; }
   .nav a { padding: 8px 10px; font-size: 11px; letter-spacing: 0.1em; }
@@ -1397,11 +1388,11 @@ a.contact__row:hover { color: var(--accent); }
   .portrait__year { font-size: 24px; }
   .projects { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
-  /* iOS Safari zooms the page when a focused field is under 16px */
+
   .field input,
   .field textarea { font-size: 16px; }
 
-  /* Comfortable touch targets (≈44px) */
+
   .filter { padding: 12px 16px; }
   .quotes__arrow { width: 44px; height: 44px; }
   .quotes__arrow svg { width: 18px; height: 18px; }
@@ -1425,12 +1416,12 @@ a.contact__row:hover { color: var(--accent); }
   .to-top { right: 16px; bottom: 16px; }
   .footer-inner { justify-content: center; text-align: center; }
 
-  /* The notes slider carries 12 dots — shrink them so the row never wraps */
+
   .quotes__dots { gap: 5px; }
   .quotes__dot { width: 6px; height: 6px; }
   .quotes__dot.is-active { width: 18px; }
 
-  /* Project cards stay 2-up, so tighten the type inside them */
+
   .project__thumb { aspect-ratio: 1 / 1; }
   .project__meta { padding: 11px 11px 13px; }
   .project__meta h3 { font-size: 12.5px; }
@@ -1439,21 +1430,20 @@ a.contact__row:hover { color: var(--accent); }
 
   .form__status.is-on { max-height: 240px; }
 
-  /* Long URLs (LinkedIn, github.io) must never widen the layout */
+
   .contact__row,
   .footer-inner { overflow-wrap: anywhere; }
 }
 
-/* Very small phones: stack the hero CTAs so they stay easy to tap */
+
 @media (max-width: 430px) {
   .hero__actions { flex-direction: column; align-items: stretch; }
   .hero__actions .btn,
   .portfolio__foot .btn { width: 100%; justify-content: center; }
 }
 
-/* ---------- 20b. Touch devices (phones + tablets) ---------- */
-/* The radial reveal is a pointer effect: on touch it fires on tap and then
-   stays open, so switch it off and flatten the hover lifts. */
+
+
 @media (hover: none), (pointer: coarse) {
   .btn__reveal { display: none; }
   .btn:hover,
@@ -1466,7 +1456,7 @@ a.contact__row:hover { color: var(--accent); }
   .btn--resume:hover { background: rgba(242, 118, 27, 0.1); border-color: var(--accent-line); border-style: dashed; }
 }
 
-/* Kill the grey tap flash and the double-tap delay */
+
 a, button, input, textarea, select, label, .filter {
   -webkit-tap-highlight-color: transparent;
 }
@@ -1474,7 +1464,7 @@ a, button, input, textarea, select, label, .filter {
   touch-action: manipulation;
 }
 
-/* ---------- 20c. Notch / safe-area insets ---------- */
+
 .site-header {
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
@@ -1499,7 +1489,7 @@ a, button, input, textarea, select, label, .filter {
   .site-footer { padding-bottom: max(30px, env(safe-area-inset-bottom)); }
 }
 
-/* ---------- 22. Legal pages (privacy.html / terms.html) ---------- */
+
 .legal { padding-block: calc(var(--header-h) + 46px) 64px; }
 .legal__head {
   display: flex;
@@ -1572,7 +1562,7 @@ a, button, input, textarea, select, label, .filter {
 .legal__note p { font-size: 12.5px; color: var(--text-3); }
 .legal__note strong { color: var(--text-2); }
 
-/* ---------- 21. Reduced motion ---------- */
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; transition: none; }

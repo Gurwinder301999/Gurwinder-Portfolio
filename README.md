@@ -30,23 +30,79 @@ or `npm start` (which shells out to `npx serve`). Any static server works; openi
 
 ## Things worth knowing before you edit
 
-- **Tuning the background animation** lives at the top of `js/background.js`:
-  `SMOOTHING` (0.12 — lower is smoother), `NEARBY_RADIUS`, `MAX_CONCURRENT`,
-  `LOADER_MAX_WAIT`.
-- **The contact form has no backend.** With `data-endpoint=""` it validates the fields and
-  opens the visitor's own mail app via `data-mailto`. Set `data-endpoint="https://…"` to
-  POST to a real service instead. If you do, update privacy.html section 1.
-- **Privacy claims must stay true.** The site sets no cookies and loads no analytics; the
-  only third-party request is Google Fonts. If you add a tracker or a form backend, add a
-  consent banner and update `privacy.html`.
-- **Add a skill or tool without duplicating.** `Skills & Expertise` lists capabilities;
-  `Systems & Tools` lists the products behind them. Nothing should appear in both columns
-  — the test that enforces it is described in the commit history.
-- **Before publishing**, fill in the two placeholders marked with HTML comments:
-  `<HOSTING PROVIDER>` in `privacy.html` and the governing law in `terms.html`.
-- **Still to verify:** the LinkedIn slug in the resume
-  (`gurwinder-undefined-583937437`) looks auto-generated, and the github.io portfolio URL
-  is from an earlier version of the site.
+This section used to live in comments inside the code. The code is now comment-free, so
+everything that used to be documented in-file is collected here instead.
+
+### `js/background.js` — scroll-scrubbed background
+
+240 JPGs (`frames/frame_000000.jpg` … `frame_000239.jpg`) are drawn on a fixed,
+full-viewport canvas. Scroll progress over the *whole page* maps to a frame index, and a
+time-based lerp keeps playback smooth even though the source frames are only 30 fps.
+
+Tuning lives at the top of the file:
+
+| Setting | Default | Effect |
+|---|---|---|
+| `SMOOTHING` | `0.12` | 0–1, lower = smoother/slower catch-up |
+| `NEARBY_RADIUS` | `12` | frames kept hot around the playhead |
+| `MAX_CONCURRENT` | `6` | parallel image downloads |
+| `LOADER_MAX_WAIT` | `2200` | ms before the preloader gives up and hides |
+
+The loader is deliberately non-blocking: it never stops the page from being read.
+
+### `js/main.js` — what each block does
+
+1. Sticky header · 2. Mobile navigation · 3. Scroll progress + sticky state ·
+4. Active nav link (position-based scroll spy) · 5. Reveal on scroll ·
+6. Animated stat counters (supports decimals via `data-decimals`) ·
+7. Portfolio filtering · 8. "How it works" slider ·
+9. Contact form · 10. Dynamic footer year ·
+11. Radial reveal on buttons · 12. Name colour sweep (portrait)
+
+Two of those are ports of React/framer-motion components into vanilla JS, kept
+dependency-free:
+
+- **Radial reveal** — a clipped copy of each button's own content sits on top, and a
+  circle growing from the pointer uncovers it. `useAnimate()` + `stagger()` became a
+  small rAF tween (0.45s easeInOut) driving `clip-path`. Two custom properties,
+  `--btn-reveal-bg` / `--btn-reveal-fg`, control the reveal colour per variant. Faces are
+  only built when the device reports `(hover: hover)`; on touch they are skipped and the
+  CSS hides them too.
+- **Name colour sweep** — the portrait name is split into per-character spans; each
+  character starts in the wave colour and settles into its own colour, staggered.
+  Tunable on the element: `data-sweep-wave` (start colour), `data-sweep-stagger`
+  (seconds between characters), `data-sweep-duration`, `data-sweep-y` (start offset in
+  `em`) and `data-sweep-spread` (% of characters in the coloured band). Fires once via
+  `IntersectionObserver`, and is skipped under `prefers-reduced-motion`.
+
+### Editing content
+
+- **Swapping a project thumbnail:** drop an `<img class="project__img" src="assets/project-1.jpg" alt="" />`
+  in place of the gradient thumb block.
+- **Resume buttons** point at `assets/Gurwinder-Singh-Resume.pdf` from five places: the
+  hero, the Services panel, the Portfolio footer, the contact note and the footer link.
+- **Adding a skill or tool without duplicating.** `Skills & Expertise` lists capabilities;
+  `Systems & Tools` lists the products behind them. Nothing should appear in both columns.
+- **Contact form:** `data-endpoint=""` means it opens the visitor's mail app pre-filled to
+  `data-mailto`. Set `data-endpoint="https://…"` to POST real submissions instead. If you
+  do, update `privacy.html` section 1.
+- **Before publishing**, fill in the two placeholders that are still marked in the text
+  itself:
+  - `<HOSTING PROVIDER>` in `privacy.html` section 5 — name whoever serves the files and
+    check their log-retention period.
+  - Governing law in `terms.html` section 9 is currently set to India / courts of New Delhi.
+
+### Privacy claims must stay true
+
+The site sets no cookies and loads no analytics; the only third-party request is Google
+Fonts. If you add a tracker or connect the form to a backend, add a consent banner and
+update `privacy.html` first — otherwise the policy becomes untrue.
+
+### Still to verify
+
+The LinkedIn slug carried over from the resume
+(`gurwinder-undefined-583937437`) looks auto-generated and will 404; it appears in three
+places in `index.html`.
 
 ## Browser support
 

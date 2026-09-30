@@ -23,7 +23,7 @@
 
 <link rel="stylesheet" href="css/styles.css" />
 
-<!-- Real details taken from Gurwinder Singh's resume (assets/Gurwinder-Singh-Resume.pdf) -->
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -64,14 +64,14 @@
 </head>
 <body>
 
-<!-- ============ Scroll-scrubbed video background ============ -->
+
 <div class="bg-stage" aria-hidden="true">
   <canvas id="frame-canvas"></canvas>
   <div class="bg-scrim"></div>
   <div class="bg-dots"></div>
 </div>
 
-<!-- ================ Preloader (non-blocking) ================ -->
+
 <div class="loader" id="loader">
   <div class="loader__mark"></div>
   <div class="loader__bar"><span id="loader-fill"></span></div>
@@ -80,7 +80,7 @@
 
 <div class="progress" id="progress" aria-hidden="true"></div>
 
-<!-- ========================= Header ========================= -->
+
 <header class="site-header" id="site-header">
   <div class="container header-inner">
     <a class="logo" href="#home" aria-label="Gurwinder Singh — home">
@@ -109,7 +109,7 @@
 
 <div class="page">
 <main>
-  <!-- ========================== Hero ========================== -->
+  
   <section class="hero" id="home">
     <div class="container hero__grid">
       <div class="hero__copy">
@@ -142,8 +142,7 @@
         <div class="hero__social reveal">
           <span>Find me on</span>
           <div class="social-row">
-            <!-- TODO: these links are taken from the resume — verify the LinkedIn slug,
-                 it looks auto-generated ("gurwinder-undefined-583937437"). -->
+            
             <a class="social-link social-link--on" href="https://www.linkedin.com/in/gurwinder-undefined-583937437" target="_blank" rel="noopener" aria-label="LinkedIn profile">in</a>
             <a class="social-link" href="mailto:gursingh301999@gmail.com" aria-label="Email gursingh301999@gmail.com">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M4 7l8 6 8-6"/></svg>
@@ -163,8 +162,7 @@
         <div class="portrait__ring">
           <div class="portrait__frame">
             <img src="frames/frame_000000.jpg" alt="Gurwinder Singh, IT Support Engineer and Developer" width="1280" height="720" />
-            <!-- Colour sweep (vanilla port of the framer-motion "Text Colour Sweep").
-                 Tunable: wave colour, per-char delay, duration, rise, colour spread. -->
+            
             <span class="portrait__name"
                   data-sweep
                   data-sweep-wave="#ffa04d"
@@ -186,7 +184,7 @@
     </div>
   </section>
 
-  <!-- ==================== About Me + Skills ==================== -->
+  
   <section class="section" id="about">
     <div class="container split split--stretch">
 
@@ -229,7 +227,7 @@
           </div>
         </div>
 
-        <!-- Experience + education straight from the resume -->
+        
         <div class="exp">
           <div class="exp__row">
             <div class="exp__top">
@@ -332,7 +330,7 @@
     </div>
   </section>
 
-  <!-- ======================== Portfolio ======================== -->
+  
   <section class="section" id="portfolio">
     <div class="container">
       <div class="panel panel--flush reveal">
@@ -499,7 +497,7 @@
     </div>
   </section>
 
-  <!-- ================ Highlights + How It Works ================ -->
+  
   <section class="section" id="clients">
     <div class="container split split--stretch">
 
@@ -718,7 +716,7 @@
     </div>
   </section>
 
-  <!-- ================ Services + Contact ================ -->
+  
   <section class="section" id="services">
     <div class="container split split--stretch">
 
@@ -775,7 +773,7 @@
           </div>
         </div>
 
-        <!-- Resume PDF: assets/Gurwinder-Singh-Resume.pdf -->
+        
         <a class="btn btn--solid btn--block" href="assets/Gurwinder-Singh-Resume.pdf"
            download="Gurwinder-Singh-Resume.pdf" target="_blank" rel="noopener"
            style="margin-top: 20px;">
@@ -784,7 +782,7 @@
         </a>
       </article>
 
-      <!-- Contact details taken from the resume -->
+      
       <article class="panel reveal" id="contact">
         <div class="panel__head">
           <span class="chip" aria-hidden="true">
@@ -812,7 +810,7 @@
             </span>
             gursingh301999@gmail.com
           </a>
-          <!-- TODO: verify this LinkedIn slug — it looks auto-generated in the resume -->
+          
           <a class="contact__row" href="https://www.linkedin.com/in/gurwinder-undefined-583937437" target="_blank" rel="noopener">
             <span class="contact__icon contact__icon--fill" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 0 5 8.5a2.5 2.5 0 0 0 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.75V21h-4v-5.3c0-1.27-.02-2.9-1.8-2.9-1.8 0-2.08 1.38-2.08 2.81V21h-3.9z"/></svg>
@@ -833,9 +831,7 @@
           </span>
         </div>
 
-        <!-- No backend required: with data-endpoint="" the form opens the visitor's
-             mail app pre-filled via data-mailto. Set data-endpoint="https://…" to
-             POST real submissions instead. -->
+        
         <form class="form" id="contact-form" novalidate data-endpoint="" data-mailto="gursingh301999@gmail.com">
           <div class="form__row">
             <div class="field">
@@ -884,7 +880,7 @@
 </main>
 </div>
 
-  <!-- ========================= Footer ========================= -->
+  
   <footer class="site-footer">
     <div class="container footer-inner">
       <p>&copy; <span data-year>2026</span> Gurwinder Singh — IT Support Engineer &amp; Developer</p>
@@ -909,19 +905,7 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5M6 11l6-6 6 6"/></svg>
   </button>
 
-  <!--
-    NOTES
-    · Every detail on this page — summary, experience, education, skills, projects,
-      contact — is taken from assets/Gurwinder-Singh-Resume.pdf. Update both together.
-    · Resume buttons: hero ("Download Resume"), the Our Services panel, the Portfolio
-      footer and the footer text link all point at assets/Gurwinder-Singh-Resume.pdf.
-    · Swap a project placeholder: drop an <img class="project__img" src="assets/
-      project-1.jpg" alt="" /> in place of the gradient thumb block.
-    · Contact form: data-endpoint="" means it opens the visitor's mail app pre-filled
-      to data-mailto. Set data-endpoint="https://…" to POST real submissions instead.
-    · TODO: the LinkedIn slug (gurwinder-undefined-583937437) and the github.io
-      portfolio URL come straight from the resume — verify both are still current.
-  -->
+  
   <script src="js/background.js"></script>
   <script src="js/main.js"></script>
 
