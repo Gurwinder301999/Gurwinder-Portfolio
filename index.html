@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gurwinder Singh — IT Support Engineer &amp; Developer</title>
+<meta name="description" content="Gurwinder Singh — IT Support Engineer and Developer with 2+ years of hands-on experience in desktop support, network administration, VoIP deployment, Windows and Linux system administration, IP CCTV and access control. Based in Paharganj, New Delhi." />
+<meta name="author" content="Gurwinder Singh" />
+<meta name="keywords" content="IT Support Engineer, desktop support, VoIP, IP-PBX, Asterisk, SIP, Active Directory, Windows Server, Rocky Linux, CentOS, LAN WAN, DHCP, DNS, VLAN, enterprise Wi-Fi, IP CCTV, biometric access control, ticketing and SLA, RDP, AnyDesk, VNC, New Delhi" />
+<meta name="theme-color" content="#070707" />
+<meta property="og:title" content="Gurwinder Singh — IT Support Engineer &amp; Developer" />
+<meta property="og:description" content="Desktop support, network administration, VoIP deployment and Windows/Linux system administration. I keep infrastructure monitored, documented and online." />
+<meta property="og:type" content="profile" />
+<meta property="og:image" content="frames/frame_000000.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23070707'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23f2761b'/%3E%3C/svg%3E" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
+<link rel="preload" as="image" href="frames/frame_000000.jpg" />
+
+<link rel="stylesheet" href="css/styles.css" />
+
+<!-- Real details taken from Gurwinder Singh's resume (assets/Gurwinder-Singh-Resume.pdf) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Gurwinder Singh",
+  "jobTitle": "IT Support Engineer \u0026 Developer",
+  "email": "mailto:gursingh301999@gmail.com",
+  "telephone": "+91-87189-09145",
+  "url": "https://gurwinder301999.github.io/Gurwinder-Portfolio",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Paharganj, New Delhi",
+    "addressRegion": "Delhi",
+    "postalCode": "110055",
+    "addressCountry": "IN"
+  },
+  "worksFor": {
+    "@type": "Organization",
+    "name": "Cromptech Integrated Solutions Pvt. Ltd."
+  },
+  "alumniOf": {
+    "@type": "CollegeOrUniversity",
+    "name": "Punjabi University, Patiala"
+  },
+  "knowsAbout": [
+    "Desktop \u0026 end-user support",
+    "Network administration (TCP/IP, LAN/WAN, DHCP, DNS, VLAN)",
+    "VoIP, IP-PBX \u0026 SIP deployment",
+    "Windows 10 / 11 \u0026 Windows Server",
+    "Active Directory user lifecycle",
+    "Linux (Rocky / CentOS) administration \u0026 hardening",
+    "IP CCTV, enterprise Wi-Fi \u0026 biometric access control",
+    "Ticketing \u0026 SLA workflows",
+    "Remote support (RDP, AnyDesk, VNC)"
+  ]
+}
+</script>
+</head>
+<body>
+
+<!-- ============ Scroll-scrubbed video background ============ -->
+<div class="bg-stage" aria-hidden="true">
+  <canvas id="frame-canvas"></canvas>
+  <div class="bg-scrim"></div>
+  <div class="bg-dots"></div>
+</div>
+
+<!-- ================ Preloader (non-blocking) ================ -->
+<div class="loader" id="loader">
+  <div class="loader__mark"></div>
+  <div class="loader__bar"><span id="loader-fill"></span></div>
+  <div class="loader__label" id="loader-label">Loading 0%</div>
+</div>
+
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<!-- ========================= Header ========================= -->
+<header class="site-header" id="site-header">
+  <div class="container header-inner">
+    <a class="logo" href="#home" aria-label="Gurwinder Singh — home">
+      <span class="logo__mark" aria-hidden="true"></span>
+      <span class="sr-only">Gurwinder Singh</span>
+    </a>
+
+    <nav class="nav" id="primary-nav" aria-label="Primary">
+      <a href="#home" class="is-active">Home</a>
+      <a href="#about">About</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#clients">Highlights</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <a class="btn btn--outline btn--sm header-cta" href="#contact">Hire Me</a>
+
+    <button class="nav-toggle" id="nav-toggle" type="button"
+            aria-label="Toggle navigation" aria-controls="primary-nav" aria-expanded="false">
+      <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="page">
+<main>
+  <!-- ========================== Hero ========================== -->
+  <section class="hero" id="home">
+    <div class="container hero__grid">
+      <div class="hero__copy">
+        <p class="eyebrow reveal">Hello, I'm</p>
+        <h1 class="hero__title reveal">IT Support<span>Engineer</span></h1>
+        <p class="hero__role reveal">&amp; Developer &middot; VoIP &middot; Networking &middot; Windows &amp; Linux</p>
+        <p class="hero__lead reveal">
+          I'm an IT Support Engineer with 2+ years of hands-on experience in desktop
+          support, network administration, VoIP deployment, and Windows and Linux
+          system administration. I keep infrastructure monitored, documented, and online.
+        </p>
+
+        <div class="hero__actions reveal">
+          <a class="btn btn--solid" href="#portfolio">
+            View My Projects
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn--outline" href="#contact">
+            Hire Me
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 20h14"/></svg>
+          </a>
+          <a class="btn btn--resume" href="assets/Gurwinder-Singh-Resume.pdf"
+             download="Gurwinder-Singh-Resume.pdf" target="_blank" rel="noopener"
+             title="Download my resume (PDF, 4 pages)">
+            Download Resume
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5z"/><path d="M14 3v5h5M12 12v5m0 0l-2-2m2 2l2-2"/></svg>
+          </a>
+        </div>
+
+        <div class="hero__social reveal">
+          <span>Find me on</span>
+          <div class="social-row">
+            <!-- TODO: these links are taken from the resume — verify the LinkedIn slug,
+                 it looks auto-generated ("gurwinder-undefined-583937437"). -->
+            <a class="social-link social-link--on" href="https://www.linkedin.com/in/gurwinder-undefined-583937437" target="_blank" rel="noopener" aria-label="LinkedIn profile">in</a>
+            <a class="social-link" href="mailto:gursingh301999@gmail.com" aria-label="Email gursingh301999@gmail.com">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M4 7l8 6 8-6"/></svg>
+            </a>
+            <a class="social-link" href="tel:+918718909145" aria-label="Call +91 87189 09145">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3.5h3l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 5.7 2 2 0 0 1 6.5 3.5z"/></svg>
+            </a>
+            <a class="social-link" href="https://gurwinder301999.github.io/Gurwinder-Portfolio" target="_blank" rel="noopener" aria-label="Portfolio and case studies">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.8 2.6 15.2 0 18M12 3c-2.6 2.8-2.6 15.2 0 18"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="portrait reveal">
+        <span class="portrait__tag portrait__tag--left">New Delhi, India</span>
+        <div class="portrait__ring">
+          <div class="portrait__frame">
+            <img src="frames/frame_000000.jpg" alt="Gurwinder Singh, IT Support Engineer and Developer" width="1280" height="720" />
+            <!-- Colour sweep (vanilla port of the framer-motion "Text Colour Sweep").
+                 Tunable: wave colour, per-char delay, duration, rise, colour spread. -->
+            <span class="portrait__name"
+                  data-sweep
+                  data-sweep-wave="#ffa04d"
+                  data-sweep-stagger="0.04"
+                  data-sweep-duration="0.6"
+                  data-sweep-y="0.3"
+                  data-sweep-spread="100">
+              <span class="sweep-text">Gurwinder<em>Singh</em></span>
+              <span class="sr-only">Gurwinder Singh</span>
+            </span>
+          </div>
+          <span class="portrait__dots" aria-hidden="true"></span>
+        </div>
+        <span class="portrait__year" aria-hidden="true"><span>2+</span><span>Yrs</span></span>
+        <span class="portrait__tag">Open to Opportunities</span>
+      </div>
+
+      <div class="hero__scroll" aria-hidden="true"><i></i> Scroll to explore <i></i></div>
+    </div>
+  </section>
+
+  <!-- ==================== About Me + Skills ==================== -->
+  <section class="section" id="about">
+    <div class="container split split--stretch">
+
+      <article class="panel reveal">
+        <div class="panel__head">
+          <span class="chip" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.6 20a7.4 7.4 0 0 1 14.8 0"/></svg>
+          </span>
+          <h2 class="panel__title">About Me</h2>
+        </div>
+
+        <p class="about__lead">
+          I'm an IT Support Engineer based in Paharganj, New Delhi, with 2+ years of
+          hands-on experience in desktop support, network administration, VoIP
+          deployment, and Windows and Linux system administration. I currently keep
+          end users and infrastructure running at Cromptech Integrated Solutions —
+          provisioned, documented and online.
+        </p>
+
+        <div class="features">
+          <div class="feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3l2 5.2 5.2 2-5.2 2L12 17.4l-2-5.2L4.8 10.2 10 8.2 12 3z"/></svg>
+            <h4>2+ Years Hands-On</h4>
+            <p>Desktops, laptops, printers and peripherals resolved end to end.</p>
+          </div>
+          <div class="feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="3.2"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3"/></svg>
+            <h4>Monitored &amp; Online</h4>
+            <p>Logs and performance watched to hold telecom uptime at 99.9%.</p>
+          </div>
+          <div class="feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3l7.2 3v6c0 4.2-3 7.4-7.2 9.2C7.8 19.4 4.8 16.2 4.8 12V6L12 3z"/><path d="M9 12.2l2.1 2.1L15.2 10"/></svg>
+            <h4>Documented</h4>
+            <p>Asset records, runbooks and preventive maintenance kept current.</p>
+          </div>
+          <div class="feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="9" cy="9" r="3.1"/><path d="M2.8 19.6a6.2 6.2 0 0 1 12.4 0M16.2 6.4a3 3 0 0 1 0 5.4M17.4 19.6a6.2 6.2 0 0 0-1.6-4"/></svg>
+            <h4>User-First Support</h4>
+            <p>Provisioning, training and remote support with ticketing and SLAs.</p>
+          </div>
+        </div>
+
+        <!-- Experience + education straight from the resume -->
+        <div class="exp">
+          <div class="exp__row">
+            <div class="exp__top">
+              <p class="exp__role">IT Support Engineer</p>
+              <p class="exp__date">Dec 2024 — Present</p>
+            </div>
+            <p class="exp__org">Cromptech Integrated Solutions Pvt. Ltd. &middot; Delhi</p>
+            <p class="exp__desc">
+              Support end users with desktops, laptops, printers and network devices,
+              plus VoIP server operations, user provisioning, preventive maintenance
+              and LAN/WAN troubleshooting.
+            </p>
+          </div>
+
+          <div class="exp__row">
+            <div class="exp__top">
+              <p class="exp__role">BCA with AI Engineering &middot; 80%</p>
+              <p class="exp__date">2020 — 2024</p>
+            </div>
+            <p class="exp__org">Punjabi University, Patiala</p>
+            <p class="exp__desc">
+              Bachelor of Computer Applications with a specialization in AI
+              Engineering, supported by a self-built home lab for LAN/WAN, firewall
+              and self-hosted VoIP experiments.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel reveal">
+        <div class="panel__head">
+          <span class="chip" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4L4.2 8.7l5.4-.8L12 3z"/></svg>
+          </span>
+          <h2 class="panel__title">Skills &amp; Expertise</h2>
+        </div>
+
+        <div class="skills__body">
+          <ul class="skill-list">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="4" width="18" height="13" rx="3"/><path d="M9 20.5h6"/></svg>
+              Desktop &amp; End-User Support
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M20.6 12.6l-8 8a2 2 0 0 1-2.8 0L3 13.8V4h9.8l7.8 7.8a2 2 0 0 1 0 .8z"/><circle cx="7.6" cy="7.6" r="1.2"/></svg>
+              Active Directory User Lifecycle
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="4.5" y="3" width="15" height="18" rx="2.4"/><path d="M8.5 8h7M8.5 12h7M8.5 16h4"/></svg>
+              Ticketing, SLAs &amp; Preventive Maintenance
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.2v3.6L16 19V5L4 10.2z"/><path d="M16.8 9a3.6 3.6 0 0 1 0 6.4M7.2 14.4V19h2.6v-3.5"/></svg>
+              VoIP &amp; IP Telephony Deployment
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M7.5 9.5l2.5 2.5-2.5 2.5M12.8 15h4"/></svg>
+              Linux System Administration
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 9V4h10v5"/><rect x="4" y="9" width="16" height="7.5" rx="2"/><path d="M7 13.5h10V20H7z"/></svg>
+              Structured Cabling &amp; Hardware Installation
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.8"/><path d="M4.4 18.4l4.8-4.6 3.6 3.6 2.8-2.4 4 3.4"/></svg>
+              IP CCTV, Enterprise Wi-Fi &amp; Access Control
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg>
+              Network Infrastructure — TCP/IP, LAN/WAN, DHCP, DNS &amp; VLANs
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="3"/><path d="M8 12.2l2.6 2.6 5-5.4"/></svg>
+              Asset Documentation &amp; Handover
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.8 20a6.2 6.2 0 0 1 12.4 0M16.2 14.6l2 2 3.4-3.8"/></svg>
+              User Training &amp; Remote Support
+            </li>
+          </ul>
+
+          <div>
+            <p class="tools__label">Systems &amp; Tools</p>
+            <div class="tools">
+              <div class="tool"><span class="tool__badge tool__badge--win">Win</span> Windows 10 / 11 &amp; Windows Server</div>
+              <div class="tool"><span class="tool__badge tool__badge--lx">Lx</span> Rocky Linux &amp; CentOS</div>
+              <div class="tool"><span class="tool__badge tool__badge--pbx">PBX</span> Asterisk IP-PBX · PJSIP · SIP / RTP</div>
+              <div class="tool"><span class="tool__badge tool__badge--sip">IP</span> IP desk phones &amp; SIP endpoints</div>
+              <div class="tool"><span class="tool__badge tool__badge--m365">365</span> Microsoft 365 &amp; Office apps</div>
+              <div class="tool"><span class="tool__badge tool__badge--rdp">RDP</span> RDP · VNC · AnyDesk</div>
+              <div class="tool"><span class="tool__badge tool__badge--cis">CIS</span> CIS-style hardening benchmarks</div>
+              <div class="tool"><span class="tool__badge tool__badge--poe">PoE</span> PoE switches · IP cameras · Wi-Fi APs</div>
+              <div class="tool"><span class="tool__badge tool__badge--f2b">F2B</span> Fail2ban SIP brute-force blocking</div>
+              <div class="tool"><span class="tool__badge tool__badge--cdp">CDP</span> CDP / LLDP neighbour discovery</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ======================== Portfolio ======================== -->
+  <section class="section" id="portfolio">
+    <div class="container">
+      <div class="panel panel--flush reveal">
+        <div class="panel__head" style="padding-inline: 26px;">
+          <span class="chip" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 15.5l5-5 4 4 3-2.5 6 5"/><circle cx="8.6" cy="8.6" r="1.6"/></svg>
+          </span>
+          <h2 class="panel__title">My Portfolio</h2>
+        </div>
+
+        <div class="filters" id="filters" role="group" aria-label="Filter projects">
+          <button class="filter is-active" type="button" data-filter="all" aria-pressed="true">All Work</button>
+          <button class="filter" type="button" data-filter="voip" aria-pressed="false">VoIP &amp; Telephony</button>
+          <button class="filter" type="button" data-filter="networking" aria-pressed="false">Networking</button>
+          <button class="filter" type="button" data-filter="security" aria-pressed="false">Security &amp; CCTV</button>
+          <button class="filter" type="button" data-filter="automation" aria-pressed="false">Automation</button>
+          <button class="filter" type="button" data-filter="infrastructure" aria-pressed="false">Infrastructure</button>
+        </div>
+
+        <div class="projects" id="projects">
+
+          <article class="project" data-cat="voip">
+            <div class="project__thumb thumb--voip">
+              <span class="project__word">30+<br />IP<br />Phones<br /><em>Live</em></span>
+            </div>
+            <div class="project__meta">
+              <h3>Dalmia Bros. — 30+ Endpoint VoIP Rollout</h3>
+              <p class="project__cat">VoIP &amp; Telephony · Jul 2026 — Present</p>
+              <p class="project__desc">End to end: structured cabling and hardware install through server configuration to 30+ live IP phones, every extension provisioned, tested and handed over.</p>
+            </div>
+          </article>
+
+          <article class="project" data-cat="voip">
+            <div class="project__thumb thumb--sip">
+              <span class="project__word">SIP<br />Endpoints<br /><em>Provisioned</em></span>
+            </div>
+            <div class="project__meta">
+              <h3>TDI Bhikaji Cama Place — IP Telephony &amp; SIP Provisioning</h3>
+              <p class="project__cat">VoIP &amp; Telephony · Jun 2026 — Present</p>
+              <p class="project__desc">Legacy lines replaced by a scalable VoIP platform: physical endpoints, voice VLAN segregation, automated extension provisioning and a zero-downtime dial plan cutover.</p>
+            </div>
+          </article>
+
+          <article class="project" data-cat="voip">
+            <div class="project__thumb thumb--asterisk">
+              <span class="project__word">Asterisk<br /><em>IP-PBX</em><br />Rocky Linux</span>
+            </div>
+            <div class="project__meta">
+              <h3>LG House, Civil Lines — Asterisk Server on Rocky Linux</h3>
+              <p class="project__cat">VoIP &amp; Telephony · May — Jun 2025</p>
+              <p class="project__desc">Asterisk IP-PBX engineered on Rocky Linux: 25+ endpoints provisioned with hardened security rules, kernel networking tuned and continuous log monitoring.</p>
+            </div>
+          </article>
+
+          <article class="project" data-cat="security">
+            <div class="project__thumb thumb--cctv">
+              <span class="project__word">IP CCTV<br />Wi-Fi &amp;<br /><em>Access Ctrl</em></span>
+            </div>
+            <div class="project__meta">
+              <h3>Chhattisgarh Bhawan — CCTV, Wi-Fi &amp; Access Control</h3>
+              <p class="project__cat">Security &amp; CCTV · Jan — Jun 2026</p>
+              <p class="project__desc">Building-wide build: IP CCTV, a secure segmented data network, enterprise Wi-Fi and biometric access control, commissioned and handed over as one coordinated project.</p>
+            </div>
+          </article>
+
+          <article class="project" data-cat="security">
+            <div class="project__thumb thumb--hardening">
+              <span class="project__word">CIS-style<br /><em>Hardening</em><br />Baseline</span>
+            </div>
+            <div class="project__meta">
+              <h3>Linux Hardening Baseline — Rocky &amp; CentOS</h3>
+              <p class="project__cat">Security &amp; CCTV · 2025 — Ongoing</p>
+              <p class="project__desc">A repeatable hardening script that applies the same documented controls to every Rocky and CentOS host and prints exactly what it changed, so state is verified rather than assumed.</p>
+            </div>
+          </article>
+
+          <article class="project" data-cat="networking">
+            <div class="project__thumb thumb--topology">
+              <span class="project__word">CDP /<br />LLDP<br /><em>Discovery</em></span>
+            </div>
+            <div class="project__meta">
+              <h3>Network Topology Mapper — Live Discovery &amp; Diagrams</h3>
+              <p class="project__cat">Networking · 2025 — Ongoing</p>
+              <p class="project__desc">Queries switches and routers for their neighbour tables and address plans, then generates the diagram from that live data, so documentation is a by-product of the network.</p>
+            </div>
+          </article>
+
+          <article class="project" data-cat="networking">
+            <div class="project__thumb thumb--lab">
+              <span class="project__word">Multi-tier<br /><em>SLA Desk</em><br />+ Home Lab</span>
+            </div>
+            <div class="project__meta">
+              <h3>Service Desk &amp; Home Lab — Network Lab + SLA Desk</h3>
+              <p class="project__cat">Networking · Ongoing, self-driven</p>
+              <p class="project__desc">An isolated home lab with multi-subnet LAN/WAN routing, firewall ACLs, an Active Directory domain and a self-hosted Asterisk PBX, run alongside a multi-tier SLA service desk.</p>
+            </div>
+          </article>
+
+          <article class="project" data-cat="automation">
+            <div class="project__thumb thumb--monitor">
+              <span class="project__word">Call<br />Quality<br /><em>Monitor</em></span>
+            </div>
+            <div class="project__meta">
+              <h3>VoIP Call Quality Monitor — Packet Loss &amp; Jitter</h3>
+              <p class="project__cat">Automation · 2025 — Ongoing</p>
+              <p class="project__desc">Samples Asterisk call detail records and interface counters on a schedule, then scores each call so a quality drop shows up as a number instead of an opinion.</p>
+            </div>
+          </article>
+
+          <article class="project" data-cat="automation">
+            <div class="project__thumb thumb--automation">
+              <span class="project__word">Ticket<br /><em>Triage</em><br />Bot</span>
+            </div>
+            <div class="project__meta">
+              <h3>Service Desk Automation Bot — Ticket Triage</h3>
+              <p class="project__cat">Automation · 2025 — Ongoing</p>
+              <p class="project__desc">Recognises recurring ticket patterns, runs the first-line checks automatically, and either resolves the ticket or hands a human the diagnostic output.</p>
+            </div>
+          </article>
+
+          <article class="project" data-cat="automation">
+            <div class="project__thumb thumb--ad">
+              <span class="project__word">Onboard<br />/ Offboard<br /><em>Scripted</em></span>
+            </div>
+            <div class="project__meta">
+              <h3>AD Onboarding Automation — User Lifecycle</h3>
+              <p class="project__cat">Automation · 2025 — Ongoing</p>
+              <p class="project__desc">Onboarding and offboarding scripted from one definition of the account: idempotent, disable before delete, and safe to re-run after a half-finished step.</p>
+            </div>
+          </article>
+
+          <article class="project" data-cat="infrastructure">
+            <div class="project__thumb thumb--backup">
+              <span class="project__word">3-2-1<br /><em>Backups</em><br />+ Drills</span>
+            </div>
+            <div class="project__meta">
+              <h3>Backup &amp; Restore Runbook — 3-2-1 Backups &amp; Drills</h3>
+              <p class="project__cat">Infrastructure · 2025 — Ongoing</p>
+              <p class="project__desc">3-2-1 backups paired with scheduled restore drills, so recovery time is a measured figure and the restore procedure is one I have actually performed.</p>
+            </div>
+          </article>
+
+          <article class="project" data-cat="infrastructure">
+            <div class="project__thumb thumb--asset">
+              <span class="project__word">Assets &amp;<br /><em>Warranty</em><br />Tracking</span>
+            </div>
+            <div class="project__meta">
+              <h3>IT Asset Inventory Dashboard — Self-hosted</h3>
+              <p class="project__cat">Infrastructure · 2025 — Ongoing</p>
+              <p class="project__desc">Records hostname, model, serial, assigned user, subnet and warranty end date, then surfaces expiring warranties and unassigned devices automatically.</p>
+            </div>
+          </article>
+
+        </div>
+
+        <div class="portfolio__foot">
+          <a class="btn btn--solid" href="assets/Gurwinder-Singh-Resume.pdf"
+             download="Gurwinder-Singh-Resume.pdf" target="_blank" rel="noopener">
+            Download Resume
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5z"/><path d="M14 3v5h5M12 12v5m0 0l-2-2m2 2l2-2"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================ Highlights + How It Works ================ -->
+  <section class="section" id="clients">
+    <div class="container split split--stretch">
+
+      <article class="panel reveal">
+        <div class="panel__head">
+          <span class="chip" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M5 4h14v6a7 7 0 0 1-14 0V4z"/><path d="M19 5h2v2a3 3 0 0 1-3 3M5 5H3v2a3 3 0 0 0 3 3"/></svg>
+          </span>
+          <h2 class="panel__title">Highlights</h2>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <p class="stat__num" data-count="2" data-suffix="+">0+</p>
+            <p class="stat__label">Years Hands-On</p>
+          </div>
+          <div class="stat">
+            <p class="stat__num" data-count="30" data-suffix="+">0+</p>
+            <p class="stat__label">VoIP Endpoints Live</p>
+          </div>
+          <div class="stat">
+            <p class="stat__num" data-count="99.9" data-decimals="1" data-suffix="%">0.0%</p>
+            <p class="stat__label">Telecom Uptime Kept</p>
+          </div>
+          <div class="stat">
+            <p class="stat__num" data-count="12" data-suffix="">0</p>
+            <p class="stat__label">Projects Documented</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel reveal" id="quotes">
+        <div class="panel__head">
+          <span class="chip" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M7.5 9.5l2.5 2.5-2.5 2.5M12.8 15h4"/></svg>
+          </span>
+          <h2 class="panel__title">How It Works</h2>
+        </div>
+
+        <div class="quotes panel__grow">
+          <div class="quote-viewport">
+            <div class="quote-track" id="quote-track">
+
+              <article class="quote">
+                <p class="quote__label">How it works</p>
+                <h3 class="quote__title">VoIP call flow — SIP, RTP and the dial plan</h3>
+                <p>
+                  An IP desk phone is a small computer: when a call starts it sends a SIP
+                  message to the call server, which decides whether the number is an
+                  internal extension, a department ring group or an outside line — then
+                  routes the call and tells both phones where to send their audio.
+                </p>
+                <p class="quote__tags">SIP · RTP · PJSIP channels · Dial plan</p>
+                <footer class="quote__by">Dalmia Bros. — 30+ endpoint rollout</footer>
+              </article>
+
+              <article class="quote">
+                <p class="quote__label">How it works</p>
+                <h3 class="quote__title">Handsets that configure themselves</h3>
+                <p>
+                  DHCP options 66 and 150 are the mechanism: a new handset asks for an
+                  address, and those two options tell it where to fetch its configuration
+                  file from. QoS then marks voice packets so the switch forwards them
+                  ahead of ordinary file and web traffic when the link gets busy.
+                </p>
+                <p class="quote__tags">DHCP 66 / 150 · Voice VLAN · QoS</p>
+                <footer class="quote__by">TDI Bhikaji Cama Place — IP telephony rollout</footer>
+              </article>
+
+              <article class="quote">
+                <p class="quote__label">How it works</p>
+                <h3 class="quote__title">Cameras over PoE, on their own segment</h3>
+                <p>
+                  A PoE switch sends power and data down one cable, so each camera needs a
+                  single outlet instead of a data point plus a power socket. Because an IP
+                  camera records digitally and sends video over the network, live view and
+                  remote playback work from a browser or a phone.
+                </p>
+                <p class="quote__tags">PoE · IP CCTV · Segmentation · Enterprise Wi-Fi</p>
+                <footer class="quote__by">Chhattisgarh Bhawan — building-wide build</footer>
+              </article>
+
+              <article class="quote">
+                <p class="quote__label">How it works</p>
+                <h3 class="quote__title">Asterisk in place of the hardware exchange</h3>
+                <p>
+                  Asterisk is software that replaces a phone exchange: PJSIP channels
+                  manage registered handsets, RTP carries the audio, and the dial plan
+                  decides where a dialled number goes. Fail2ban watches the auth log for
+                  repeated failed SIP logins and blocks those addresses.
+                </p>
+                <p class="quote__tags">Asterisk · Rocky Linux · Fail2ban · Kernel tuning</p>
+                <footer class="quote__by">LG House, Civil Lines — 25+ IP endpoints</footer>
+              </article>
+
+              <article class="quote">
+                <p class="quote__label">How it works</p>
+                <h3 class="quote__title">Backups that are restored, not just written</h3>
+                <p>
+                  The 3-2-1 rule is a shape rather than a product: three copies, two media
+                  types, one kept off site. Scheduling matters more than tooling — a manual
+                  backup is one that eventually gets skipped — and restore drills turn
+                  recovery time into a measured figure.
+                </p>
+                <p class="quote__tags">3-2-1 · Checksums · Restore drills · RPO / RTO</p>
+                <footer class="quote__by">Backup &amp; Restore Runbook — home lab</footer>
+              </article>
+
+              <article class="quote">
+                <p class="quote__label">How it works</p>
+                <h3 class="quote__title">A lab that lets you break things first</h3>
+                <p>
+                  Anything I plan to deploy is built and broken on purpose in the home lab
+                  first, so the failure costs a Saturday instead of a production incident.
+                  Two NICs on the firewall are what make it behave like a real site: one
+                  faces an isolated subnet standing in for the internet, the other the
+                  internal network.
+                </p>
+                <p class="quote__tags">LAN/WAN routing · Firewall ACLs · Asterisk PBX</p>
+                <footer class="quote__by">Service Desk &amp; Home Lab — self-driven</footer>
+              </article>
+
+              <article class="quote">
+                <p class="quote__label">How it works</p>
+                <h3 class="quote__title">The three numbers that decide intelligibility</h3>
+                <p>
+                  Every finished call leaves a call detail record, written whether it
+                  succeeded or failed. Packet loss, jitter and latency decide whether a
+                  call is intelligible — and because codecs conceal small amounts of all
+                  three, a call often sounds acceptable on numbers that look alarming.
+                </p>
+                <p class="quote__tags">CDR · Packet loss · Jitter · Latency</p>
+                <footer class="quote__by">VoIP Call Quality Monitor — home lab</footer>
+              </article>
+
+              <article class="quote">
+                <p class="quote__label">How it works</p>
+                <h3 class="quote__title">Triage that escalates instead of guessing</h3>
+                <p>
+                  Ticket text is matched against known signatures and the confidence of
+                  that match decides what happens: a strong match runs its checks, a weak
+                  one is escalated. Each signature names the checks to run rather than the
+                  answer to report, which is what makes an automated resolution defensible.
+                </p>
+                <p class="quote__tags">Classification · Confidence · Escalation</p>
+                <footer class="quote__by">Service Desk Automation Bot — home lab</footer>
+              </article>
+
+              <article class="quote">
+                <p class="quote__label">How it works</p>
+                <h3 class="quote__title">Idempotence makes hardening safe to re-run</h3>
+                <p>
+                  A hardening script that has already run changes nothing on its second
+                  pass, so it can be applied to a new host, re-applied during patching and
+                  scheduled as an audit. CIS benchmarks are the reference because they are
+                  published consensus rather than personal preference.
+                </p>
+                <p class="quote__tags">Idempotence · CIS-style controls · Audit trail</p>
+                <footer class="quote__by">Linux Hardening Baseline — home lab</footer>
+              </article>
+
+              <article class="quote">
+                <p class="quote__label">How it works</p>
+                <h3 class="quote__title">Discovery from the wire, not from guesswork</h3>
+                <p>
+                  CDP and LLDP let devices announce themselves to directly connected
+                  neighbours, so one query returns what is physically attached to a port.
+                  Combining that neighbour table with interface addresses is what separates
+                  a genuine link from two devices sharing a segment.
+                </p>
+                <p class="quote__tags">CDP · LLDP · Neighbour tables · Read-only</p>
+                <footer class="quote__by">Network Topology Mapper — home lab</footer>
+              </article>
+
+              <article class="quote">
+                <p class="quote__label">How it works</p>
+                <h3 class="quote__title">One definition, two directions</h3>
+                <p>
+                  Group membership decides what a user can actually reach, and it is where
+                  hand-built accounts go wrong. Both directions are scripted from one
+                  definition of the person, so a change to it applies to onboarding and
+                  offboarding at once.
+                </p>
+                <p class="quote__tags">Active Directory · Idempotent · Disable before delete</p>
+                <footer class="quote__by">AD Onboarding Automation — home lab</footer>
+              </article>
+
+              <article class="quote">
+                <p class="quote__label">How it works</p>
+                <h3 class="quote__title">An inventory that is found again</h3>
+                <p>
+                  A device record is worth keeping only if it answers the support question
+                  that actually arrives: hostname, model, serial, assigned user, subnet and
+                  warranty end date. Warranty expiry is a date problem, so remaining
+                  coverage is calculated at read time rather than when the row was edited.
+                </p>
+                <p class="quote__tags">Hostname · Serial · Assignment · Warranty dates</p>
+                <footer class="quote__by">IT Asset Inventory Dashboard — self-hosted</footer>
+              </article>
+
+            </div>
+          </div>
+
+          <div class="quotes__nav">
+            <button class="quotes__arrow" id="quote-prev" type="button" aria-label="Previous note">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+            </button>
+            <button class="quotes__arrow" id="quote-next" type="button" aria-label="Next note">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+            <div class="quotes__dots" id="quote-dots"></div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ================ Services + Contact ================ -->
+  <section class="section" id="services">
+    <div class="container split split--stretch">
+
+      <article class="panel reveal">
+        <div class="panel__head">
+          <span class="chip" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8.5 4.2-8.5 4.3-8.5-4.3L12 3z"/><path d="M4 12.4l8 4 8-4M4 16.6l8 4 8-4"/></svg>
+          </span>
+          <h2 class="panel__title">My Services</h2>
+        </div>
+
+        <div class="services">
+          <div class="service">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="4" width="18" height="13" rx="3"/><path d="M9 20.5h6"/></svg>
+            <div>
+              <h4>IT Support &amp; Desktop Support</h4>
+              <p>Desktops, laptops, printers and peripherals, resolved fast.</p>
+            </div>
+          </div>
+          <div class="service">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.6" r="2.3"/><circle cx="5" cy="18.4" r="2.3"/><circle cx="19" cy="18.4" r="2.3"/><path d="M12 6.9v3.6M6.6 16.4L10.2 11M17.4 16.4L13.8 11"/></svg>
+            <div>
+              <h4>Network Setup &amp; Administration</h4>
+              <p>LAN/WAN, DHCP, DNS, VLANs and enterprise Wi-Fi.</p>
+            </div>
+          </div>
+          <div class="service">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.2v3.6L16 19V5L4 10.2z"/><path d="M16.8 9a3.6 3.6 0 0 1 0 6.4M7.2 14.4V19h2.6v-3.5"/></svg>
+            <div>
+              <h4>VoIP / IP-PBX Deployment</h4>
+              <p>Asterisk servers, SIP endpoints and dial plans.</p>
+            </div>
+          </div>
+          <div class="service">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.6" width="17" height="6.4" rx="2"/><rect x="3.5" y="14" width="17" height="6.4" rx="2"/><path d="M7.2 6.8h.01M7.2 17.2h.01M11 6.8h6M11 17.2h6"/></svg>
+            <div>
+              <h4>Windows &amp; Linux Server Admin</h4>
+              <p>Active Directory, hardening and log monitoring.</p>
+            </div>
+          </div>
+          <div class="service">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7.5" width="12" height="9" rx="2.4"/><path d="M15 11l6-3v8l-6-3z"/><path d="M6 20h6"/></svg>
+            <div>
+              <h4>IP CCTV &amp; Access Control</h4>
+              <p>Cameras, PoE switching, biometric access control.</p>
+            </div>
+          </div>
+          <div class="service">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5A2.5 2.5 0 0 1 5.5 6h13A2.5 2.5 0 0 1 21 8.5v1.6a1.9 1.9 0 0 0 0 3.8v1.6a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 15.5v-1.6a1.9 1.9 0 0 0 0-3.8z"/><path d="M9.5 6v12"/></svg>
+            <div>
+              <h4>Ticketing, SLAs &amp; Documentation</h4>
+              <p>Asset records, maintenance schedules, remote support.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resume PDF: assets/Gurwinder-Singh-Resume.pdf -->
+        <a class="btn btn--solid btn--block" href="assets/Gurwinder-Singh-Resume.pdf"
+           download="Gurwinder-Singh-Resume.pdf" target="_blank" rel="noopener"
+           style="margin-top: 20px;">
+          Download Resume (PDF)
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 20h14"/></svg>
+        </a>
+      </article>
+
+      <!-- Contact details taken from the resume -->
+      <article class="panel reveal" id="contact">
+        <div class="panel__head">
+          <span class="chip" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2.5L11 13M21.5 2.5l-6.6 19-3.9-8.5-8.5-3.9 19-6.6z"/></svg>
+          </span>
+          <h2 class="panel__title">Let's Work Together!</h2>
+        </div>
+
+        <p class="about__lead" style="margin-bottom: 20px;">
+          I'm open to full-time IT support, network and VoIP roles in Delhi NCR, and to
+          freelance deployments. Call, email, or send the form below — my resume is one
+          click away either way.
+        </p>
+
+        <div class="contact__info">
+          <a class="contact__row" href="tel:+918718909145">
+            <span class="contact__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3.5h3l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 5.7 2 2 0 0 1 6.5 3.5z"/></svg>
+            </span>
+            +91 87189 09145
+          </a>
+          <a class="contact__row" href="mailto:gursingh301999@gmail.com">
+            <span class="contact__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M4 7l8 6 8-6"/></svg>
+            </span>
+            gursingh301999@gmail.com
+          </a>
+          <!-- TODO: verify this LinkedIn slug — it looks auto-generated in the resume -->
+          <a class="contact__row" href="https://www.linkedin.com/in/gurwinder-undefined-583937437" target="_blank" rel="noopener">
+            <span class="contact__icon contact__icon--fill" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 0 5 8.5a2.5 2.5 0 0 0 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.75V21h-4v-5.3c0-1.27-.02-2.9-1.8-2.9-1.8 0-2.08 1.38-2.08 2.81V21h-3.9z"/></svg>
+            </span>
+            linkedin.com/in/gurwinder-undefined-583937437
+          </a>
+          <a class="contact__row" href="https://gurwinder301999.github.io/Gurwinder-Portfolio" target="_blank" rel="noopener">
+            <span class="contact__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.8 2.6 15.2 0 18M12 3c-2.6 2.8-2.6 15.2 0 18"/></svg>
+            </span>
+            gurwinder301999.github.io/Gurwinder-Portfolio
+          </a>
+          <span class="contact__row">
+            <span class="contact__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
+            </span>
+            Paharganj, New Delhi, Delhi 110055
+          </span>
+        </div>
+
+        <!-- No backend required: with data-endpoint="" the form opens the visitor's
+             mail app pre-filled via data-mailto. Set data-endpoint="https://…" to
+             POST real submissions instead. -->
+        <form class="form" id="contact-form" novalidate data-endpoint="" data-mailto="gursingh301999@gmail.com">
+          <div class="form__row">
+            <div class="field">
+              <label class="sr-only" for="name">Your Name</label>
+              <input id="name" name="name" type="text" placeholder="Your Name" autocomplete="name" />
+              <span class="field__error" role="alert"></span>
+            </div>
+            <div class="field">
+              <label class="sr-only" for="email">Your Email</label>
+              <input id="email" name="email" type="email" placeholder="Your Email" autocomplete="email" />
+              <span class="field__error" role="alert"></span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="sr-only" for="subject">Subject</label>
+            <input id="subject" name="subject" type="text" placeholder="Subject — role, project or deployment" />
+            <span class="field__error" role="alert"></span>
+          </div>
+
+          <div class="field">
+            <label class="sr-only" for="message">Your Message</label>
+            <textarea id="message" name="message" placeholder="Your Message" rows="4"></textarea>
+            <span class="field__error" role="alert"></span>
+          </div>
+
+          <div class="form__status" id="form-status" role="status" aria-live="polite"></div>
+
+          <button class="btn btn--solid" type="submit">
+            <span class="btn__label">Send Message</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2.5L11 13M21.5 2.5l-6.6 19-3.9-8.5-8.5-3.9 19-6.6z"/></svg>
+          </button>
+        </form>
+
+        <p class="contact__note">
+          Prefer email? Write to
+          <a href="mailto:gursingh301999@gmail.com">gursingh301999@gmail.com</a> or call
+          <a href="tel:+918718909145">+91 87189 09145</a> — my resume PDF is
+          <a href="assets/Gurwinder-Singh-Resume.pdf" download="Gurwinder-Singh-Resume.pdf">right here</a>.
+        </p>
+      </article>
+
+    </div>
+  </section>
+
+</main>
+</div>
+
+  <!-- ========================= Footer ========================= -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; <span data-year>2026</span> Gurwinder Singh — IT Support Engineer &amp; Developer</p>
+      <p>
+        Paharganj, New Delhi 110055 &middot;
+        <a href="mailto:gursingh301999@gmail.com">gursingh301999@gmail.com</a> &middot;
+        <a href="tel:+918718909145">+91 87189 09145</a> &middot;
+        <a class="footer-resume" href="assets/Gurwinder-Singh-Resume.pdf" download="Gurwinder-Singh-Resume.pdf">Resume PDF</a>
+        &middot;
+        <a href="privacy.html">Privacy</a>
+        &middot;
+        <a href="terms.html">Terms</a>
+      </p>
+      <a class="footer-top-link" href="#home">
+        Back to top
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5M6 11l6-6 6 6"/></svg>
+      </a>
+    </div>
+  </footer>
+
+  <button class="to-top" id="to-top" type="button" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5M6 11l6-6 6 6"/></svg>
+  </button>
+
+  <!--
+    NOTES
+    · Every detail on this page — summary, experience, education, skills, projects,
+      contact — is taken from assets/Gurwinder-Singh-Resume.pdf. Update both together.
+    · Resume buttons: hero ("Download Resume"), the Our Services panel, the Portfolio
+      footer and the footer text link all point at assets/Gurwinder-Singh-Resume.pdf.
+    · Swap a project placeholder: drop an <img class="project__img" src="assets/
+      project-1.jpg" alt="" /> in place of the gradient thumb block.
+    · Contact form: data-endpoint="" means it opens the visitor's mail app pre-filled
+      to data-mailto. Set data-endpoint="https://…" to POST real submissions instead.
+    · TODO: the LinkedIn slug (gurwinder-undefined-583937437) and the github.io
+      portfolio URL come straight from the resume — verify both are still current.
+  -->
+  <script src="js/background.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>
