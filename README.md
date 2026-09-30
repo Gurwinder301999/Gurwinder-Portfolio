@@ -165,7 +165,9 @@ Copy-Item public\Gurwinder-Singh-Resume.pdf "C:\Users\Lenovo\Desktop\Gurwinder S
 - `profile.website` drives **both** the QR code and the footer URL on the printed page, so
   it must match the live site. It is currently the Vercel URL; Vercel and GitHub Pages
   serve identical files, and the QR points at Vercel.
-- `profile.linkedin` is rendered into the resume header. See the note below.
+- `profile.linkedin` is rendered into the resume header and the contact block, so it
+  must match the `index.html` links. `npm run check` fails if they drift or if a
+  placeholder slug reappears.
 - The generator is self-contained: `build_resume.mjs` bundles the TypeScript data with
   esbuild, generates the QR with a dependency-free encoder, and prints with headless
   Chrome. It needs no extra tooling. `node scripts/check-qr.mjs` validates the encoder
@@ -202,9 +204,11 @@ update `privacy.html` first — otherwise the policy becomes untrue.
 
 ### Still to verify
 
-The LinkedIn slug carried over from the resume
-(`gurwinder-undefined-583937437`) looks auto-generated and will 404; it appears in three
-places in `index.html`.
+None outstanding. The LinkedIn slug that used to read
+`gurwinder-undefined-583937437` (a JavaScript interpolation bug baked into the
+data, so it always 404ed) has been replaced with the real profile,
+`linkedin.com/in/gurwinder07`, in `index.html` and in `profile.linkedin` in
+`portfolio.ts`. `npm run check` fails if a placeholder slug reappears.
 
 ## Browser support
 

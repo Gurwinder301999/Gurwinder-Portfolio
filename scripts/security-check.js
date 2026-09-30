@@ -128,6 +128,17 @@ check("no placeholder LinkedIn slug is published",
   !/linkedin\.com\/in\/[^"']*undefined/.test(allHtml),
   "the gurwinder-undefined slug 404s");
 
+// The resume is generated from profile.linkedin in the sibling Portfoleo project,
+// so the printed PDF and the site are two separate copies of the same URL. Assert
+// they agree, and that the one on the page is the one the site links to.
+const SLUG_RE = /linkedin\.com\/in\/([A-Za-z0-9-]+)/g;
+const siteSlugs = new Set([...html.matchAll(SLUG_RE)].map((m) => m[1]));
+check("exactly one LinkedIn slug on the site", siteSlugs.size === 1,
+  [...siteSlugs].join(", "));
+check("every LinkedIn href matches the displayed slug",
+  [...html.matchAll(/href="https?:\/\/(?:www\.)?linkedin\.com\/in\/([^"]+)"/g)]
+    .every((m) => siteSlugs.has(m[1])));
+
 /* ------------------------------------------------------------------ */
 section("secrets and payloads");
 
@@ -174,6 +185,9 @@ const allowed = new Set([
   "fonts.googleapis.com",
   "fonts.gstatic.com",
   "gurwinder-portfolio.vercel.app",
+  // Outbound profile links are not fetched by the page, they are only navigated
+  // to on click, so they are listed rather than treated as a dependency.
+  "www.linkedin.com",
 ]);
 const unexpected = hosts.filter((h) => !allowed.has(h));
 check("only expected external hosts", unexpected.length === 0, unexpected.join(", "));
@@ -191,10 +205,45 @@ check("no service worker registration", !/navigator\.serviceWorker/.test(allJs))
 /* ------------------------------------------------------------------ */
 section("resume");
 
-check("resume PDF exists and starts with %PDF-", (() => {
-  const p = path.join(ROOT, "assets", "Gurwinder-Singh-Resume.pdf");
-  return fs.existsSync(p) && fs.readFileSync(p).slice(0, 5).toString() === "%PDF-";
-})());
+const pdfPath = path.join(ROOT, "assets", "Gurwinder-Singh-Resume.pdf");
+const hasPdf = fs.existsSync(pdfPath) && fs.readFileSync(pdfPath).slice(0, 5).toString() === "%PDF-";
+check("resume PDF exists and starts with %PDF-", hasPdf);
+
+// The PDF is generated from the sibling Portfoleo project, so the slug printed on
+// page 1 is a second copy of the one in index.html and the two can drift.
+//
+// Rather than parse the PDF, assert the two things that actually matter:
+//   1. the data file the PDF is generated from carries the same slug as the site
+//   2. the PDF in assets/ is byte-identical to the one that data produces
+//
+// (2) subsumes (1) for the PDF itself: if the bytes match a build from the data,
+// the printed page necessarily carries whatever the data says. A PDF text reader
+// is deliberately not used, because the resume sets text in several subset fonts
+// and a hand-rolled reader drops characters, which would fail on a correct file.
+const DATA = path.resolve(ROOT, "..", "..", "Portfoleo", "src", "data", "portfolio.ts");
+const BUILT = path.resolve(ROOT, "..", "..", "Portfoleo", "public", "Gurwinder-Singh-Resume.pdf");
+
+if (fs.existsSync(DATA) && siteSlugs.size === 1) {
+  const slug = [...siteSlugs][0];
+  const data = fs.readFileSync(DATA, "utf8");
+
+  check("resume data source declares the same slug",
+    data.includes("linkedin: 'https://www.linkedin.com/in/" + slug + "'"),
+    "profile.linkedin in portfolio.ts does not match the site");
+  check("resume data source has no placeholder slug",
+    !data.includes("gurwinder-undefined-583937437"));
+
+  if (fs.existsSync(BUILT) && hasPdf) {
+    const same = fs.readFileSync(BUILT).equals(fs.readFileSync(pdfPath));
+    check("assets/ PDF matches a build of that data, byte for byte", same,
+      "rerun build_resume.mjs --pdf and copy the result into assets/");
+  } else {
+    check("the built PDF is available to compare against", false,
+      "run node scripts/build_resume.mjs --pdf in the Portfoleo project");
+  }
+} else if (!fs.existsSync(DATA)) {
+  console.log("  skip  resume data source not found at " + DATA);
+}
 
 /* ------------------------------------------------------------------ */
 console.log("\n" + (failures ? failures + " FAILED of " + checks : "all " + checks + " checks passed"));
