@@ -16,6 +16,61 @@ or `npm start` (which shells out to `npx serve`). Any static server works; openi
 `index.html` straight off disk will not, because browsers block the frame requests on
 `file://`.
 
+## Security
+
+```bash
+npm run check          # 40 assertions, no dependencies, exits non-zero on failure
+```
+
+### What this site is exposed to
+
+It is a **static site**: no server-side code, no database, no authentication, no file
+uploads, no user input stored anywhere. There is no application to compromise and no
+attack surface for traditional malware, so "malware protection" here means hardening
+what does exist, not running an antivirus.
+
+The genuine risks for a site like this are: a script injected into the markup running
+in a visitor's browser, the page being framed for clickjacking, a secret committed to
+git, and a third-party host being compromised. Those are what the controls below cover.
+
+### Controls in place
+
+| Control | Where | What it stops |
+|---|---|---|
+| Content-Security-Policy | `vercel.json` | Any injected script. `script-src 'self'`, no `unsafe-inline`, no `unsafe-eval` |
+| `X-Frame-Options` + `frame-ancestors 'none'` | `vercel.json` | Clickjacking |
+| `X-Content-Type-Options: nosniff` | `vercel.json` | MIME confusion |
+| `Referrer-Policy` | `vercel.json` | Leaking the URL to third parties |
+| `Permissions-Policy` | `vercel.json` | Camera, mic, geolocation, payment |
+| `Cross-Origin-Opener-Policy` / `-Resource-Policy` | `vercel.json` | Cross-origin tab takeover, asset embedding |
+| HSTS (2 years, preload) | `vercel.json` | Downgrade to plain HTTP |
+| `rel="noopener"` on every `target="_blank"` | `index.html` | The opened page reaching back via `window.opener` |
+
+The CSP is deliberately strict and was verified in headless Chrome against the real
+header set: the sweep, radial reveal, counters, quote slider, canvas background and
+Google Fonts all still work, and an injected inline script is refused. `style-src`
+carries `'unsafe-inline'` because the reveal and sweep effects write `element.style`
+at runtime; `script-src` does not need it, since there is no inline script and the
+`application/ld+json` block is data the browser never executes.
+
+### What `vercel.json` does *not* cover
+
+**GitHub Pages ignores it.** Pages supports neither `vercel.json` nor `.htaccess`, so
+the `gurwinder301999.github.io` deployment sends no CSP at all. Vercel is the
+hardened host; giving Pages the same headers needs a proxy in front (Cloudflare or
+similar). Treat the Vercel URL as canonical for that reason.
+
+### Adding anything third-party
+
+A new external script, font, or analytics tag will be **blocked by the CSP** until
+`vercel.json` is updated to allow it. That is the policy working, not a bug. Before
+adding a third party, ask whether the site needs it: each one is a supply-chain risk,
+and `privacy.html` states exactly what is loaded.
+
+If you do add one, re-run `npm run check`. It asserts that only the Google Fonts hosts
+are contacted and that no analytics or tag manager is present, so the privacy policy
+stays true.
+
 ## Layout
 
 | Path | What it is |
@@ -25,6 +80,8 @@ or `npm start` (which shells out to `npx serve`). Any static server works; openi
 | `css/styles.css` | Design tokens + every component. Sections are numbered in comments |
 | `js/background.js` | Scroll-scrubbed background: 240 frames mapped to whole-page scroll progress, with a frame-rate-independent lerp |
 | `js/main.js` | Sticky header, scroll spy, reveal-on-scroll, stat counters, portfolio filters, notes slider, radial-reveal buttons, name colour sweep, contact form |
+| `vercel.json` | Security headers and cache policy for the Vercel deployment |
+| `scripts/security-check.js` | The `npm run check` assertions |
 | `frames/` | 240 JPEGs used by the background animation (~34 MB) |
 | `assets/` | `Gurwinder-Singh-Resume.pdf` |
 

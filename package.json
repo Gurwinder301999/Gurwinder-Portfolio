@@ -4,7 +4,9 @@
   "private": true,
   "description": "IT Support Engineer portfolio — desktop support, networking, VoIP and Windows/Linux admin — with a scroll-scrubbed 240-frame background animation. No dependencies.",
   "scripts": {
-    "start": "npx --yes serve -l 8123 ."
+    "start": "npx --yes serve -l 8123 .",
+    "check": "node scripts/security-check.js",
+    "test": "node scripts/security-check.js"
   }
 }
 

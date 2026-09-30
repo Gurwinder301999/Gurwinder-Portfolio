@@ -388,7 +388,10 @@
     const face = document.createElement("span");
     face.className = "btn__reveal";
     face.setAttribute("aria-hidden", "true");
-    face.innerHTML = btn.innerHTML;
+    // Cloned nodes rather than assigned to innerHTML: assigning re-parses the
+    // markup, which is a needless parse on every button and the one sink on the
+    // page where injected markup would execute. cloneNode never re-parses.
+    Array.from(btn.childNodes).forEach((node) => face.appendChild(node.cloneNode(true)));
     btn.appendChild(face);
 
     const clip = { r: 0, x: 100, y: 100, max: 160 };
