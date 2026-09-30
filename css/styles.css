@@ -1308,7 +1308,6 @@ a.contact__row:hover { color: var(--accent); }
 .footer-inner strong { color: var(--text-2); font-weight: 500; }
 .footer-inner a { color: var(--text-2); transition: color 0.25s var(--ease); }
 .footer-inner a:hover { color: var(--accent); }
-.footer-inner .footer-resume { color: var(--accent); font-weight: 500; }
 .footer-top-link {
   display: inline-flex;
   align-items: center;

@@ -96,8 +96,9 @@ dependency-free:
 
 - **Swapping a project thumbnail:** drop an `<img class="project__img" src="assets/project-1.jpg" alt="" />`
   in place of the gradient thumb block.
-- **Resume buttons** point at `assets/Gurwinder-Singh-Resume.pdf` from five places: the
-  hero, the Services panel, the Portfolio footer, the contact note and the footer link.
+- **Resume buttons** point at `assets/Gurwinder-Singh-Resume.pdf` from four places: the
+  hero, the Services panel, the Portfolio footer and the contact note. It is deliberately
+  *not* in the site footer.
 - **Adding a skill or tool without duplicating.** `Skills & Expertise` lists capabilities;
   `Systems & Tools` lists the products behind them. Nothing should appear in both columns.
 - **Contact form:** `data-endpoint=""` means it opens the visitor's mail app pre-filled to
