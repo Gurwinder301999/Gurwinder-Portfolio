@@ -92,6 +92,30 @@ dependency-free:
   `em`) and `data-sweep-spread` (% of characters in the coloured band). Fires once via
   `IntersectionObserver`, and is skipped under `prefers-reduced-motion`.
 
+### The resume PDF is generated — do not hand-edit it
+
+`assets/Gurwinder-Singh-Resume.pdf` is built from a single source of truth in a
+*sibling* project, so the file in `assets/` is a copy and editing it directly would be
+overwritten on the next build:
+
+```powershell
+cd "C:\Users\Lenovo\Desktop\Gurwinder Singh\Portfoleo"
+# edit src\data\portfolio.ts  (profile.summary, profile.website, skills, timeline, projects)
+node scripts/build_resume.mjs --pdf
+Copy-Item public\Gurwinder-Singh-Resume.pdf "C:\Users\Lenovo\Desktop\Gurwinder Singh\omniroute\portfolio\assets\" -Force
+```
+
+- `profile.website` drives **both** the QR code and the footer URL on the printed page, so
+  it must match the live site. It is currently the Vercel URL; Vercel and GitHub Pages
+  serve identical files, and the QR points at Vercel.
+- `profile.linkedin` is rendered into the resume header. See the note below.
+- The generator is self-contained: `build_resume.mjs` bundles the TypeScript data with
+  esbuild, generates the QR with a dependency-free encoder, and prints with headless
+  Chrome. It needs no extra tooling. `node scripts/check-qr.mjs` validates the encoder
+  (75 assertions) if the QR ever changes.
+- After copying, confirm the two files match by hash, not by size alone:
+  `Get-FileHash` on both paths should report the same SHA256.
+
 ### Editing content
 
 - **Swapping a project thumbnail:** drop an `<img class="project__img" src="assets/project-1.jpg" alt="" />`
@@ -101,6 +125,9 @@ dependency-free:
   *not* in the site footer.
 - **Adding a skill or tool without duplicating.** `Skills & Expertise` lists capabilities;
   `Systems & Tools` lists the products behind them. Nothing should appear in both columns.
+  These two lists are hand-maintained in `index.html`; the same skills are declared a third
+  time in `portfolio.ts` for the PDF. Change all three together or the site and the printed
+  resume will drift.
 - **Contact form:** `data-endpoint=""` means it opens the visitor's mail app pre-filled to
   `data-mailto`. Set `data-endpoint="https://…"` to POST real submissions instead. If you
   do, update `privacy.html` section 1.
