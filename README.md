@@ -50,6 +50,23 @@ Tuning lives at the top of the file:
 
 The loader is deliberately non-blocking: it never stops the page from being read.
 
+### Background video opacity
+
+The video's strength is one knob: `--bg-video-opacity` in the `:root` block of
+`css/styles.css` (currently `0.62`). Three layers stack behind the content:
+
+| Layer | Value | Purpose |
+|---|---|---|
+| `#frame-canvas` | `opacity: var(--bg-video-opacity)` | how much of the video shows through |
+| `filter` on the canvas | `saturate(0.85) contrast(1.05) brightness(0.78)` | tames bright frames |
+| `.bg-scrim` | `0.90` top, `0.58` / `0.66` middle, `0.94` bottom | keeps the header, footer and body copy readable |
+
+Raising the knob without darkening the scrim is what makes the video brighter, but it also
+eats into text contrast. Measured against the brightest pixels in the real frames, the hero
+lead text (`#a8a8a8`) sits at **5.06:1** — above the 4.5:1 WCAG AA threshold. If you push
+the knob much past `0.7`, darken the scrim's middle stops at the same time, or raise the
+hero text colours.
+
 ### `js/main.js` — what each block does
 
 1. Sticky header · 2. Mobile navigation · 3. Scroll progress + sticky state ·
