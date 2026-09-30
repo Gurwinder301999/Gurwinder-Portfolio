@@ -1,0 +1,10 @@
+{
+  "name": "gurwinder-singh-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "IT Support Engineer portfolio — desktop support, networking, VoIP and Windows/Linux admin — with a scroll-scrubbed 240-frame background animation. No dependencies.",
+  "scripts": {
+    "start": "npx --yes serve -l 8123 ."
+  }
+}
+

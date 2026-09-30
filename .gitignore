@@ -1,0 +1,22 @@
+# ---- Source material: kept out of the repository --------------------
+# The 240 frames in frames/ are committed (the site needs them), but the
+# working copies of the original export are not.
+video_frames_30fps_high_quality_jpg/
+*.zip
+gemini_generated_video_*.mp4
+
+# Scratch / reference material (not part of the site)
+_check.js
+01.jpg
+WhatsApp Image *.jpeg
+*.log
+
+# OS + editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+
+# Tooling
+node_modules/
