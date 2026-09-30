@@ -1308,6 +1308,14 @@ a.contact__row:hover { color: var(--accent); }
 .footer-inner strong { color: var(--text-2); font-weight: 500; }
 .footer-inner a { color: var(--text-2); transition: color 0.25s var(--ease); }
 .footer-inner a:hover { color: var(--accent); }
+.footer-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px 14px;
+}
+.footer-meta > span { color: var(--text-3); }
 .footer-top-link {
   display: inline-flex;
   align-items: center;
@@ -1417,6 +1425,7 @@ a.contact__row:hover { color: var(--accent); }
   .projects { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .to-top { right: 16px; bottom: 16px; }
   .footer-inner { justify-content: center; text-align: center; }
+  .footer-meta { justify-content: center; gap: 4px 12px; }
 
 
   .quotes__dots { gap: 5px; }
