@@ -1,4 +1,3 @@
-
 (() => {
   "use strict";
 
@@ -8,11 +7,9 @@
     ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
     : false;
 
-
   const header = $("#site-header");
   const toTop  = $("#to-top");
   const bar    = $("#progress");
-
 
   const nav    = $("#primary-nav");
   const toggle = $("#nav-toggle");
@@ -31,12 +28,13 @@
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") setNav(false);
   });
+  // Click-away only matters while the menu is open, so bail before testing
+  // containment on every click that lands on the page.
   document.addEventListener("click", (e) => {
     if (!nav || !nav.classList.contains("is-open")) return;
     if (nav.contains(e.target) || (toggle && toggle.contains(e.target))) return;
     setNav(false);
   });
-
 
   let scrollQueued = false;
 
@@ -50,6 +48,8 @@
     scrollQueued = false;
   }
 
+  // The progress bar and header state read layout, so they run at most once
+  // per frame no matter how fast the wheel events arrive.
   window.addEventListener("scroll", () => {
     if (scrollQueued) return;
     scrollQueued = true;
@@ -64,9 +64,8 @@
     });
   }
 
-
-
-
+  // Scroll spy. Anchors are matched to their sections once here, so a tick
+  // only reads getBoundingClientRect instead of re-querying the DOM.
   const navLinks = $$(".nav a");
   const navTargets = navLinks
     .map((link) => ({
@@ -115,7 +114,8 @@
   });
   syncActiveNav();
 
-
+  // Fade sections in as they arrive. Unobserving each one matters: without
+  // it every scroll re-fires the callback for the whole page.
   const revealables = $$(".reveal");
 
   if (!("IntersectionObserver" in window) || reduceMotion) {
@@ -133,7 +133,9 @@
     revealables.forEach((el) => io.observe(el));
   }
 
-
+  // Count-up on first view. Under reduced motion the final value is written
+  // straight out, since animating a number is exactly the kind of motion
+  // that setting is asking us not to do.
   const counters = $$("[data-count]");
 
   function runCounter(el) {
@@ -176,7 +178,8 @@
     }
   }
 
-
+  // Category filter. The staggered animationDelay is what keeps the cards
+  // from appearing all at once.
   const filterBtns = $$(".filter");
   const cards      = $$(".project");
 
@@ -204,7 +207,8 @@
     });
   });
 
-
+  // Rotating notes. The dots are built in JS because they are pure
+  // decoration and the markup stays free of them.
   const track = $("#quote-track");
 
   if (track) {
@@ -251,7 +255,6 @@
       quotes.addEventListener("focusin", () => window.clearInterval(timer));
     }
 
-
     let startX = null;
     track.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; }, { passive: true });
     track.addEventListener("touchend", (e) => {
@@ -264,7 +267,8 @@
     restart();
   }
 
-
+  // Validates locally, then hands off. There is no backend, so a valid
+  // submission opens the visitor's mail app with the message prefilled.
   const form = $("#contact-form");
 
   if (form) {
@@ -365,12 +369,11 @@
     });
   }
 
-
   $$("[data-year]").forEach((el) => { el.textContent = new Date().getFullYear(); });
 
-
-
-
+  // Hover reveal. Touch devices get none of it: the pointer position that
+  // drives the circle does not exist there, and a tap-triggered wipe is
+  // just a flicker.
   const REVEAL_DURATION = 450;
   const canHover = typeof window.matchMedia !== "function"
     || window.matchMedia("(hover: hover)").matches;
@@ -447,9 +450,9 @@
     });
   });
 
-
-
-
+  // Name colour sweep. Each character is wrapped so it can be animated on
+  // its own; the resolved colour is stashed and handed back to CSS when the
+  // animation finishes, so the element goes back to inheriting.
   $$("[data-sweep]").forEach((root) => {
     const source = $(".sweep-text", root) || root;
     const num = (v, fallback) => (v === undefined || v === "" ? fallback : parseFloat(v));
@@ -461,8 +464,6 @@
       rise:     num(root.dataset.sweepY, 0.3),
       spread:   Math.max(0, Math.min(100, num(root.dataset.sweepSpread, 100)))
     };
-
-
 
     const chars = [];
     (function split(node) {
@@ -489,9 +490,7 @@
 
     if (!chars.length) return;
 
-
     if (reduceMotion || typeof source.animate !== "function") return;
-
 
     const total = chars.length;
     const affected = Math.round(total * (cfg.spread / 100));
@@ -505,7 +504,6 @@
       c.style.transform = "translateY(" + cfg.rise + "em)";
       c.style.color = fromColors[i];
     });
-
 
     let played = false;
     function play() {
@@ -546,6 +544,5 @@
       play();
     }
   });
-
 
 })();

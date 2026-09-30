@@ -1,7 +1,5 @@
-
 (() => {
   "use strict";
-
 
   const TOTAL_FRAMES    = 240;
   const SMOOTHING       = 0.12;
@@ -11,7 +9,6 @@
 
   const FRAME_SRC = (i) => `frames/frame_${String(i).padStart(6, "0")}.jpg`;
 
-
   const canvas = document.getElementById("frame-canvas");
   const loader = document.getElementById("loader");
   const fill   = document.getElementById("loader-fill");
@@ -20,12 +17,21 @@
 
   const ctx = canvas.getContext("2d", { alpha: false });
 
-
   const frames    = new Map();
   const inFlight  = new Set();
   const failed    = new Set();
   let loadedCount = 0;
   let started     = false;
+  let revealed    = false;
+
+  // target is where scroll wants us, playhead is where the animation actually
+  // is. The gap between them is the smoothing. lastDrawn is tracked separately
+  // so a slow scrub that rounds to the same frame does not redraw it 60 times.
+  let target      = 0;
+  let playhead    = 0;
+  let lastDrawn   = -1;
+  let lastTime    = 0;
+  let queueCursor = 0;
 
   function requestFrame(index) {
     if (index < 0 || index >= TOTAL_FRAMES) return;
@@ -48,7 +54,9 @@
     img.src = FRAME_SRC(index);
   }
 
-
+  // Runs on every frame, including mid-scrub, so it regularly asks for a frame
+  // that is still downloading. Rather than flash a stale image, walk outwards
+  // for the closest one we have.
   function nearestLoaded(index) {
     for (let d = 0; d <= NEARBY_RADIUS + 30; d++) {
       if (frames.has(index - d)) return frames.get(index - d);
@@ -57,12 +65,14 @@
     return frames.get(0) || null;
   }
 
-
-  let queueCursor = 0;
   function pump() {
+    // Frames either side of the playhead first, since those are what the next
+    // scroll tick is most likely to need.
     const center = Math.round(target);
     for (let d = -NEARBY_RADIUS; d <= NEARBY_RADIUS; d++) requestFrame(center + d);
 
+    // Then walk the rest of the timeline in order, capped so a slow connection
+    // does not get 240 parallel requests.
     let active = inFlight.size;
     while (active < MAX_CONCURRENT && queueCursor < TOTAL_FRAMES) {
       requestFrame(queueCursor);
@@ -71,21 +81,20 @@
     }
   }
 
-
   function paintLoader() {
     const pct = Math.round((loadedCount / TOTAL_FRAMES) * 100);
     if (fill) fill.style.width = pct + "%";
     if (label) label.textContent = "Loading " + pct + "%";
   }
 
-  let revealed = false;
   function reveal() {
     if (revealed) return;
     revealed = true;
+    // Small delay so the first painted frame is on the canvas before it fades
+    // in over the loader.
     window.setTimeout(() => canvas.classList.add("visible"), 60);
     if (loader) loader.classList.add("is-done");
   }
-
 
   function resizeCanvas() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -103,17 +112,11 @@
     ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
   }
 
-
   function scrollProgress() {
     const max = document.documentElement.scrollHeight - window.innerHeight;
     if (max <= 0) return 0;
     return Math.min(1, Math.max(0, window.scrollY / max));
   }
-
-  let target    = 0;
-  let playhead  = 0;
-  let lastDrawn = -1;
-  let lastTime  = 0;
 
   function tick(now) {
     if (!lastTime) lastTime = now;
@@ -122,11 +125,11 @@
 
     target = scrollProgress() * (TOTAL_FRAMES - 1);
 
-
+    // Exponential smoothing corrected for the real frame interval. Without the
+    // dt term one constant would scrub at different speeds on 60Hz and 144Hz.
     const k = 1 - Math.pow(1 - SMOOTHING, dt * 60);
     playhead += (target - playhead) * k;
     if (Math.abs(target - playhead) < 0.01) playhead = target;
-
 
     const index = Math.round(playhead);
     if (index !== lastDrawn) {
@@ -141,13 +144,13 @@
     requestAnimationFrame(tick);
   }
 
-
   function onResize() { resizeCanvas(); }
 
   window.addEventListener("resize", onResize, { passive: true });
   window.addEventListener("orientationchange", onResize, { passive: true });
 
-
+  // Safety net. If the first frame is slow or one file 404s, reveal anyway so
+  // the loader cannot sit over the page forever.
   window.setTimeout(reveal, LOADER_MAX_WAIT);
 
   function start() {
@@ -159,10 +162,13 @@
   if (document.readyState === "complete") start();
 
   resizeCanvas();
+
+  // Frame 0 so there is something to paint immediately, the last frame so the
+  // bottom of the page is not blank, and one either side of the start.
   requestFrame(0);
   requestFrame(TOTAL_FRAMES - 1);
   requestFrame(1);
   requestFrame(2);
-  requestAnimationFrame(tick);
 
+  requestAnimationFrame(tick);
 })();
