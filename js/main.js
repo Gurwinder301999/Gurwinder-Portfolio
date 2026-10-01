@@ -1,19 +1,15 @@
 (() => {
   "use strict";
-
   const $  = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
   const reduceMotion = typeof window.matchMedia === "function"
     ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
     : false;
-
   const header = $("#site-header");
   const toTop  = $("#to-top");
   const bar    = $("#progress");
-
   const nav    = $("#primary-nav");
   const toggle = $("#nav-toggle");
-
   function setNav(open) {
     if (!nav || !toggle) return;
     nav.classList.toggle("is-open", open);
@@ -28,28 +24,21 @@
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") setNav(false);
   });
-  // Click-away only matters while the menu is open, so bail before testing
-  // containment on every click that lands on the page.
   document.addEventListener("click", (e) => {
     if (!nav || !nav.classList.contains("is-open")) return;
     if (nav.contains(e.target) || (toggle && toggle.contains(e.target))) return;
     setNav(false);
   });
-
   let scrollQueued = false;
-
   function onScroll() {
     const max = document.documentElement.scrollHeight - window.innerHeight;
     const ratio = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
-
     if (bar) bar.style.transform = `scaleX(${ratio})`;
     if (header) header.classList.toggle("is-stuck", window.scrollY > 24);
     if (toTop) toTop.classList.toggle("is-visible", window.scrollY > 520);
     scrollQueued = false;
   }
 
-  // The progress bar and header state read layout, so they run at most once
-  // per frame no matter how fast the wheel events arrive.
   window.addEventListener("scroll", () => {
     if (scrollQueued) return;
     scrollQueued = true;
@@ -57,15 +46,12 @@
   }, { passive: true });
   window.addEventListener("resize", onScroll, { passive: true });
   onScroll();
-
   if (toTop) {
     toTop.addEventListener("click", () => {
       window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
     });
   }
 
-  // Scroll spy. Anchors are matched to their sections once here, so a tick
-  // only reads getBoundingClientRect instead of re-querying the DOM.
   const navLinks = $$(".nav a");
   const navTargets = navLinks
     .map((link) => ({
@@ -74,9 +60,7 @@
       el: document.getElementById((link.getAttribute("href") || "").slice(1))
     }))
     .filter((t) => t.el);
-
   let activeHref = null;
-
   function setActive(href) {
     if (href === activeHref) return;
     activeHref = href;
@@ -85,7 +69,6 @@
 
   function syncActiveNav() {
     if (!navTargets.length) return;
-
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     if (maxScroll > 0 && window.scrollY >= maxScroll - 2) {
       setActive(navTargets[navTargets.length - 1].href);
@@ -113,11 +96,7 @@
     link.addEventListener("click", () => setActive(href));
   });
   syncActiveNav();
-
-  // Fade sections in as they arrive. Unobserving each one matters: without
-  // it every scroll re-fires the callback for the whole page.
   const revealables = $$(".reveal");
-
   if (!("IntersectionObserver" in window) || reduceMotion) {
     revealables.forEach((el) => el.classList.add("is-visible"));
   } else {
@@ -129,26 +108,19 @@
         obs.unobserve(el);
       });
     }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
-
     revealables.forEach((el) => io.observe(el));
   }
 
-  // Count-up on first view. Under reduced motion the final value is written
-  // straight out, since animating a number is exactly the kind of motion
-  // that setting is asking us not to do.
   const counters = $$("[data-count]");
-
   function runCounter(el) {
     const end      = Number(el.dataset.count) || 0;
     const suffix   = el.dataset.suffix || "";
     const decimals = Number(el.dataset.decimals) || 0;
     const render   = (value) => value.toFixed(decimals) + suffix;
-
     if (reduceMotion) { el.textContent = render(end); return; }
 
     const duration = 1400;
     let startTime  = 0;
-
     function step(now) {
       if (!startTime) startTime = now;
       const p = Math.min((now - startTime) / duration, 1);
@@ -178,11 +150,8 @@
     }
   }
 
-  // Category filter. The staggered animationDelay is what keeps the cards
-  // from appearing all at once.
   const filterBtns = $$(".filter");
   const cards      = $$(".project");
-
   function applyFilter(value) {
     cards.forEach((card, i) => {
       const show = value === "all" || card.dataset.cat === value;
@@ -206,17 +175,12 @@
       applyFilter(btn.dataset.filter || "all");
     });
   });
-
-  // Rotating notes. The dots are built in JS because they are pure
-  // decoration and the markup stays free of them.
   const track = $("#quote-track");
-
   if (track) {
     const slides = $$(".quote", track);
     const dots   = $("#quote-dots");
     let index    = 0;
     let timer    = null;
-
     if (dots) {
       slides.forEach((_, i) => {
         const dot = document.createElement("button");
@@ -247,7 +211,6 @@
     const next = $("#quote-next");
     if (prev) prev.addEventListener("click", () => go(index - 1, true));
     if (next) next.addEventListener("click", () => go(index + 1, true));
-
     const quotes = $("#quotes");
     if (quotes) {
       quotes.addEventListener("mouseenter", () => window.clearInterval(timer));
@@ -263,18 +226,13 @@
       if (Math.abs(dx) > 45) go(index + (dx < 0 ? 1 : -1), true);
       startX = null;
     }, { passive: true });
-
     restart();
   }
 
-  // Validates locally, then hands off. There is no backend, so a valid
-  // submission opens the visitor's mail app with the message prefilled.
   const form = $("#contact-form");
-
   if (form) {
     const status = $("#form-status");
     const EMAIL  = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
-
     function setStatus(message, ok) {
       if (!status) return;
       status.textContent = message;
@@ -286,7 +244,6 @@
       const field = input.closest(".field");
       const error = $(".field__error", field);
       let message = "";
-
       if (!input.value.trim()) {
         message = "This field is required.";
       } else if (input.type === "email" && !EMAIL.test(input.value.trim())) {
@@ -301,18 +258,15 @@
     }
 
     const inputs = $$("input, textarea", form);
-
     inputs.forEach((input) => {
       input.addEventListener("blur", () => validateField(input));
       input.addEventListener("input", () => {
         if (input.closest(".field").classList.contains("is-invalid")) validateField(input);
       });
     });
-
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       const invalid = inputs.filter((input) => !validateField(input));
-
       if (invalid.length) {
         setStatus("Please fix the highlighted fields and try again.", false);
         invalid[0].focus();
@@ -322,7 +276,6 @@
       const button = $("button[type='submit']", form);
       const labelNode = button ? $(".btn__label", button) : null;
       const label = labelNode ? labelNode.textContent : "Send Message";
-
       const setLabel = (text) => {
         if (!button) return;
         $$(".btn__label", button).forEach((el) => { el.textContent = text; });
@@ -341,16 +294,13 @@
           setStatus("Something went wrong. Please email me directly instead.", false);
         }
       };
-
       if (!endpoint) {
-
         const data    = Object.fromEntries(new FormData(form));
         const to      = form.dataset.mailto || "gursingh301999@gmail.com";
         const subject = encodeURIComponent(data.subject || "Portfolio enquiry");
         const body    = encodeURIComponent(
           `Name: ${data.name}\nEmail: ${data.email}\n\n${data.message}`
         );
-
         window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
         done(true, {
           message: `Opening your mail app — if nothing happens, write to ${to}.`,
@@ -370,33 +320,21 @@
   }
 
   $$("[data-year]").forEach((el) => { el.textContent = new Date().getFullYear(); });
-
-  // Hover reveal. Touch devices get none of it: the pointer position that
-  // drives the circle does not exist there, and a tap-triggered wipe is
-  // just a flicker.
   const REVEAL_DURATION = 450;
   const canHover = typeof window.matchMedia !== "function"
     || window.matchMedia("(hover: hover)").matches;
-
   const revealTargets = canHover
     ? $$(".btn, .filter, .quotes__arrow, .to-top, .nav-toggle")
     : [];
-
   revealTargets.forEach((btn) => {
     if ($(".btn__reveal", btn)) return;
-
     const face = document.createElement("span");
     face.className = "btn__reveal";
     face.setAttribute("aria-hidden", "true");
-    // Cloned nodes rather than assigned to innerHTML: assigning re-parses the
-    // markup, which is a needless parse on every button and the one sink on the
-    // page where injected markup would execute. cloneNode never re-parses.
     Array.from(btn.childNodes).forEach((node) => face.appendChild(node.cloneNode(true)));
     btn.appendChild(face);
-
     const clip = { r: 0, x: 100, y: 100, max: 160 };
     let rafId = 0;
-
     function applyClip() {
       const value = "circle(" + clip.r + "% at " + clip.x + "% " + clip.y + "%)";
       face.style.clipPath = value;
@@ -426,7 +364,6 @@
 
       const from = clip.r;
       const started = performance.now();
-
       function step(now) {
         const p = Math.min((now - started) / REVEAL_DURATION, 1);
         const eased = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
@@ -442,7 +379,6 @@
       applyClip();
       growTo(clip.max);
     });
-
     btn.addEventListener("pointerleave", (event) => {
       if (clip.r >= clip.max - 0.5) {
         anchorTo(event);
@@ -452,14 +388,9 @@
       growTo(0);
     });
   });
-
-  // Name colour sweep. Each character is wrapped so it can be animated on
-  // its own; the resolved colour is stashed and handed back to CSS when the
-  // animation finishes, so the element goes back to inheriting.
   $$("[data-sweep]").forEach((root) => {
     const source = $(".sweep-text", root) || root;
     const num = (v, fallback) => (v === undefined || v === "" ? fallback : parseFloat(v));
-
     const cfg = {
       wave:     root.dataset.sweepWave || "#ffa04d",
       stagger:  num(root.dataset.sweepStagger, 0.04) * 1000,
@@ -467,7 +398,6 @@
       rise:     num(root.dataset.sweepY, 0.3),
       spread:   Math.max(0, Math.min(100, num(root.dataset.sweepSpread, 100)))
     };
-
     const chars = [];
     (function split(node) {
       Array.from(node.childNodes).forEach((child) => {
@@ -490,24 +420,19 @@
         }
       });
     })(source);
-
     if (!chars.length) return;
-
     if (reduceMotion || typeof source.animate !== "function") return;
-
     const total = chars.length;
     const affected = Math.round(total * (cfg.spread / 100));
     const middle = (total - 1) / 2;
     const halfBand = (Math.max(affected, 1) - 1) / 2;
     const fromColors = chars.map((c, i) =>
       (affected > 0 && Math.abs(i - middle) <= halfBand) ? cfg.wave : c.dataset.color);
-
     chars.forEach((c, i) => {
       c.style.opacity = "0";
       c.style.transform = "translateY(" + cfg.rise + "em)";
       c.style.color = fromColors[i];
     });
-
     let played = false;
     function play() {
       if (played) return;
@@ -547,5 +472,4 @@
       play();
     }
   });
-
 })();
