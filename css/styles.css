@@ -1,9 +1,9 @@
 /* This Website is made by GURWINDER SINGH. */
 :root {
-  --bg: #071015;
-  --bg-2: #0b171d;
-  --panel: rgba(12, 25, 31, 0.62);
-  --panel-solid: #0d1a20;
+  --bg: #050c10;
+  --bg-2: #081218;
+  --panel: rgba(9, 20, 25, 0.66);
+  --panel-solid: #0a171c;
   --panel-2: rgba(195, 232, 234, 0.045);
   --line: rgba(171, 218, 220, 0.12);
   --line-strong: rgba(171, 218, 220, 0.24);
@@ -127,8 +127,8 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
   inset: 0;
   background:
     radial-gradient(120% 90% at 78% 22%, rgba(56, 214, 200, 0.14), transparent 60%),
-    linear-gradient(180deg, rgba(5, 13, 17, 0.9) 0%, rgba(5, 13, 17, 0.58) 30%,
-                    rgba(5, 13, 17, 0.66) 62%, rgba(5, 13, 17, 0.94) 100%);
+    linear-gradient(180deg, rgba(3, 10, 14, 0.9) 0%, rgba(3, 10, 14, 0.58) 30%,
+                    rgba(3, 10, 14, 0.66) 62%, rgba(3, 10, 14, 0.94) 100%);
 }
 
 .bg-dots {
@@ -234,7 +234,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
   border-bottom: 1px solid transparent;
 }
 .site-header.is-stuck {
-  background: rgba(7, 16, 21, 0.82);
+  background: rgba(5, 12, 16, 0.82);
   backdrop-filter: blur(14px) saturate(140%);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
   border-bottom-color: var(--line);
@@ -1338,7 +1338,7 @@ a.contact__row:hover { color: var(--accent); }
     gap: 2px;
     margin: 0;
     padding: 14px 24px 22px;
-    background: rgba(7, 16, 21, 0.97);
+    background: rgba(5, 12, 16, 0.97);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--line);
