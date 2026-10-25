@@ -187,62 +187,80 @@
     start();
   })();
 
-  /* 2) HERO ROLE TYPEWRITER — unchanged, light weight */
+  /* 2) HERO PHRASE ROTATOR — Morphext-inspired, no jQuery/dependencies */
   (() => {
     const el = $(".hero__role");
-    if (!el) return;
+    if (!el || reduceMotion) return;
     const phrases = [
-      "& Network Engineer · VoIP Telephony · Windows & Linux Systems",
+      el.textContent.trim(),
       "Desktop Support · Network Administration · VoIP Deployment",
       "Windows Server · Rocky Linux · Asterisk IP-PBX",
       "LAN / WAN · DHCP · DNS · VLAN · Enterprise Wi-Fi",
       "IP CCTV · Biometric Access · Ticketing & SLA",
     ];
-    if (reduceMotion) return;
-    const original = el.textContent.trim();
-    el.setAttribute("aria-label", original);
-    el.textContent = "";
-    const typed = document.createElement("span");
-    typed.className = "typed";
-    const caret = document.createElement("span");
-    caret.className = "caret";
-    caret.setAttribute("aria-hidden", "true");
-    el.appendChild(typed);
-    el.appendChild(caret);
-    let pi = 0, ci = 0, deleting = false;
-    const HIGHLIGHT_RE = /(VoIP|Windows|Linux|Asterisk|CCTV|Wi-Fi|SLA|LAN|WAN|DHCP|DNS|VLAN)/gi;
-    function renderTyped(text) {
-      typed.textContent = "";
-      let lastIndex = 0, m;
-      HIGHLIGHT_RE.lastIndex = 0;
-      while ((m = HIGHLIGHT_RE.exec(text)) !== null) {
-        if (m.index > lastIndex) typed.appendChild(document.createTextNode(text.slice(lastIndex, m.index)));
-        const em = document.createElement("em");
-        em.textContent = m[0];
-        typed.appendChild(em);
-        lastIndex = m.index + m[0].length;
+    if (phrases.length < 2) return;
+
+    // Keep one stable accessible phrase for assistive technology; only the visual
+    // rotator changes, so screen readers are not interrupted every few seconds.
+    const accessible = document.createElement("span");
+    accessible.className = "sr-only";
+    accessible.textContent = phrases[0];
+    const visual = document.createElement("span");
+    visual.className = "phrase-rotator";
+    visual.setAttribute("aria-hidden", "true");
+    el.replaceChildren(accessible, visual);
+
+    const highlightRe = /(VoIP|Windows|Linux|Asterisk|CCTV|Wi-Fi|SLA|LAN|WAN|DHCP|DNS|VLAN)/gi;
+    const holdMs = 3200;
+    const transitionMs = 240;
+    let index = 0;
+    let holdTimer = 0;
+    let swapTimer = 0;
+
+    function renderPhrase(text) {
+      visual.replaceChildren();
+      let cursor = 0;
+      let match;
+      highlightRe.lastIndex = 0;
+      while ((match = highlightRe.exec(text)) !== null) {
+        if (match.index > cursor) visual.appendChild(document.createTextNode(text.slice(cursor, match.index)));
+        const emphasis = document.createElement("em");
+        emphasis.textContent = match[0];
+        visual.appendChild(emphasis);
+        cursor = match.index + match[0].length;
       }
-      if (lastIndex < text.length) typed.appendChild(document.createTextNode(text.slice(lastIndex)));
+      if (cursor < text.length) visual.appendChild(document.createTextNode(text.slice(cursor)));
     }
-    function tick() {
-      const full = phrases[pi];
-      if (!deleting) {
-        ci++;
-        renderTyped(full.slice(0, ci));
-        if (ci >= full.length) {
-          setTimeout(() => { deleting = true; tick(); }, 2200);
-          return;
-        }
-        const delay = full[ci - 1] === "·" ? 110 : 36 + Math.random() * 16;
-        setTimeout(tick, delay);
+
+    function schedule() {
+      window.clearTimeout(holdTimer);
+      if (!document.hidden) holdTimer = window.setTimeout(rotate, holdMs);
+    }
+
+    function rotate() {
+      visual.classList.add("is-changing");
+      swapTimer = window.setTimeout(() => {
+        index = (index + 1) % phrases.length;
+        renderPhrase(phrases[index]);
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          visual.classList.remove("is-changing");
+        }));
+        schedule();
+      }, transitionMs);
+    }
+
+    renderPhrase(phrases[index]);
+    schedule();
+    document.addEventListener("visibilitychange", () => {
+      window.clearTimeout(holdTimer);
+      window.clearTimeout(swapTimer);
+      if (document.hidden) {
+        visual.classList.remove("is-changing");
+        renderPhrase(phrases[index]);
       } else {
-        ci--;
-        renderTyped(full.slice(0, Math.max(0, ci)));
-        if (ci <= 0) { deleting = false; pi = (pi + 1) % phrases.length; setTimeout(tick, 420); return; }
-        setTimeout(tick, 22);
+        schedule();
       }
-    }
-    setTimeout(tick, 900);
+    });
   })();
 
   /* 3) SPOTLIGHT — throttled, disabled on phones */

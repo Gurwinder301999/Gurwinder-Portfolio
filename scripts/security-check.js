@@ -19,6 +19,7 @@ const html = read("index.html");
 const css = read(path.join("css", "styles.css"));
 const mainJs = read(path.join("js", "main.js"));
 const bgJs = read(path.join("js", "background.js"));
+const animationsJs = read(path.join("js", "animations.js"));
 const vercel = read("vercel.json");
 const gitignore = read(".gitignore");
 const robots = read("robots.txt");
@@ -59,7 +60,7 @@ function trackedSet() {
   }
 }
 
-const allJs = mainJs + "\n" + bgJs;
+const allJs = mainJs + "\n" + bgJs + "\n" + animationsJs;
 const allHtml = Object.values(pages).join("\n");
 
 /* ------------------------------------------------------------------ */
@@ -162,6 +163,7 @@ const shipped = Object.entries(pages).concat([
   ["css/styles.css", css],
   ["js/main.js", mainJs],
   ["js/background.js", bgJs],
+  ["js/animations.js", animationsJs],
   ["vercel.json", vercel],
   [".gitignore", gitignore],
   ["robots.txt", robots],
@@ -265,6 +267,19 @@ check("home page has Open Graph and Twitter share metadata",
 check("all published HTML documents have titles and no noindex directive",
   Object.values(pages).every((body) => /<title>[^<]+<\/title>/i.test(body) &&
     !/<meta[^>]+name="robots"[^>]+content="[^"]*noindex/i.test(body)));
+
+/* ------------------------------------------------------------------ */
+section("motion and accessibility");
+check("hero phrase rotator is disabled for reduced-motion users",
+  /if \(!el \|\| reduceMotion\) return;/.test(animationsJs));
+check("rotating phrase is hidden from AT in favor of stable fallback text",
+  /accessible\.className = "sr-only"/.test(animationsJs) &&
+  /visual\.setAttribute\("aria-hidden", "true"\)/.test(animationsJs));
+check("phrase rotation pauses while the document is hidden",
+  /addEventListener\("visibilitychange"/.test(animationsJs) &&
+  /clearTimeout\(holdTimer\)/.test(animationsJs));
+check("hero phrase transition uses opacity and transform only",
+  /transition: opacity 240ms var\(--ease\), transform 240ms var\(--ease\)/.test(css));
 
 /* ------------------------------------------------------------------ */
 section("resume");

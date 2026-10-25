@@ -82,6 +82,7 @@ stays true.
 | `css/styles.css` | Design tokens + every component. Sections are numbered in comments |
 | `js/background.js` | Scroll-scrubbed background: 240 frames mapped to whole-page scroll progress, with a frame-rate-independent lerp |
 | `js/main.js` | Sticky header, scroll spy, reveal-on-scroll, stat counters, portfolio filters, notes slider, radial-reveal buttons, name colour sweep, contact form |
+| `js/animations.js` | Lightweight visual phrase rotator and optional motion effects; no jQuery/plugin dependency, reduced-motion aware |
 | `vercel.json` | Security headers and cache policy for the Vercel deployment |
 | `robots.txt`, `sitemap.xml` | Crawler access rules and canonical page index |
 | `.well-known/security.txt` | Security disclosure contact and expiry |
