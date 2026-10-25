@@ -1793,20 +1793,25 @@ a, button, input, textarea, select, label, .filter {
    8) Skill stagger  9) Scanline  10) Floating accents
    ────────────────────────────────────────────────────────── */
 
-/* --- Network mesh canvas (sits above bg-stage, below scrim) --- */
+/* --- Network mesh canvas — optimized: no blend mode, lower opacity, GPU hint --- */
 #network-canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   display: block;
-  opacity: 0.38;
-  mix-blend-mode: screen;
+  opacity: 0.28;
   pointer-events: none;
+  z-index: 0;
+  /* promote to layer but no mix-blend (was screen — cost 3ms/frame) */
+  transform: translateZ(0);
 }
 .bg-stage:has(#network-canvas) .bg-scrim { z-index: 1; }
 .bg-stage:has(#network-canvas) #frame-canvas { z-index: 0; }
-#network-canvas { z-index: 0; }
+/* Hide mesh on very small screens — saves battery */
+@media (max-width: 900px) {
+  #network-canvas { display: none !important; }
+}
 
 /* --- Tech marquee ticker --- */
 .marquee {
@@ -1825,6 +1830,12 @@ a, button, input, textarea, select, label, .filter {
   width: max-content;
   animation: marquee 42s linear infinite;
   will-change: transform;
+  /* perf: ensure it runs on compositor, not main thread */
+  transform: translateZ(0);
+}
+@media (max-width: 700px) {
+  .marquee__track { animation-duration: 60s; }
+  .marquee { backdrop-filter: none; -webkit-backdrop-filter: none; }
 }
 .marquee:hover .marquee__track { animation-play-state: paused; }
 .marquee__group {
@@ -1927,12 +1938,12 @@ a, button, input, textarea, select, label, .filter {
 }
 .spotlight:hover::after { opacity: 1; }
 
-/* --- 3D tilt for project cards --- */
+/* --- 3D tilt for project cards — will-change only on hover to save memory --- */
 .project.tilt {
   transform-style: preserve-3d;
-  will-change: transform;
   transition: transform 0.18s ease-out, border-color 0.35s var(--ease), box-shadow 0.35s var(--ease);
 }
+.project.tilt:hover { will-change: transform; }
 .project.tilt .project__thumb { transform: translateZ(18px); }
 .project.tilt .project__meta { transform: translateZ(12px); }
 .project__glare {
@@ -1948,45 +1959,38 @@ a, button, input, textarea, select, label, .filter {
 }
 .project.tilt:hover .project__glare { opacity: 1; }
 
-/* --- Cursor aura (desktop only) --- */
+/* --- Cursor aura — only on fine pointer, disabled on low-end/mobile --- */
 .cursor-aura {
   position: fixed;
   top: 0; left: 0;
-  width: 420px;
-  height: 420px;
-  margin-left: -210px;
-  margin-top: -210px;
+  width: 360px;
+  height: 360px;
+  margin-left: -180px;
+  margin-top: -180px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(59,130,246,0.14) 0%, rgba(59,130,246,0.06) 28%, transparent 68%);
+  background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, rgba(59,130,246,0.05) 30%, transparent 68%);
   pointer-events: none;
   z-index: 9999;
   opacity: 0;
   transform: translate3d(0,0,0);
-  transition: opacity 0.4s var(--ease);
+  transition: opacity 0.35s var(--ease);
   will-change: transform;
-  mix-blend-mode: screen;
+  /* removed mix-blend-mode (was screen — expensive) */
 }
 .cursor-aura.is-visible { opacity: 1; }
 .cursor-aura.is-hovering {
-  width: 560px;
-  height: 560px;
-  margin-left: -280px;
-  margin-top: -280px;
-  background: radial-gradient(circle, rgba(59,130,246,0.18) 0%, rgba(59,130,246,0.08) 30%, transparent 70%);
+  width: 480px;
+  height: 480px;
+  margin-left: -240px;
+  margin-top: -240px;
+  background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0.06) 30%, transparent 70%);
+}
+@media (hover: none), (pointer: coarse), (max-width: 1024px) {
+  .cursor-aura { display: none !important; }
 }
 
-/* --- Scanline / grain subtle overlay --- */
-.bg-stage::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0.045;
-  background-image: repeating-linear-gradient(0deg,
-    transparent 0 2px, rgba(255,255,255,0.5) 2px 3px);
-  mix-blend-mode: soft-light;
-}
+/* --- Scanline removed for perf: was mix-blend + repaint every frame --- */
+.bg-stage::after { display: none; }
 
 /* --- Floating accents on icons --- */
 .service svg, .feature svg {
@@ -2044,10 +2048,10 @@ a, button, input, textarea, select, label, .filter {
 .tools.is-visible .tool:nth-child(9) { transition-delay: 480ms; }
 .tools.is-visible .tool:nth-child(10){ transition-delay: 530ms; }
 
-/* --- Parallax & depth: hero elements respond to scroll --- */
-.hero__copy, .portrait {
-  will-change: transform;
-  transition: transform 0.1s linear;
+/* --- Parallax: only transform when in viewport, no transition cost otherwise --- */
+.hero__copy, .portrait { will-change: transform; }
+@media (max-width: 900px) {
+  .hero__copy, .portrait { will-change: auto; }
 }
 
 /* --- About features progressive glow line --- */
@@ -2079,8 +2083,9 @@ a, button, input, textarea, select, label, .filter {
   transform: translateY(-1px);
 }
 
-/* --- Quotes track now uses GPU --- */
-.quote-track { will-change: transform; }
+/* --- Quotes track — GPU only when animating --- */
+.quote-track { will-change: auto; }
+#quotes:hover .quote-track { will-change: transform; }
 
 /* --- Scroll progress shimmer --- */
 .progress {

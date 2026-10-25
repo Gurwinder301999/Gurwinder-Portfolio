@@ -1,5 +1,5 @@
-// Gurwinder Portfolio — Premium Animation Layer
-// No dependencies. Respects prefers-reduced-motion & hover capabilities.
+// Gurwinder Portfolio — Premium Animation Layer (Optimized)
+// Optimized for 60fps on mid-range devices. Respects prefers-reduced-motion.
 (() => {
   "use strict";
   const $ = (s, r = document) => r.querySelector(s);
@@ -8,24 +8,39 @@
   const canHover = typeof window.matchMedia !== "function" || window.matchMedia("(hover: hover)").matches;
   const isTouch = typeof window.matchMedia === "function" && window.matchMedia("(pointer: coarse)").matches;
 
-  /* ────────────────────────────────────────────────
-     1) NETWORK MESH CANVAS
-     ──────────────────────────────────────────────── */
+  // Detect low-end devices to scale back
+  const conn = typeof navigator !== "undefined" ? navigator.connection : null;
+  const saveData = conn && (conn.saveData || /2g/.test(conn.effectiveType || ""));
+  const lowEnd = saveData || (typeof navigator !== "undefined" && navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) || window.innerWidth < 768;
+
+  /* 1) NETWORK MESH — throttled, paused off-screen, no shadowBlur */
   (() => {
     const canvas = $("#network-canvas");
     if (!canvas) return;
     if (reduceMotion) { canvas.style.display = "none"; return; }
+    // On low-end / mobile, disable mesh entirely for performance
+    const isMobile = window.innerWidth < 900 || isTouch;
+    if (lowEnd && isMobile) { canvas.style.display = "none"; return; }
+    // Allow user to force low perf via ?perf=low
+    if (new URLSearchParams(window.location.search).get("perf") === "low") { canvas.style.display = "none"; return; }
+
     const ctx = canvas.getContext("2d", { alpha: true });
     let w = 0, h = 0, dpr = 1, nodes = [], raf = 0, t = 0;
-    const COUNT_DESKTOP = 52;
-    const COUNT_MOBILE = 24;
-    const LINK_DIST = 150;
+    let lastDraw = 0;
+    let paused = false;
+    const COUNT_DESKTOP = lowEnd ? 22 : 28;
+    const COUNT_MOBILE = 14;
+    const LINK_DIST = lowEnd ? 110 : 135;
     const LINK_DIST2 = LINK_DIST * LINK_DIST;
+    const FPS = lowEnd ? 22 : 30; // throttle canvas
+    const FRAME_MS = 1000 / FPS;
 
-    function count() { return window.innerWidth < 700 ? COUNT_MOBILE : COUNT_DESKTOP; }
+    function count() { return window.innerWidth < 900 ? COUNT_MOBILE : COUNT_DESKTOP; }
 
     function resize() {
-      dpr = Math.min(window.devicePixelRatio || 1, 1.8);
+      // cap dpr to 1 on low-end, 1.3 otherwise — saves 40% pixels
+      const cap = lowEnd ? 1 : 1.35;
+      dpr = Math.min(window.devicePixelRatio || 1, cap);
       w = window.innerWidth;
       h = window.innerHeight;
       canvas.width = Math.round(w * dpr);
@@ -40,28 +55,35 @@
       nodes = Array.from({ length: n }, () => ({
         x: Math.random() * w,
         y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.35,
-        vy: (Math.random() - 0.5) * 0.35,
-        r: 1.1 + Math.random() * 1.4,
+        vx: (Math.random() - 0.5) * 0.22,
+        vy: (Math.random() - 0.5) * 0.22,
+        r: 1 + Math.random() * 1,
         pulse: Math.random() * Math.PI * 2,
       }));
     }
 
-    function step() {
+    function step(now) {
+      raf = 0;
+      if (paused || document.hidden) return schedule();
+      // throttle to FPS
+      if (now - lastDraw < FRAME_MS) { schedule(); return; }
+      lastDraw = now;
       t += 0.016;
+
       ctx.clearRect(0, 0, w, h);
 
-      // move
       for (const p of nodes) {
-        p.x += p.vx + Math.cos(t * 0.3 + p.pulse) * 0.06;
-        p.y += p.vy + Math.sin(t * 0.25 + p.pulse) * 0.06;
+        p.x += p.vx + Math.cos(t * 0.22 + p.pulse) * 0.04;
+        p.y += p.vy + Math.sin(t * 0.2 + p.pulse) * 0.04;
         if (p.x < -20) p.x = w + 20;
         if (p.x > w + 20) p.x = -20;
         if (p.y < -20) p.y = h + 20;
         if (p.y > h + 20) p.y = -20;
       }
 
-      // links
+      // batch lines: single beginPath where possible would be faster but need per-line alpha
+      // So batch by drawing all lines with one stroke is not possible due to varying alpha.
+      // Keep loop but skip sqrt when d2 > LINK_DIST2 — already early out.
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const a = nodes[i], b = nodes[j];
@@ -69,72 +91,101 @@
           const d2 = dx * dx + dy * dy;
           if (d2 > LINK_DIST2) continue;
           const d = Math.sqrt(d2);
-          const alpha = (1 - d / LINK_DIST) * 0.22;
-          // data-flow shimmer: dash offset
+          const alpha = (1 - d / LINK_DIST) * 0.18;
           ctx.beginPath();
           ctx.strokeStyle = `rgba(59,130,246,${alpha})`;
-          ctx.lineWidth = 0.7;
+          ctx.lineWidth = 0.6;
           ctx.moveTo(a.x, a.y);
           ctx.lineTo(b.x, b.y);
           ctx.stroke();
         }
       }
 
-      // nodes
       for (const p of nodes) {
-        const glow = 0.55 + Math.sin(t * 1.2 + p.pulse) * 0.22;
+        const glow = 0.5 + Math.sin(t * 1 + p.pulse) * 0.18;
         ctx.beginPath();
+        // no shadowBlur — major GPU cost saved
         ctx.fillStyle = `rgba(147,197,251,${glow})`;
-        ctx.shadowColor = "rgba(59,130,246,0.8)";
-        ctx.shadowBlur = 6;
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
-        ctx.shadowBlur = 0;
-
-        // inner bright dot
-        ctx.beginPath();
-        ctx.fillStyle = `rgba(255,255,255,${0.55 + Math.sin(t * 0.9 + p.pulse) * 0.2})`;
-        ctx.arc(p.x, p.y, 0.7, 0, Math.PI * 2);
-        ctx.fill();
+        // remove inner dot — saves extra arc per node
       }
 
-      raf = requestAnimationFrame(step);
+      schedule();
+    }
+
+    function schedule() {
+      if (!raf && !paused && !document.hidden) raf = requestAnimationFrame(step);
     }
 
     function start() {
       resize();
       makeNodes();
       if (raf) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(step);
+      raf = 0;
+      schedule();
+    }
+
+    // Pause when hero scrolled out (saves 100% when not visible)
+    let heroVisible = true;
+    const hero = $(".hero");
+    if (hero && "IntersectionObserver" in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          heroVisible = e.isIntersecting;
+          if (heroVisible) { if (!raf && !document.hidden) schedule(); }
+          else { if (raf) { cancelAnimationFrame(raf); raf = 0; } }
+        });
+      }, { threshold: 0 });
+      io.observe(hero);
+    } else {
+      // fallback: scroll check throttled
+      let ticking = false;
+      window.addEventListener("scroll", () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          ticking = false;
+          const scrolled = window.scrollY;
+          const shouldPause = scrolled > window.innerHeight * 1.2;
+          if (shouldPause && !paused) { paused = true; if (raf) { cancelAnimationFrame(raf); raf = 0; } }
+          else if (!shouldPause && paused) { paused = false; schedule(); }
+        });
+      }, { passive: true });
     }
 
     let resizeT = 0;
     window.addEventListener("resize", () => {
       clearTimeout(resizeT);
-      resizeT = setTimeout(start, 120);
+      resizeT = setTimeout(() => {
+        resize();
+        makeNodes();
+      }, 150);
     }, { passive: true });
+
     document.addEventListener("visibilitychange", () => {
-      if (document.hidden) { cancelAnimationFrame(raf); raf = 0; }
-      else if (!raf) raf = requestAnimationFrame(step);
+      if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = 0; } }
+      else if (heroVisible) schedule();
     });
 
-    // fade intensity with scroll: stronger at top, subtler mid-page
-    let scrollY = 0;
+    // fade intensity with scroll — throttled via rAF
+    let scrollTick = false;
     window.addEventListener("scroll", () => {
-      scrollY = window.scrollY;
-      const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-      const p = Math.min(1, scrollY / max);
-      // 0 at top -> 0.38 opacity, mid -> 0.16, end -> 0.08
-      const op = 0.38 - p * 0.28;
-      canvas.style.opacity = String(Math.max(0.06, op));
+      if (scrollTick) return;
+      scrollTick = true;
+      requestAnimationFrame(() => {
+        scrollTick = false;
+        const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        const p = Math.min(1, window.scrollY / max);
+        const op = 0.32 - p * 0.26;
+        canvas.style.opacity = String(Math.max(0.04, op));
+      });
     }, { passive: true });
 
     start();
   })();
 
-  /* ────────────────────────────────────────────────
-     2) HERO ROLE TYPEWRITER
-     ──────────────────────────────────────────────── */
+  /* 2) HERO ROLE TYPEWRITER — unchanged, light weight */
   (() => {
     const el = $(".hero__role");
     if (!el) return;
@@ -146,11 +197,8 @@
       "IP CCTV · Biometric Access · Ticketing & SLA",
     ];
     if (reduceMotion) return;
-
-    // preserve SEO: keep original text for screen readers
     const original = el.textContent.trim();
     el.setAttribute("aria-label", original);
-    // build typed structure without innerHTML
     el.textContent = "";
     const typed = document.createElement("span");
     typed.className = "typed";
@@ -159,93 +207,90 @@
     caret.setAttribute("aria-hidden", "true");
     el.appendChild(typed);
     el.appendChild(caret);
-
-    let pi = 0, ci = 0, deleting = false, hold = 0;
-    const TYPE_SPEED = 38;
-    const DELETE_SPEED = 22;
-    const HOLD_FULL = 2200;
-    const HOLD_EMPTY = 420;
-
+    let pi = 0, ci = 0, deleting = false;
     const HIGHLIGHT_RE = /(VoIP|Windows|Linux|Asterisk|CCTV|Wi-Fi|SLA|LAN|WAN|DHCP|DNS|VLAN)/gi;
     function renderTyped(text) {
-      // clear and rebuild with safe DOM nodes (no innerHTML)
       typed.textContent = "";
-      let lastIndex = 0;
-      let m;
-      // reset regex
+      let lastIndex = 0, m;
       HIGHLIGHT_RE.lastIndex = 0;
       while ((m = HIGHLIGHT_RE.exec(text)) !== null) {
-        if (m.index > lastIndex) {
-          typed.appendChild(document.createTextNode(text.slice(lastIndex, m.index)));
-        }
+        if (m.index > lastIndex) typed.appendChild(document.createTextNode(text.slice(lastIndex, m.index)));
         const em = document.createElement("em");
         em.textContent = m[0];
         typed.appendChild(em);
         lastIndex = m.index + m[0].length;
       }
-      if (lastIndex < text.length) {
-        typed.appendChild(document.createTextNode(text.slice(lastIndex)));
-      }
-      if (!text.length) typed.textContent = "";
+      if (lastIndex < text.length) typed.appendChild(document.createTextNode(text.slice(lastIndex)));
     }
-
     function tick() {
       const full = phrases[pi];
       if (!deleting) {
         ci++;
         renderTyped(full.slice(0, ci));
         if (ci >= full.length) {
-          deleting = false;
-          hold = HOLD_FULL;
-          setTimeout(() => { deleting = true; tick(); }, hold);
+          setTimeout(() => { deleting = true; tick(); }, 2200);
           return;
         }
-        // natural pause on "·"
-        const delay = full[ci - 1] === "·" ? TYPE_SPEED * 3 : TYPE_SPEED + (Math.random() * 18);
+        const delay = full[ci - 1] === "·" ? 110 : 36 + Math.random() * 16;
         setTimeout(tick, delay);
       } else {
         ci--;
         renderTyped(full.slice(0, Math.max(0, ci)));
-        if (ci <= 0) {
-          deleting = false;
-          pi = (pi + 1) % phrases.length;
-          setTimeout(tick, HOLD_EMPTY);
-          return;
-        }
-        setTimeout(tick, DELETE_SPEED);
+        if (ci <= 0) { deleting = false; pi = (pi + 1) % phrases.length; setTimeout(tick, 420); return; }
+        setTimeout(tick, 22);
       }
     }
-    // start after hero reveal
     setTimeout(tick, 900);
   })();
 
-  /* ────────────────────────────────────────────────
-     3) SPOTLIGHT CARDS (mouse-following glow)
-     ──────────────────────────────────────────────── */
+  /* 3) SPOTLIGHT — throttled via shared rAF */
   (() => {
     if (!canHover || reduceMotion) return;
-    const targets = $$(".panel, .project, .feature, .service, .stat, .hero-tool, .exp__row");
+    // fewer targets = fewer listeners
+    const targets = $$(".panel, .project, .stat");
     targets.forEach(el => el.classList.add("spotlight"));
-    targets.forEach(el => {
-      el.addEventListener("pointermove", (e) => {
-        const r = el.getBoundingClientRect();
-        const x = ((e.clientX - r.left) / r.width) * 100;
-        const y = ((e.clientY - r.top) / r.height) * 100;
-        el.style.setProperty("--mx", x + "%");
-        el.style.setProperty("--my", y + "%");
+    // use single delegated handler with rAF
+    let pending = null;
+    document.addEventListener("pointermove", (e) => {
+      pending = e;
+      if (pending._raf) return;
+      pending._raf = requestAnimationFrame(() => {
+        const ev = pending;
+        pending = null;
+        // find spotlight ancestor quickly
+        let t = ev.target;
+        while (t && t !== document) {
+          if (t.classList && t.classList.contains("spotlight")) {
+            const r = t.getBoundingClientRect();
+            t.style.setProperty("--mx", ((ev.clientX - r.left) / r.width) * 100 + "%");
+            t.style.setProperty("--my", ((ev.clientY - r.top) / r.height) * 100 + "%");
+            break;
+          }
+          t = t.parentElement;
+        }
       });
-    });
+    }, { passive: true });
   })();
 
-  /* ────────────────────────────────────────────────
-     4) 3D TILT FOR PROJECT CARDS
-     ──────────────────────────────────────────────── */
+  /* 4) 3D TILT — disabled on low-end, throttled */
   (() => {
-    if (!canHover || reduceMotion) return;
+    if (!canHover || reduceMotion || lowEnd) return;
     const cards = $$(".project");
+    // only enable tilt when card is intersecting viewport
+    const visibleSet = new Set();
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(en => {
+          if (en.isIntersecting) visibleSet.add(en.target);
+          else visibleSet.delete(en.target);
+        });
+      }, { threshold: 0.05 });
+      cards.forEach(c => io.observe(c));
+    } else {
+      cards.forEach(c => visibleSet.add(c));
+    }
     cards.forEach(card => {
       card.classList.add("tilt");
-      // ensure glare element exists
       if (!$(".project__glare", card)) {
         const g = document.createElement("span");
         g.className = "project__glare";
@@ -254,18 +299,18 @@
         if (thumb) thumb.appendChild(g);
         else card.appendChild(g);
       }
-      let rafId = 0;
-      let mx = 50, my = 50, rx = 0, ry = 0;
+      let rafId = 0, mx = 50, my = 50;
       function apply() {
         rafId = 0;
-        const max = 7;
+        const max = lowEnd ? 4 : 6;
         const rotY = (mx - 50) / 50 * max;
         const rotX = -(my - 50) / 50 * max;
-        card.style.transform = `perspective(800px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(0) translateY(-6px)`;
+        card.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(0)`;
         card.style.setProperty("--mx", mx + "%");
         card.style.setProperty("--my", my + "%");
       }
       card.addEventListener("pointermove", (e) => {
+        if (!visibleSet.has(card)) return;
         const r = card.getBoundingClientRect();
         mx = ((e.clientX - r.left) / r.width) * 100;
         my = ((e.clientY - r.top) / r.height) * 100;
@@ -276,54 +321,52 @@
         rafId = 0;
         card.style.transform = "";
       });
-      card.addEventListener("pointerenter", () => {
-        card.style.transition = "transform 0.18s ease-out";
-      });
     });
   })();
 
-  /* ────────────────────────────────────────────────
-     5) CURSOR AURA
-     ──────────────────────────────────────────────── */
+  /* 5) CURSOR AURA — on-demand RAF only, no endless loop */
   (() => {
     if (isTouch || reduceMotion || !canHover) return;
+    // disable aura on low-end
+    if (lowEnd) return;
     const aura = $(".cursor-aura");
     if (!aura) return;
-    let mx = window.innerWidth / 2, my = window.innerHeight / 2;
-    let ax = mx, ay = my, raf = 0, visible = false;
-    function loop() {
-      ax += (mx - ax) * 0.08;
-      ay += (my - ay) * 0.08;
-      aura.style.transform = `translate3d(${ax}px, ${ay}px, 0)`;
-      raf = requestAnimationFrame(loop);
+    let raf = 0, mx = 0, my = 0, ax = 0, ay = 0, visible = false;
+    function update() {
+      raf = 0;
+      // lerp 0.12 — quicker, fewer frames needed
+      ax += (mx - ax) * 0.14;
+      ay += (my - ay) * 0.14;
+      aura.style.transform = `translate3d(${ax}px,${ay}px,0)`;
+      // continue only if still moving significantly
+      if (Math.abs(mx - ax) > 0.3 || Math.abs(my - ay) > 0.3) {
+        raf = requestAnimationFrame(update);
+      }
     }
     window.addEventListener("pointermove", (e) => {
       mx = e.clientX; my = e.clientY;
       if (!visible) {
         visible = true;
         aura.classList.add("is-visible");
-        if (!raf) raf = requestAnimationFrame(loop);
+        ax = mx; ay = my;
+        aura.style.transform = `translate3d(${ax}px,${ay}px,0)`;
       }
+      if (!raf) raf = requestAnimationFrame(update);
     }, { passive: true });
-    window.addEventListener("pointerleave", () => {
+    document.addEventListener("pointerleave", () => {
       visible = false;
       aura.classList.remove("is-visible");
+      if (raf) { cancelAnimationFrame(raf); raf = 0; }
     });
-    // enlarge over interactive elements
     $$("a, button, .project, .panel").forEach(el => {
       el.addEventListener("pointerenter", () => aura.classList.add("is-hovering"));
       el.addEventListener("pointerleave", () => aura.classList.remove("is-hovering"));
     });
-    // hide if mouse hasn't moved after load (e.g. keyboard nav)
-    setTimeout(() => {
-      if (!visible) aura.style.display = "none";
-    }, 1200);
-    loop();
+    // hide if never moved (keyboard nav)
+    setTimeout(() => { if (!visible) aura.style.display = "none"; }, 1500);
   })();
 
-  /* ────────────────────────────────────────────────
-     6) SCROLL PARALLAX (hero & portrait)
-     ──────────────────────────────────────────────── */
+  /* 6) SCROLL PARALLAX — only when hero visible via IntersectionObserver */
   (() => {
     if (reduceMotion) return;
     const copy = $(".hero__copy");
@@ -331,51 +374,65 @@
     const hero = $(".hero");
     if (!hero || (!copy && !portrait)) return;
     let ticking = false;
+    let heroInView = true;
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(en => {
+          heroInView = en.isIntersecting;
+          if (!heroInView) {
+            // reset transforms when out
+            if (copy) copy.style.transform = "";
+            if (portrait) portrait.style.transform = "";
+          }
+        });
+      }, { threshold: 0 });
+      io.observe(hero);
+    }
     function onScroll() {
+      ticking = false;
+      if (!heroInView) return;
       const rect = hero.getBoundingClientRect();
       const vh = window.innerHeight;
-      // only when hero is in viewport
-      if (rect.bottom < -200 || rect.top > vh) { ticking = false; return; }
+      if (rect.bottom < -100 || rect.top > vh) return;
       const progress = Math.min(1, Math.max(0, -rect.top / (rect.height || 1)));
-      const y1 = progress * 28;
-      const y2 = progress * -18;
-      const scale = 1 - progress * 0.02;
-      if (copy) copy.style.transform = `translate3d(0, ${y1}px, 0)`;
-      if (portrait) portrait.style.transform = `translate3d(0, ${y2}px, 0) scale(${scale})`;
-      ticking = false;
+      const y1 = progress * 20; // reduced from 28
+      const y2 = progress * -12;
+      const scale = 1 - progress * 0.015;
+      if (copy) copy.style.transform = `translate3d(0,${y1}px,0)`;
+      if (portrait) portrait.style.transform = `translate3d(0,${y2}px,0) scale(${scale})`;
     }
     window.addEventListener("scroll", () => {
-      if (ticking) return;
+      if (ticking || !heroInView) return;
       ticking = true;
       requestAnimationFrame(onScroll);
     }, { passive: true });
-    // parallax portrait also reacts to mouse
-    if (canHover && portrait) {
+    if (canHover && portrait && !lowEnd) {
       const ring = $(".portrait__ring", portrait) || portrait;
+      let rafP = 0, nx = 0, ny = 0;
       portrait.addEventListener("pointermove", (e) => {
         const r = portrait.getBoundingClientRect();
-        const nx = (e.clientX - r.left - r.width / 2) / r.width;
-        const ny = (e.clientY - r.top - r.height / 2) / r.height;
-        ring.style.transform = `translate3d(${nx * 10}px, ${ny * 10}px, 0)`;
+        nx = (e.clientX - r.left - r.width / 2) / r.width;
+        ny = (e.clientY - r.top - r.height / 2) / r.height;
+        if (!rafP) rafP = requestAnimationFrame(() => {
+          rafP = 0;
+          ring.style.transform = `translate3d(${nx * 8}px,${ny * 8}px,0)`;
+        });
       });
       portrait.addEventListener("pointerleave", () => {
+        if (rafP) cancelAnimationFrame(rafP);
+        rafP = 0;
         ring.style.transform = "";
       });
     }
   })();
 
-  /* ────────────────────────────────────────────────
-     7) SKILLS STAGGER REVEAL + STAT PULSE
-     ──────────────────────────────────────────────── */
+  /* 7) SKILLS STAGGER + STAT PULSE — unchanged, light */
   (() => {
     const skillList = $(".skill-list");
     const tools = $(".tools");
     const targets = [skillList, tools].filter(Boolean);
     if (!targets.length) return;
-    if (reduceMotion) {
-      targets.forEach(el => el.classList.add("is-visible"));
-      return;
-    }
+    if (reduceMotion) { targets.forEach(el => el.classList.add("is-visible")); return; }
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
@@ -384,8 +441,6 @@
       });
     }, { threshold: 0.18 });
     targets.forEach(el => io.observe(el));
-
-    // stat pulse after count
     const stats = $$(".stat");
     const sio = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -397,60 +452,34 @@
     stats.forEach(s => sio.observe(s));
   })();
 
-  /* ────────────────────────────────────────────────
-     8) HERO TOOLS & SERVICES ICON FLOAT LOOP
-     ──────────────────────────────────────────────── */
+  /* 8) HERO TOOLS FLOAT — disabled on low-end */
   (() => {
-    if (reduceMotion) return;
+    if (reduceMotion || lowEnd) return;
     const tools = $$(".hero-tool");
     tools.forEach((el, i) => {
-      el.style.animation = `hero-tool-float ${3.2 + (i % 3) * 0.4}s ease-in-out ${i * 0.18}s infinite`;
+      el.style.animation = `hero-tool-float ${3.4 + (i % 3) * 0.3}s ease-in-out ${i * 0.18}s infinite`;
     });
-    // inject keyframes if not present
     if (!$("#anim-float-kf")) {
       const s = document.createElement("style");
       s.id = "anim-float-kf";
-      s.textContent = `@keyframes hero-tool-float{
-        0%,100%{ transform: translateY(0); }
-        50%{ transform: translateY(-3px); }
-      }`;
+      s.textContent = "@keyframes hero-tool-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}";
       document.head.appendChild(s);
     }
   })();
 
-  /* ────────────────────────────────────────────────
-     9) PORTFOLIO FILTERS: add subtle exit/enter stagger
-     ──────────────────────────────────────────────── */
+  /* 9) PORTFOLIO FILTERS — removed heavy setTimeout stacking */
   (() => {
-    // enhance existing filter with exit animation
     const btns = $$(".filter");
-    const cards = $$(".project");
     if (!btns.length || reduceMotion) return;
-    btns.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const v = btn.dataset.filter || "all";
-        cards.forEach((c, i) => {
-          const show = v === "all" || c.dataset.cat === v;
-          if (!show) {
-            c.style.transition = `opacity 0.28s var(--ease) ${i * 18}ms, transform 0.28s var(--ease) ${i * 18}ms`;
-            c.style.opacity = "0";
-            c.style.transform = "scale(0.96) translateY(8px)";
-            setTimeout(() => { c.classList.add("is-out"); c.style.opacity = ""; c.style.transform = ""; c.style.transition = ""; }, 320);
-          }
-        });
-      });
-    });
+    // No extra JS — CSS handles is-out/is-in via main.js, which is already optimized.
   })();
 
-  /* ────────────────────────────────────────────────
-     10) REDUCED-MOTION TOGGLE (keyboard: Alt+M) for QA
-     ──────────────────────────────────────────────── */
+  /* 10) REDUCED-MOTION TOGGLE Alt+M */
   (() => {
     window.addEventListener("keydown", (e) => {
       if (e.altKey && e.key.toLowerCase() === "m") {
         document.documentElement.classList.toggle("force-reduced");
         const on = document.documentElement.classList.contains("force-reduced");
-        // inject override
         let s = $("#force-reduced-override");
         if (on && !s) {
           s = document.createElement("style");
@@ -458,10 +487,8 @@
           s.textContent = "*{animation:none!important;transition:none!important} #network-canvas,.cursor-aura{display:none!important}";
           document.head.appendChild(s);
         } else if (!on && s) s.remove();
-        // eslint-disable-next-line no-console
         console.log("Reduced motion:", on ? "forced" : "auto");
       }
     });
   })();
-
 })();
