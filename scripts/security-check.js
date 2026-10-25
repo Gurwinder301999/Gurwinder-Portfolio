@@ -1,3 +1,4 @@
+// This Website is made by GURWINDER SINGH.
 /*
  * Dependency-free security check for the portfolio. No npm install, no scanner,
  * nothing to keep current: it asserts the things that would actually weaken this

@@ -1,3 +1,4 @@
+// This Website is made by GURWINDER SINGH.
 (() => {
   "use strict";
   const TOTAL_FRAMES    = 240;
