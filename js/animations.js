@@ -8,17 +8,19 @@
   const canHover = typeof window.matchMedia !== "function" || window.matchMedia("(hover: hover)").matches;
   const isTouch = typeof window.matchMedia === "function" && window.matchMedia("(pointer: coarse)").matches;
 
-  // Detect low-end devices to scale back
+  // Detect low-end devices & phones to scale back — every phone optimization
   const conn = typeof navigator !== "undefined" ? navigator.connection : null;
   const saveData = conn && (conn.saveData || /2g/.test(conn.effectiveType || ""));
-  const lowEnd = saveData || (typeof navigator !== "undefined" && navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) || window.innerWidth < 768;
+  const isPhone = window.innerWidth < 768 || window.matchMedia("(pointer: coarse)").matches;
+  const lowEnd = saveData || (typeof navigator !== "undefined" && navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) || isPhone;
 
-  /* 1) NETWORK MESH — throttled, paused off-screen, no shadowBlur */
+  /* 1) NETWORK MESH — fully disabled on every phone, throttled on desktop */
   (() => {
     const canvas = $("#network-canvas");
     if (!canvas) return;
     if (reduceMotion) { canvas.style.display = "none"; return; }
-    // On low-end / mobile, disable mesh entirely for performance
+    // Every phone: completely skip for battery & 60fps
+    if (isPhone) { canvas.style.display = "none"; return; }
     const isMobile = window.innerWidth < 900 || isTouch;
     if (lowEnd && isMobile) { canvas.style.display = "none"; return; }
     // Allow user to force low perf via ?perf=low
@@ -243,9 +245,9 @@
     setTimeout(tick, 900);
   })();
 
-  /* 3) SPOTLIGHT — throttled via shared rAF */
+  /* 3) SPOTLIGHT — throttled, disabled on phones */
   (() => {
-    if (!canHover || reduceMotion) return;
+    if (!canHover || reduceMotion || isPhone) return;
     // fewer targets = fewer listeners
     const targets = $$(".panel, .project, .stat");
     targets.forEach(el => el.classList.add("spotlight"));
@@ -366,9 +368,9 @@
     setTimeout(() => { if (!visible) aura.style.display = "none"; }, 1500);
   })();
 
-  /* 6) SCROLL PARALLAX — only when hero visible via IntersectionObserver */
+  /* 6) SCROLL PARALLAX — disabled on phones for 60fps, only desktop */
   (() => {
-    if (reduceMotion) return;
+    if (reduceMotion || isPhone) return;
     const copy = $(".hero__copy");
     const portrait = $(".portrait");
     const hero = $(".hero");
