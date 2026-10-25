@@ -1,5 +1,3 @@
-// Gurwinder Portfolio — Premium Animation Layer (Optimized)
-// Optimized for 60fps on mid-range devices. Respects prefers-reduced-motion.
 (() => {
   "use strict";
   const $ = (s, r = document) => r.querySelector(s);
@@ -8,22 +6,18 @@
   const canHover = typeof window.matchMedia !== "function" || window.matchMedia("(hover: hover)").matches;
   const isTouch = typeof window.matchMedia === "function" && window.matchMedia("(pointer: coarse)").matches;
 
-  // Detect low-end devices & phones to scale back — every phone optimization
   const conn = typeof navigator !== "undefined" ? navigator.connection : null;
   const saveData = conn && (conn.saveData || /2g/.test(conn.effectiveType || ""));
   const isPhone = window.innerWidth < 768 || window.matchMedia("(pointer: coarse)").matches;
   const lowEnd = saveData || (typeof navigator !== "undefined" && navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) || isPhone;
 
-  /* 1) NETWORK MESH — fully disabled on every phone, throttled on desktop */
   (() => {
     const canvas = $("#network-canvas");
     if (!canvas) return;
     if (reduceMotion) { canvas.style.display = "none"; return; }
-    // Every phone: completely skip for battery & 60fps
     if (isPhone) { canvas.style.display = "none"; return; }
     const isMobile = window.innerWidth < 900 || isTouch;
     if (lowEnd && isMobile) { canvas.style.display = "none"; return; }
-    // Allow user to force low perf via ?perf=low
     if (new URLSearchParams(window.location.search).get("perf") === "low") { canvas.style.display = "none"; return; }
 
     const ctx = canvas.getContext("2d", { alpha: true });
@@ -34,13 +28,12 @@
     const COUNT_MOBILE = 14;
     const LINK_DIST = lowEnd ? 110 : 135;
     const LINK_DIST2 = LINK_DIST * LINK_DIST;
-    const FPS = lowEnd ? 22 : 30; // throttle canvas
+    const FPS = lowEnd ? 22 : 30;
     const FRAME_MS = 1000 / FPS;
 
     function count() { return window.innerWidth < 900 ? COUNT_MOBILE : COUNT_DESKTOP; }
 
     function resize() {
-      // cap dpr to 1 on low-end, 1.3 otherwise — saves 40% pixels
       const cap = lowEnd ? 1 : 1.35;
       dpr = Math.min(window.devicePixelRatio || 1, cap);
       w = window.innerWidth;
@@ -67,7 +60,6 @@
     function step(now) {
       raf = 0;
       if (paused || document.hidden) return schedule();
-      // throttle to FPS
       if (now - lastDraw < FRAME_MS) { schedule(); return; }
       lastDraw = now;
       t += 0.016;
@@ -83,9 +75,6 @@
         if (p.y > h + 20) p.y = -20;
       }
 
-      // batch lines: single beginPath where possible would be faster but need per-line alpha
-      // So batch by drawing all lines with one stroke is not possible due to varying alpha.
-      // Keep loop but skip sqrt when d2 > LINK_DIST2 — already early out.
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const a = nodes[i], b = nodes[j];
@@ -106,11 +95,9 @@
       for (const p of nodes) {
         const glow = 0.5 + Math.sin(t * 1 + p.pulse) * 0.18;
         ctx.beginPath();
-        // no shadowBlur — major GPU cost saved
         ctx.fillStyle = `rgba(147,197,251,${glow})`;
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
-        // remove inner dot — saves extra arc per node
       }
 
       schedule();
@@ -128,7 +115,6 @@
       schedule();
     }
 
-    // Pause when hero scrolled out (saves 100% when not visible)
     let heroVisible = true;
     const hero = $(".hero");
     if (hero && "IntersectionObserver" in window) {
@@ -141,7 +127,6 @@
       }, { threshold: 0 });
       io.observe(hero);
     } else {
-      // fallback: scroll check throttled
       let ticking = false;
       window.addEventListener("scroll", () => {
         if (ticking) return;
@@ -170,7 +155,6 @@
       else if (heroVisible) schedule();
     });
 
-    // fade intensity with scroll — throttled via rAF
     let scrollTick = false;
     window.addEventListener("scroll", () => {
       if (scrollTick) return;
@@ -187,7 +171,6 @@
     start();
   })();
 
-  /* 2) HERO PHRASE ROTATOR — Morphext-inspired, no jQuery/dependencies */
   (() => {
     const el = $(".hero__role");
     if (!el || reduceMotion) return;
@@ -200,8 +183,6 @@
     ];
     if (phrases.length < 2) return;
 
-    // Keep one stable accessible phrase for assistive technology; only the visual
-    // rotator changes, so screen readers are not interrupted every few seconds.
     const accessible = document.createElement("span");
     accessible.className = "sr-only";
     accessible.textContent = phrases[0];
@@ -263,13 +244,10 @@
     });
   })();
 
-  /* 3) SPOTLIGHT — throttled, disabled on phones */
   (() => {
     if (!canHover || reduceMotion || isPhone) return;
-    // fewer targets = fewer listeners
     const targets = $$(".panel, .project, .stat");
     targets.forEach(el => el.classList.add("spotlight"));
-    // use single delegated handler with rAF
     let pending = null;
     document.addEventListener("pointermove", (e) => {
       pending = e;
@@ -277,7 +255,6 @@
       pending._raf = requestAnimationFrame(() => {
         const ev = pending;
         pending = null;
-        // find spotlight ancestor quickly
         let t = ev.target;
         while (t && t !== document) {
           if (t.classList && t.classList.contains("spotlight")) {
@@ -292,11 +269,9 @@
     }, { passive: true });
   })();
 
-  /* 4) 3D TILT — disabled on low-end, throttled */
   (() => {
     if (!canHover || reduceMotion || lowEnd) return;
     const cards = $$(".project");
-    // only enable tilt when card is intersecting viewport
     const visibleSet = new Set();
     if ("IntersectionObserver" in window) {
       const io = new IntersectionObserver((entries) => {
@@ -344,21 +319,17 @@
     });
   })();
 
-  /* 5) CURSOR AURA — on-demand RAF only, no endless loop */
   (() => {
     if (isTouch || reduceMotion || !canHover) return;
-    // disable aura on low-end
     if (lowEnd) return;
     const aura = $(".cursor-aura");
     if (!aura) return;
     let raf = 0, mx = 0, my = 0, ax = 0, ay = 0, visible = false;
     function update() {
       raf = 0;
-      // lerp 0.12 — quicker, fewer frames needed
       ax += (mx - ax) * 0.14;
       ay += (my - ay) * 0.14;
       aura.style.transform = `translate3d(${ax}px,${ay}px,0)`;
-      // continue only if still moving significantly
       if (Math.abs(mx - ax) > 0.3 || Math.abs(my - ay) > 0.3) {
         raf = requestAnimationFrame(update);
       }
@@ -382,11 +353,9 @@
       el.addEventListener("pointerenter", () => aura.classList.add("is-hovering"));
       el.addEventListener("pointerleave", () => aura.classList.remove("is-hovering"));
     });
-    // hide if never moved (keyboard nav)
     setTimeout(() => { if (!visible) aura.style.display = "none"; }, 1500);
   })();
 
-  /* 6) SCROLL PARALLAX — disabled on phones for 60fps, only desktop */
   (() => {
     if (reduceMotion || isPhone) return;
     const copy = $(".hero__copy");
@@ -400,7 +369,6 @@
         entries.forEach(en => {
           heroInView = en.isIntersecting;
           if (!heroInView) {
-            // reset transforms when out
             if (copy) copy.style.transform = "";
             if (portrait) portrait.style.transform = "";
           }
@@ -415,7 +383,7 @@
       const vh = window.innerHeight;
       if (rect.bottom < -100 || rect.top > vh) return;
       const progress = Math.min(1, Math.max(0, -rect.top / (rect.height || 1)));
-      const y1 = progress * 20; // reduced from 28
+      const y1 = progress * 20;
       const y2 = progress * -12;
       const scale = 1 - progress * 0.015;
       if (copy) copy.style.transform = `translate3d(0,${y1}px,0)`;
@@ -446,7 +414,6 @@
     }
   })();
 
-  /* 7) SKILLS STAGGER + STAT PULSE — unchanged, light */
   (() => {
     const skillList = $(".skill-list");
     const tools = $(".tools");
@@ -472,7 +439,6 @@
     stats.forEach(s => sio.observe(s));
   })();
 
-  /* 8) HERO TOOLS FLOAT — disabled on low-end */
   (() => {
     if (reduceMotion || lowEnd) return;
     const tools = $$(".hero-tool");
@@ -487,14 +453,11 @@
     }
   })();
 
-  /* 9) PORTFOLIO FILTERS — removed heavy setTimeout stacking */
   (() => {
     const btns = $$(".filter");
     if (!btns.length || reduceMotion) return;
-    // No extra JS — CSS handles is-out/is-in via main.js, which is already optimized.
   })();
 
-  /* 10) REDUCED-MOTION TOGGLE Alt+M */
   (() => {
     window.addEventListener("keydown", (e) => {
       if (e.altKey && e.key.toLowerCase() === "m") {
@@ -512,18 +475,15 @@
     });
   })();
 
-  /* 11) MOBILE-ONLY LIGHT ANIMATIONS — runs even on phones, 60fps */
   (() => {
     if (reduceMotion) return;
     const mq = window.matchMedia("(max-width: 820px)");
     if (!mq.matches) return;
 
-    // stagger CSS var for features/services/projects
     $$(".features .feature").forEach((el,i)=> el.style.setProperty("--i", i));
     $$(".services .service").forEach((el,i)=> el.style.setProperty("--i", i));
     $$(".project").forEach((el,i)=> el.style.setProperty("--i", i));
 
-    // reveal projects on scroll (mobile)
     if ("IntersectionObserver" in window) {
       const cards = $$(".project");
       const io = new IntersectionObserver((entries)=>{
@@ -534,13 +494,11 @@
         });
       }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
       cards.forEach(c=> io.observe(c));
-      // panels already via main.js reveal, add count for stagger
       $$(".panel").forEach((p,i)=> p.style.setProperty("--i", i%4));
     } else {
       $$(".project").forEach(c=> c.classList.add("is-visible"));
     }
 
-    // tap ripple for buttons/filters on touch (no layout shift)
     const tapTargets = $$(".btn, .filter, .project, .feature, .service");
     tapTargets.forEach(el=>{
       el.addEventListener("touchstart", ()=> el.classList.add("is-tapped"), {passive:true});

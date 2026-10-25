@@ -1,4 +1,4 @@
-// This Website is made by GURWINDER SINGH.
+// This website is made by Gurwinder Singh.
 (() => {
   "use strict";
   const $  = (sel, root = document) => root.querySelector(sel);
@@ -22,7 +22,6 @@
     toggle.addEventListener("click", () => {
       const willOpen = !nav.classList.contains("is-open");
       setNav(willOpen);
-      // haptic on supported phones
       if (willOpen && navigator.vibrate) try { navigator.vibrate(10); } catch {}
     });
   }
@@ -35,7 +34,6 @@
     if (nav.contains(e.target) || (toggle && toggle.contains(e.target))) return;
     setNav(false);
   });
-  // auto-close nav on scroll (mobile UX: don't trap)
   let lastY = window.scrollY;
   window.addEventListener("scroll", () => {
     if (!nav || !nav.classList.contains("is-open")) { lastY = window.scrollY; return; }
@@ -499,7 +497,6 @@
     }
   });
 
-  // ── Mobile dock: hide when near bottom (footer), hide on nav open ──
   (() => {
     const dock = $("#mobile-dock");
     if (!dock) return;
@@ -518,12 +515,10 @@
       ticking = true;
       requestAnimationFrame(updateDock);
     }, { passive: true });
-    // observe nav class changes
     if (nav && "MutationObserver" in window) {
       new MutationObserver(updateDock).observe(nav, { attributes: true, attributeFilter: ["class"] });
     }
     updateDock();
-    // hide dock when contact section in view to avoid duplicate CTA
     const contact = $("#contact");
     if (contact && "IntersectionObserver" in window) {
       const io = new IntersectionObserver((entries) => {

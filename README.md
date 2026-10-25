@@ -1,4 +1,4 @@
-<!-- This Website is made by GURWINDER SINGH. -->
+<!-- This website is made by Gurwinder Singh. -->
 
 # Gurwinder Singh — Portfolio
 
@@ -164,7 +164,6 @@ overwritten on the next build:
 
 ```powershell
 cd "C:\Users\Lenovo\Desktop\Gurwinder Singh\Portfoleo"
-# edit src\data\portfolio.ts  (profile.summary, profile.website, skills, timeline, projects)
 node scripts/build_resume.mjs --pdf
 Copy-Item public\Gurwinder-Singh-Resume.pdf "C:\Users\Lenovo\Desktop\Gurwinder Singh\omniroute\portfolio\assets\" -Force
 ```

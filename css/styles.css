@@ -1,4 +1,4 @@
-/* This Website is made by GURWINDER SINGH. */
+/* This website is made by Gurwinder Singh. */
 :root {
   --bg: #070c16;
   --bg-2: #0a1524;
@@ -500,7 +500,6 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
   color: var(--accent);
 }
 
-/* Clip-path wipe on the two headline lines, staggered through --i. */
 .hero__title > * {
   clip-path: inset(0 100% 0 0);
   transition: clip-path 0.9s var(--ease);
@@ -1572,7 +1571,7 @@ a, button, input, textarea, select, label, .filter {
   .portrait__node,
   .portrait__node::before { animation: none; }
 }
-/* Visual polish: add depth, a soft brand glow, and clearer interaction states. */
+
 .hero {
   isolation: isolate;
   overflow: clip;
@@ -1650,7 +1649,6 @@ a, button, input, textarea, select, label, .filter {
   .panel { background: linear-gradient(145deg, rgba(17, 37, 42, 0.78), rgba(8, 19, 24, 0.86)); }
 }
 
-/* Hero refinement: instrumented portrait ring and a toolset strip under the CTAs. */
 .hero__tools {
   display: flex;
   flex-wrap: wrap;
@@ -1692,7 +1690,6 @@ a, button, input, textarea, select, label, .filter {
   transform: translateY(-2px);
 }
 
-/* The experience counter becomes a glass badge, as in the design reference. */
 .portrait__year {
   top: -1%;
   right: -2%;
@@ -1713,7 +1710,6 @@ a, button, input, textarea, select, label, .filter {
   opacity: 1;
 }
 
-/* Calibration ticks orbiting the portrait, drawn with a masked conic gradient. */
 .portrait__ticks {
   position: absolute;
   inset: -34px;
@@ -1730,14 +1726,12 @@ a, button, input, textarea, select, label, .filter {
   animation: spin 140s linear infinite reverse;
 }
 
-/* Telemetry nodes riding the ring. */
 @property --orbit {
   syntax: "<angle>";
   inherits: false;
   initial-value: 0deg;
 }
 
-/* Telemetry nodes riding the ring — each on its own pulse period, orbiting. */
 .portrait__node {
   position: absolute;
   inset: 0;
@@ -1776,7 +1770,6 @@ a, button, input, textarea, select, label, .filter {
   to { --orbit: 360deg; }
 }
 
-/* Ambient bloom behind the portrait and a soft glow on the accent headline. */
 .portrait::after {
   content: "";
   position: absolute;
@@ -1788,7 +1781,6 @@ a, button, input, textarea, select, label, .filter {
 }
 .hero__title span { filter: drop-shadow(0 0 24px rgba(59, 130, 246, 0.26)); }
 
-/* The header call to action reads as a pill, per the brief. */
 .header-cta { border-radius: var(--radius-pill); }
 @media (min-width: 821px) { .header-cta { padding-inline: 20px; } }
 
@@ -1806,14 +1798,7 @@ a, button, input, textarea, select, label, .filter {
 @media (hover: none), (pointer: coarse) {
   .hero-tool:hover { transform: none; }
 }
-/* ──────────────────────────────────────────────────────────
-   Premium animation layer — Gurwinder Portfolio
-   1) Network mesh canvas  2) Marquee  3) Hero phrase rotator
-   4) Spotlight cards  5) 3D tilt  6) Cursor aura  7) Parallax
-   8) Skill stagger  9) Scanline  10) Floating accents
-   ────────────────────────────────────────────────────────── */
 
-/* --- Network mesh canvas — optimized: no blend mode, lower opacity, GPU hint --- */
 #network-canvas {
   position: absolute;
   inset: 0;
@@ -1823,17 +1808,16 @@ a, button, input, textarea, select, label, .filter {
   opacity: 0.28;
   pointer-events: none;
   z-index: 0;
-  /* promote to layer but no mix-blend (was screen — cost 3ms/frame) */
+
   transform: translateZ(0);
 }
 .bg-stage:has(#network-canvas) .bg-scrim { z-index: 1; }
 .bg-stage:has(#network-canvas) #frame-canvas { z-index: 0; }
-/* Hide mesh on very small screens — saves battery */
+
 @media (max-width: 900px) {
   #network-canvas { display: none !important; }
 }
 
-/* --- Tech marquee ticker --- */
 .marquee {
   position: relative;
   z-index: 1;
@@ -1850,7 +1834,7 @@ a, button, input, textarea, select, label, .filter {
   width: max-content;
   animation: marquee 42s linear infinite;
   will-change: transform;
-  /* perf: ensure it runs on compositor, not main thread */
+
   transform: translateZ(0);
 }
 @media (max-width: 700px) {
@@ -1893,7 +1877,6 @@ a, button, input, textarea, select, label, .filter {
   to   { transform: translateX(-50%); }
 }
 
-/* --- Lightweight phrase rotator for the hero role --- */
 .hero__role {
   position: relative;
   min-height: 1.6em;
@@ -1915,7 +1898,6 @@ a, button, input, textarea, select, label, .filter {
   .hero__role .phrase-rotator { transition: none; }
 }
 
-/* --- Spotlight cards (mouse-following glow) --- */
 .spotlight {
   position: relative;
   --mx: 50%;
@@ -1940,7 +1922,7 @@ a, button, input, textarea, select, label, .filter {
   background: radial-gradient(420px circle at var(--mx) var(--my),
     rgba(59,130,246,0.18), transparent 68%);
 }
-/* subtle border glow on hover */
+
 .spotlight::after {
   content: "";
   position: absolute;
@@ -1958,7 +1940,6 @@ a, button, input, textarea, select, label, .filter {
 }
 .spotlight:hover::after { opacity: 1; }
 
-/* --- 3D tilt for project cards — will-change only on hover to save memory --- */
 .project.tilt {
   transform-style: preserve-3d;
   transition: transform 0.18s ease-out, border-color 0.35s var(--ease), box-shadow 0.35s var(--ease);
@@ -1979,7 +1960,6 @@ a, button, input, textarea, select, label, .filter {
 }
 .project.tilt:hover .project__glare { opacity: 1; }
 
-/* --- Cursor aura — only on fine pointer, disabled on low-end/mobile --- */
 .cursor-aura {
   position: fixed;
   top: 0; left: 0;
@@ -1995,7 +1975,7 @@ a, button, input, textarea, select, label, .filter {
   transform: translate3d(0,0,0);
   transition: opacity 0.35s var(--ease);
   will-change: transform;
-  /* removed mix-blend-mode (was screen — expensive) */
+
 }
 .cursor-aura.is-visible { opacity: 1; }
 .cursor-aura.is-hovering {
@@ -2009,10 +1989,8 @@ a, button, input, textarea, select, label, .filter {
   .cursor-aura { display: none !important; }
 }
 
-/* --- Scanline removed for perf: was mix-blend + repaint every frame --- */
 .bg-stage::after { display: none; }
 
-/* --- Floating accents on icons --- */
 .service svg, .feature svg {
   transition: transform 0.45s var(--ease), color 0.35s var(--ease);
 }
@@ -2023,7 +2001,6 @@ a, button, input, textarea, select, label, .filter {
 .hero-tool svg { transition: transform 0.4s var(--ease); }
 .hero-tool:hover svg { transform: scale(1.15) rotate(-6deg); }
 
-/* --- Stat pulse when counter finishes --- */
 .stat.is-counted {
   border-color: rgba(59,130,246,0.28);
   box-shadow: 0 0 24px rgba(59,130,246,0.12);
@@ -2035,7 +2012,6 @@ a, button, input, textarea, select, label, .filter {
   text-shadow: 0 0 18px rgba(59,130,246,0.45);
 }
 
-/* --- Skills stagger reveal --- */
 .skill-list li,
 .tools .tool {
   opacity: 0;
@@ -2068,13 +2044,11 @@ a, button, input, textarea, select, label, .filter {
 .tools.is-visible .tool:nth-child(9) { transition-delay: 480ms; }
 .tools.is-visible .tool:nth-child(10){ transition-delay: 530ms; }
 
-/* --- Parallax: only transform when in viewport, no transition cost otherwise --- */
 .hero__copy, .portrait { will-change: transform; }
 @media (max-width: 900px) {
   .hero__copy, .portrait { will-change: auto; }
 }
 
-/* --- About features progressive glow line --- */
 .feature {
   position: relative;
 }
@@ -2090,7 +2064,6 @@ a, button, input, textarea, select, label, .filter {
 }
 .feature:hover::after { opacity: 1; transform: scaleX(1); }
 
-/* --- Contact rows slide on hover --- */
 .contact__row {
   transition: transform 0.35s var(--ease), color 0.3s var(--ease);
 }
@@ -2098,16 +2071,13 @@ a, button, input, textarea, select, label, .filter {
 .contact__icon { transition: transform 0.35s var(--ease), background 0.3s var(--ease), border-color 0.3s var(--ease); }
 .contact__row:hover .contact__icon { transform: scale(1.06); }
 
-/* --- Filter active morph --- */
 .filter.is-active {
   transform: translateY(-1px);
 }
 
-/* --- Quotes track — GPU only when animating --- */
 .quote-track { will-change: auto; }
 #quotes:hover .quote-track { will-change: transform; }
 
-/* --- Scroll progress shimmer --- */
 .progress {
   overflow: hidden;
 }
@@ -2124,7 +2094,6 @@ a, button, input, textarea, select, label, .filter {
   60%,100% { transform: translateX(200%); }
 }
 
-/* --- Loader brand pulse upgrade --- */
 .loader__mark {
   position: relative;
 }
