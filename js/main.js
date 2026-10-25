@@ -19,7 +19,12 @@
   }
 
   if (toggle) {
-    toggle.addEventListener("click", () => setNav(!nav.classList.contains("is-open")));
+    toggle.addEventListener("click", () => {
+      const willOpen = !nav.classList.contains("is-open");
+      setNav(willOpen);
+      // haptic on supported phones
+      if (willOpen && navigator.vibrate) try { navigator.vibrate(10); } catch {}
+    });
   }
   $$(".nav a").forEach((link) => link.addEventListener("click", () => setNav(false)));
   document.addEventListener("keydown", (e) => {
@@ -30,6 +35,12 @@
     if (nav.contains(e.target) || (toggle && toggle.contains(e.target))) return;
     setNav(false);
   });
+  // auto-close nav on scroll (mobile UX: don't trap)
+  let lastY = window.scrollY;
+  window.addEventListener("scroll", () => {
+    if (!nav || !nav.classList.contains("is-open")) { lastY = window.scrollY; return; }
+    if (Math.abs(window.scrollY - lastY) > 12) setNav(false);
+  }, { passive: true });
   let scrollQueued = false;
   function onScroll() {
     const max = document.documentElement.scrollHeight - window.innerHeight;
@@ -487,4 +498,41 @@
       play();
     }
   });
+
+  // ── Mobile dock: hide when near bottom (footer), hide on nav open ──
+  (() => {
+    const dock = $("#mobile-dock");
+    if (!dock) return;
+    const mq = window.matchMedia("(max-width: 768px)");
+    if (!mq.matches) return;
+    const footer = $(".site-footer");
+    let ticking = false;
+    function updateDock() {
+      ticking = false;
+      const nearFooter = footer && (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 80);
+      const navOpen = nav && nav.classList.contains("is-open");
+      dock.classList.toggle("is-hidden", nearFooter || navOpen);
+    }
+    window.addEventListener("scroll", () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(updateDock);
+    }, { passive: true });
+    // observe nav class changes
+    if (nav && "MutationObserver" in window) {
+      new MutationObserver(updateDock).observe(nav, { attributes: true, attributeFilter: ["class"] });
+    }
+    updateDock();
+    // hide dock when contact section in view to avoid duplicate CTA
+    const contact = $("#contact");
+    if (contact && "IntersectionObserver" in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) dock.classList.add("is-hidden");
+          else updateDock();
+        });
+      }, { threshold: 0.15 });
+      io.observe(contact);
+    }
+  })();
 })();
