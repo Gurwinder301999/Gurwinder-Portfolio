@@ -434,8 +434,8 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
 .panel__title--center { display: inline-block; }
 
 .hero {
-  padding-top: calc(var(--header-h) + 42px);
-  padding-bottom: 34px;
+  padding-top: calc(var(--header-h) + 30px);
+  padding-bottom: 30px;
 }
 .hero__grid {
   display: grid;
@@ -491,7 +491,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
 
 .hero__lead {
   max-width: 44ch;
-  margin: 22px 0 28px;
+  margin: 18px 0 24px;
   color: var(--text-2);
   font-size: 15.5px;
 }
@@ -506,7 +506,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
   display: flex;
   align-items: center;
   gap: 14px;
-  margin-top: 38px;
+  margin-top: 28px;
 }
 .hero__social > span { text-shadow: 0 1px 7px rgba(0, 0, 0, 0.92); }
 .hero__social > span {
@@ -550,7 +550,7 @@ h1, h2, h3, h4 { line-height: 1.1; font-weight: 700; }
   padding: 10px;
 }
 .portrait__ring {
-  --ring: min(430px, 82vw);
+  --ring: min(404px, 82vw);
   position: relative;
   width: var(--ring);
   aspect-ratio: 1;
@@ -1608,4 +1608,144 @@ a, button, input, textarea, select, label, .filter {
 @media (max-width: 560px) {
   .hero::before { top: 10%; right: -68%; width: 160vw; }
   .panel { background: linear-gradient(145deg, rgba(17, 37, 42, 0.78), rgba(8, 19, 24, 0.86)); }
+}
+
+/* Hero refinement: instrumented portrait ring and a toolset strip under the CTAs. */
+.hero__tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 18px;
+  max-width: 560px;
+}
+.hero-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 13px 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.015));
+  box-shadow: inset 0 1px 0 rgba(220, 255, 250, 0.05), 0 8px 20px rgba(0, 6, 9, 0.28);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  color: var(--text-2);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  transition: color 0.3s var(--ease), border-color 0.3s var(--ease),
+              background 0.3s var(--ease), transform 0.3s var(--ease);
+}
+.hero-tool svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: var(--accent);
+  opacity: 0.92;
+}
+.hero-tool:hover {
+  color: var(--text);
+  border-color: var(--accent-line);
+  background: linear-gradient(150deg, rgba(56, 214, 200, 0.14), rgba(56, 214, 200, 0.04));
+  transform: translateY(-2px);
+}
+
+/* The experience counter becomes a glass badge, as in the design reference. */
+.portrait__year {
+  top: -1%;
+  right: -2%;
+  width: calc(var(--ring) * 0.205);
+  height: calc(var(--ring) * 0.205);
+  display: grid;
+  place-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--accent-line);
+  background: radial-gradient(circle at 50% 28%, rgba(56, 214, 200, 0.16), rgba(7, 18, 22, 0.84) 72%);
+  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.46), inset 0 1px 0 rgba(220, 255, 250, 0.08),
+              0 0 26px rgba(56, 214, 200, 0.14);
+  font-size: calc(var(--ring) * 0.076);
+  line-height: 0.92;
+  text-align: center;
+  opacity: 1;
+}
+
+/* Calibration ticks orbiting the portrait, drawn with a masked conic gradient. */
+.portrait__ticks {
+  position: absolute;
+  inset: -34px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: repeating-conic-gradient(
+    from 0deg,
+    rgba(56, 214, 200, 0.55) 0deg 0.45deg,
+    transparent 0.45deg 4deg
+  );
+  -webkit-mask-image: radial-gradient(circle, transparent 0 92.5%, #000 92.5% 98%, transparent 98%);
+  mask-image: radial-gradient(circle, transparent 0 92.5%, #000 92.5% 98%, transparent 98%);
+  opacity: 0.5;
+  animation: spin 140s linear infinite reverse;
+}
+
+/* Telemetry nodes riding the ring. */
+.portrait__node {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(56, 214, 200, 0.1), 0 0 16px rgba(56, 214, 200, 0.75);
+  pointer-events: none;
+  animation: node-pulse 4.2s ease-in-out infinite;
+}
+.portrait__node--a { top: 2%; left: 26%; }
+.portrait__node--b { bottom: 9%; right: 3%; animation-delay: -1.4s; }
+.portrait__node--c {
+  top: 46%;
+  left: -4px;
+  width: 6px;
+  height: 6px;
+  animation-delay: -2.8s;
+}
+@keyframes node-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(0.85); }
+  50%      { opacity: 1;   transform: scale(1.18); }
+}
+
+/* Ambient bloom behind the portrait and a soft glow on the accent headline. */
+.portrait::after {
+  content: "";
+  position: absolute;
+  inset: -12%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 52% 46%, rgba(56, 214, 200, 0.16), rgba(56, 214, 200, 0.04) 46%, transparent 68%);
+  pointer-events: none;
+}
+.hero__title span { filter: drop-shadow(0 0 24px rgba(56, 214, 200, 0.26)); }
+
+/* The header call to action reads as a pill, per the brief. */
+.header-cta { border-radius: var(--radius-pill); }
+@media (min-width: 821px) { .header-cta { padding-inline: 20px; } }
+
+@media (max-width: 980px) {
+  .hero__tools { margin-top: 22px; }
+  .portrait__node--a { left: 20%; }
+}
+@media (max-width: 560px) {
+  .hero__tools { gap: 8px; margin-top: 20px; }
+  .hero-tool { padding: 7px 11px 7px 9px; font-size: 10.5px; }
+  .hero-tool svg { width: 15px; height: 15px; }
+  .portrait__ticks { inset: -24px; opacity: 0.38; }
+  .portrait__node--c { display: none; }
+}
+@media (hover: none), (pointer: coarse) {
+  .hero-tool:hover { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .portrait__ticks,
+  .portrait__node { animation: none; }
 }

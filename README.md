@@ -86,6 +86,7 @@ stays true.
 | `scripts/security-check.js` | The `npm run check` assertions |
 | `frames/` | 240 JPEGs used by the background animation (~34 MB) |
 | `assets/` | `Gurwinder-Singh-Resume.pdf` |
+| `docs/` | `prompts.md` — the hero design brief written as a build prompt and as an image prompt, plus the concept mockup |
 
 ## Things worth knowing before you edit
 
