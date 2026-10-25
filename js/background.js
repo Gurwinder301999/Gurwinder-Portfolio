@@ -1,5 +1,4 @@
-// This Website is made by GURWINDER SINGH.
-// Optimized: idle-sleep, lower dpr on mobile, rAF only when needed.
+// This website is made by Gurwinder Singh.
 (() => {
   "use strict";
   const TOTAL_FRAMES    = 240;
@@ -23,9 +22,7 @@
   const ctx = canvas.getContext("2d", { alpha: false });
   const frames    = new Map();
 
-  // Disable heavy canvas on low-end mobile to keep 60fps
   const isLowEndMobile = window.innerWidth < 600 && (conn && (conn.saveData || /2g/.test(conn.effectiveType || "")));
-  // keep canvas but lower DPR; don't fully disable unless saveData
 
   const reducedMotion = typeof window.matchMedia === "function"
     && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -44,7 +41,6 @@
   let lastDrawn   = -1;
   let lastTime    = 0;
   let queueCursor = 0;
-  // idle-sleep: stop RAF when at rest
   let rafId = 0;
   let isTicking = false;
   let idleFrames = 0;
@@ -61,7 +57,6 @@
       loadedCount += 1;
       paintLoader();
       if (!revealed && index === Math.round(target)) reveal();
-      // wake tick if new frame arrived near playhead
       if (!isTicking) wake();
     };
     img.onerror = () => {
@@ -162,11 +157,9 @@
 
     if (started) pump();
 
-    // idle detection: if playhead at target and no draw, count idle
     const atRest = Math.abs(target - playhead) < 0.02 && !didDraw;
     if (atRest) idleFrames++; else idleFrames = 0;
 
-    // sleep after ~20 idle frames (~320ms) — wakes on next scroll/resize
     if (idleFrames > 20 && lag < 0.02) {
       isTicking = false;
       rafId = 0;
