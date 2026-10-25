@@ -72,9 +72,11 @@
 
 <div class="bg-stage" aria-hidden="true">
   <canvas id="frame-canvas"></canvas>
+  <canvas id="network-canvas" aria-hidden="true"></canvas>
   <div class="bg-scrim"></div>
   <div class="bg-dots"></div>
 </div>
+<div class="cursor-aura" aria-hidden="true"></div>
 
 <div class="loader" id="loader">
   <div class="loader__mark"></div>
@@ -213,6 +215,46 @@
       <div class="hero__scroll" aria-hidden="true"><i></i> Scroll to explore <i></i></div>
     </div>
   </section>
+
+  <!-- Tech marquee: infinite ticker of core systems — pauses on hover -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      <div class="marquee__group">
+        <span class="marquee__item"><i></i> Active Directory <em>· AD DS</em></span>
+        <span class="marquee__item"><i></i> Windows Server</span>
+        <span class="marquee__item"><i></i> Rocky Linux <em>· CentOS</em></span>
+        <span class="marquee__item"><i></i> Asterisk <em>IP-PBX</em></span>
+        <span class="marquee__item"><i></i> SIP / RTP <em>· PJSIP</em></span>
+        <span class="marquee__item"><i></i> VoIP <em>Telephony</em></span>
+        <span class="marquee__item"><i></i> TCP / IP</span>
+        <span class="marquee__item"><i></i> VLAN <em>· DHCP · DNS</em></span>
+        <span class="marquee__item"><i></i> LAN / WAN</span>
+        <span class="marquee__item"><i></i> Firewall <em>ACLs</em></span>
+        <span class="marquee__item"><i></i> IP CCTV</span>
+        <span class="marquee__item"><i></i> Enterprise Wi-Fi</span>
+        <span class="marquee__item"><i></i> PoE <em>Switching</em></span>
+        <span class="marquee__item"><i></i> Biometric Access</span>
+        <span class="marquee__item"><i></i> Ticketing <em>& SLA</em></span>
+      </div>
+      <div class="marquee__group" aria-hidden="true">
+        <span class="marquee__item"><i></i> Active Directory <em>· AD DS</em></span>
+        <span class="marquee__item"><i></i> Windows Server</span>
+        <span class="marquee__item"><i></i> Rocky Linux <em>· CentOS</em></span>
+        <span class="marquee__item"><i></i> Asterisk <em>IP-PBX</em></span>
+        <span class="marquee__item"><i></i> SIP / RTP <em>· PJSIP</em></span>
+        <span class="marquee__item"><i></i> VoIP <em>Telephony</em></span>
+        <span class="marquee__item"><i></i> TCP / IP</span>
+        <span class="marquee__item"><i></i> VLAN <em>· DHCP · DNS</em></span>
+        <span class="marquee__item"><i></i> LAN / WAN</span>
+        <span class="marquee__item"><i></i> Firewall <em>ACLs</em></span>
+        <span class="marquee__item"><i></i> IP CCTV</span>
+        <span class="marquee__item"><i></i> Enterprise Wi-Fi</span>
+        <span class="marquee__item"><i></i> PoE <em>Switching</em></span>
+        <span class="marquee__item"><i></i> Biometric Access</span>
+        <span class="marquee__item"><i></i> Ticketing <em>& SLA</em></span>
+      </div>
+    </div>
+  </div>
 
   <section class="section" id="about">
     <div class="container split split--stretch">
@@ -930,6 +972,7 @@
 
   <script src="js/background.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/animations.js"></script>
 
 </body>
 </html>
