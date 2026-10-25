@@ -91,12 +91,17 @@
   .portrait__ring { --ring: min(264px, 80vw); }
 }
 
-/* 3) Portrait decor — lighter on phones */
+/* 3) Portrait — light motion, not heavy orbit */
 @media (max-width: 600px) {
-  .portrait__ring::before { animation: none !important; opacity: .42; }
-  .portrait__ticks { animation: none !important; opacity: .20; }
-  .portrait__node { animation: none !important; }
+  .portrait__ring::before { animation: spin 60s linear infinite !important; opacity: .32; }
+  .portrait__ticks { animation: spin 120s linear infinite reverse !important; opacity: .16; }
+  .portrait__node { animation: orbit 38s linear infinite !important; }
+  .portrait__node::before { animation: node-pulse 3.6s ease-in-out infinite !important; }
   .portrait__dots { display: none; }
+  .portrait__year { animation: m-pulse 3s ease-in-out infinite; }
+}
+@media (max-width: 600px) and (prefers-reduced-motion: reduce) {
+  .portrait__ring::before, .portrait__ticks, .portrait__node, .portrait__node::before, .portrait__year { animation: none !important; }
 }
 
 /* 4) Marquee — no blur on mobile */
@@ -268,4 +273,67 @@
   .hero__lead { margin: 10px auto 12px; } .hero__social { margin-top: 10px; }
   .mobile-dock { display: none !important; } .page { padding-bottom: 0; } .site-footer { padding-bottom: max(18px, env(safe-area-inset-bottom)); }
 }
+/* 17) MOBILE ANIMATIONS — light, 60fps, compositor only */
+@media (max-width: 820px) and (prefers-reduced-motion: no-preference) {
+  /* header slides down on load */
+  .site-header { animation: m-header-in .5s var(--ease) both; }
+  /* hero stagger — uses reveal + delay chain */
+  .hero .eyebrow { animation: m-enter .5s var(--ease) .05s both; }
+  .hero__title { animation: m-enter .55s var(--ease) .14s both; }
+  .hero__role { animation: m-enter .5s var(--ease) .22s both; }
+  .hero__lead { animation: m-enter .5s var(--ease) .30s both; }
+  .hero__actions { animation: m-enter .5s var(--ease) .38s both; }
+  .hero__tools { animation: m-enter .5s var(--ease) .46s both; }
+  .hero__social { animation: m-enter .5s var(--ease) .54s both; }
+  .portrait { animation: m-scale .6s var(--ease) .10s both; }
+  .portrait__frame img { animation: m-img-in .7s var(--ease) .35s both; }
+
+  /* tools float gently */
+  .hero-tool { animation: m-float 3.6s ease-in-out infinite; }
+  .hero-tool:nth-child(2) { animation-delay: .25s; }
+  .hero-tool:nth-child(3) { animation-delay: .5s; }
+  .hero-tool:nth-child(4) { animation-delay: .75s; }
+  .hero-tool:nth-child(5) { animation-delay: 1s; }
+
+  /* panels / features / services enter on reveal */
+  .reveal:not(.hero__title):not(.eyebrow) { transition: opacity .55s var(--ease), transform .55s var(--ease); }
+  .reveal.is-visible { transition-delay: calc(var(--i,0)*45ms); }
+  .panel { will-change: transform, opacity; }
+  .features .feature, .services .service { transition-delay: calc(var(--i,0)*60ms); }
+  /* projects stagger */
+  .project { animation: m-enter .45s var(--ease) both; animation-delay: calc(var(--i,0)*70ms); animation-play-state: paused; }
+  .project.is-visible, .project.is-in { animation-play-state: running; }
+  /* marquee stays, but with subtle opacity wave */
+  .marquee__item { animation: m-fade 4s ease-in-out infinite; }
+  .marquee__item:nth-child(2n) { animation-delay: .6s; }
+  /* filters pop when active */
+  .filter.is-active { animation: m-pop .28s var(--ease) both; }
+  /* stats bounce in */
+  .stat { animation: m-enter .45s var(--ease) both; }
+  .stat:nth-child(2) { animation-delay: .08s; } .stat:nth-child(3){animation-delay:.16s} .stat:nth-child(4){animation-delay:.24s}
+  /* nav sheet links stagger when opening */
+  .nav.is-open a { animation: m-enter .35s var(--ease) both; }
+  .nav.is-open a:nth-child(1){animation-delay:.04s} .nav.is-open a:nth-child(2){animation-delay:.08s}
+  .nav.is-open a:nth-child(3){animation-delay:.12s} .nav.is-open a:nth-child(4){animation-delay:.16s}
+  .nav.is-open a:nth-child(5){animation-delay:.20s} .nav.is-open a:nth-child(6){animation-delay:.24s}
+  /* dock slides up after load */
+  .mobile-dock { animation: m-dock-in .5s var(--ease) .9s both; }
+  /* to-top pops when visible */
+  .to-top.is-visible { animation: m-pop .32s var(--ease) both; }
+}
+@media (max-width: 820px) and (prefers-reduced-motion: no-preference) {
+  .quotes__dot.is-active { animation: m-pulse 1.8s ease-in-out infinite; }
+  .chip { animation: m-float 3s ease-in-out infinite; }
+}
+
+/* keyframes — only transform/opacity for GPU */
+@keyframes m-enter { from { opacity:0; transform: translateY(14px); } to { opacity:1; transform:none; } }
+@keyframes m-scale { from { opacity:0; transform: scale(.96) translateY(8px); } to { opacity:1; transform: none; } }
+@keyframes m-img-in { from { transform: scale(1.12); filter: contrast(1.05) brightness(.98) blur(2px); } to { transform: scale(1.08); filter: contrast(1.05) brightness(.98); } }
+@keyframes m-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+@keyframes m-pop { 0%{transform:scale(.92)} 55%{transform:scale(1.04)} 100%{transform:scale(1)} }
+@keyframes m-fade { 0%,100%{opacity:.9} 50%{opacity:1} }
+@keyframes m-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+@keyframes m-header-in { from { transform: translateY(-100%); opacity:0 } to { transform:none; opacity:1 } }
+@keyframes m-dock-in { from { transform: translateY(110px); opacity:0 } to { transform:none; opacity:1 } }
 @media (prefers-reduced-motion: reduce) { .mobile-dock, .nav { transition: none; } }
