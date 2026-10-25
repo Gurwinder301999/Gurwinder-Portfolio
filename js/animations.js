@@ -493,4 +493,40 @@
       }
     });
   })();
+
+  /* 11) MOBILE-ONLY LIGHT ANIMATIONS — runs even on phones, 60fps */
+  (() => {
+    if (reduceMotion) return;
+    const mq = window.matchMedia("(max-width: 820px)");
+    if (!mq.matches) return;
+
+    // stagger CSS var for features/services/projects
+    $$(".features .feature").forEach((el,i)=> el.style.setProperty("--i", i));
+    $$(".services .service").forEach((el,i)=> el.style.setProperty("--i", i));
+    $$(".project").forEach((el,i)=> el.style.setProperty("--i", i));
+
+    // reveal projects on scroll (mobile)
+    if ("IntersectionObserver" in window) {
+      const cards = $$(".project");
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+          if (!e.isIntersecting) return;
+          e.target.classList.add("is-visible");
+          io.unobserve(e.target);
+        });
+      }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+      cards.forEach(c=> io.observe(c));
+      // panels already via main.js reveal, add count for stagger
+      $$(".panel").forEach((p,i)=> p.style.setProperty("--i", i%4));
+    } else {
+      $$(".project").forEach(c=> c.classList.add("is-visible"));
+    }
+
+    // tap ripple for buttons/filters on touch (no layout shift)
+    const tapTargets = $$(".btn, .filter, .project, .feature, .service");
+    tapTargets.forEach(el=>{
+      el.addEventListener("touchstart", ()=> el.classList.add("is-tapped"), {passive:true});
+      el.addEventListener("touchend", ()=> setTimeout(()=> el.classList.remove("is-tapped"), 180), {passive:true});
+    });
+  })();
 })();
