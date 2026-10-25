@@ -98,15 +98,19 @@
   });
   syncActiveNav();
   const revealables = $$(".reveal");
+  revealables.forEach((el, i) => el.style.setProperty("--i", i));
+  const headline = $(".hero__title");
+  if (headline) {
+    Array.from(headline.children).forEach((el, i) => el.style.setProperty("--i", i));
+  }
   if (!("IntersectionObserver" in window) || reduceMotion) {
     revealables.forEach((el) => el.classList.add("is-visible"));
   } else {
     const io = new IntersectionObserver((entries, obs) => {
-      entries.forEach((entry, i) => {
+      entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-        const el = entry.target;
-        window.setTimeout(() => el.classList.add("is-visible"), i * 70);
-        obs.unobserve(el);
+        entry.target.classList.add("is-visible");
+        obs.unobserve(entry.target);
       });
     }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
     revealables.forEach((el) => io.observe(el));
@@ -159,10 +163,20 @@
       card.classList.toggle("is-out", !show);
       card.classList.remove("is-in");
       if (show && !reduceMotion) {
+        card.style.setProperty("--i", i);
         void card.offsetWidth;
-        card.style.animationDelay = (i % 6) * 45 + "ms";
         card.classList.add("is-in");
       }
+    });
+  }
+
+  if (cards.length && !reduceMotion) {
+    cards.forEach((card, i) => card.style.setProperty("--i", i));
+    requestAnimationFrame(() => {
+      cards.forEach((card) => {
+        void card.offsetWidth;
+        card.classList.add("is-in");
+      });
     });
   }
 

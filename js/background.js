@@ -2,7 +2,8 @@
 (() => {
   "use strict";
   const TOTAL_FRAMES    = 240;
-  const SMOOTHING       = 0.12;
+  const SMOOTHING_FAST  = 0.2;
+  const SMOOTHING_REST  = 0.08;
   const NEARBY_RADIUS   = 12;
   const MAX_CONCURRENT  = 6;
   const LOADER_MAX_WAIT = 2200;
@@ -20,6 +21,13 @@
   if (!canvas) return;
   const ctx = canvas.getContext("2d", { alpha: false });
   const frames    = new Map();
+
+  const reducedMotion = typeof window.matchMedia === "function"
+    && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reducedMotion) {
+    if (loader) loader.classList.add("is-done");
+    return;
+  }
   const inFlight  = new Set();
   const failed    = new Set();
   let loadedCount = 0;
@@ -115,7 +123,8 @@
     const dt = Math.min((now - lastTime) / 1000, 0.05);
     lastTime = now;
     target = scrollProgress() * (TOTAL_FRAMES - 1);
-    const k = 1 - Math.pow(1 - SMOOTHING, dt * 60);
+    const lag = Math.abs(target - playhead);
+    const k = 1 - Math.pow(1 - (lag > 2 ? SMOOTHING_FAST : SMOOTHING_REST), dt * 60);
     playhead += (target - playhead) * k;
     if (Math.abs(target - playhead) < 0.01) playhead = target;
     const index = Math.round(playhead);
