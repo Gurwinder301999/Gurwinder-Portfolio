@@ -2,7 +2,7 @@
 
 # Gurwinder Singh — Portfolio
 
-Personal portfolio for **Gurwinder Singh, IT Support Engineer & Developer** (Paharganj,
+Personal portfolio for **Gurwinder Singh, IT Support Engineer & Developer** (Janakpuri East,
 New Delhi). Every detail on the site — experience, education, skills, the twelve project
 case studies and contact information — comes from the resume PDF in `assets/`.
 
