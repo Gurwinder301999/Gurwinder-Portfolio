@@ -267,6 +267,18 @@ check("home page has Open Graph and Twitter share metadata",
 check("all published HTML documents have titles and no noindex directive",
   Object.values(pages).every((body) => /<title>[^<]+<\/title>/i.test(body) &&
     !/<meta[^>]+name="robots"[^>]+content="[^"]*noindex/i.test(body)));
+check("all HTML pages use the custom favicon and touch icon",
+  Object.values(pages).every((body) => /href="assets\/favicon-32\.png"/.test(body) &&
+    /href="assets\/apple-touch-icon\.png"/.test(body)));
+const faviconPng = fs.readFileSync(path.join(ROOT, "assets", "favicon-32.png"));
+const touchPng = fs.readFileSync(path.join(ROOT, "assets", "apple-touch-icon.png"));
+const faviconIco = fs.readFileSync(path.join(ROOT, "assets", "favicon.ico"));
+check("favicon PNGs and ICO have valid signatures and standard dimensions",
+  faviconPng.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])) &&
+    faviconPng.readUInt32BE(16) === 32 && faviconPng.readUInt32BE(20) === 32 &&
+    touchPng.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])) &&
+    touchPng.readUInt32BE(16) === 180 && touchPng.readUInt32BE(20) === 180 &&
+    faviconIco.readUInt16LE(0) === 0 && faviconIco.readUInt16LE(2) === 1);
 
 /* ------------------------------------------------------------------ */
 section("motion and accessibility");

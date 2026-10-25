@@ -89,7 +89,7 @@ stays true.
 | `scripts/security-check.js` | Dependency-free security, metadata, link and crawlability assertions |
 | `frames-webp/` | 240 WebP animation frames (~6.6 MB), preferred when supported |
 | `frames/` | 240 JPEG fallback frames (~35 MB) for browsers without WebP support |
-| `assets/` | `Gurwinder-Singh-Resume.pdf` |
+| `assets/` | Resume PDF and custom favicon master + browser-size PNG/ICO assets |
 | `docs/` | `prompts.md` — the hero design brief written as a build prompt and as an image prompt, plus the concept mockup |
 
 ## Things worth knowing before you edit
