@@ -298,7 +298,6 @@
   /* panels / features / services enter on reveal */
   .reveal:not(.hero__title):not(.eyebrow) { transition: opacity .55s var(--ease), transform .55s var(--ease); }
   .reveal.is-visible { transition-delay: calc(var(--i,0)*45ms); }
-  .panel { will-change: transform, opacity; }
   .features .feature, .services .service { transition-delay: calc(var(--i,0)*60ms); }
   /* projects stagger */
   .project { animation: m-enter .45s var(--ease) both; animation-delay: calc(var(--i,0)*70ms); animation-play-state: paused; }
@@ -329,7 +328,7 @@
 /* keyframes — only transform/opacity for GPU */
 @keyframes m-enter { from { opacity:0; transform: translateY(14px); } to { opacity:1; transform:none; } }
 @keyframes m-scale { from { opacity:0; transform: scale(.96) translateY(8px); } to { opacity:1; transform: none; } }
-@keyframes m-img-in { from { transform: scale(1.12); filter: contrast(1.05) brightness(.98) blur(2px); } to { transform: scale(1.08); filter: contrast(1.05) brightness(.98); } }
+@keyframes m-img-in { from { opacity: 0; transform: scale(1.12); } to { opacity: 1; transform: scale(1.08); } }
 @keyframes m-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
 @keyframes m-pop { 0%{transform:scale(.92)} 55%{transform:scale(1.04)} 100%{transform:scale(1)} }
 @keyframes m-fade { 0%,100%{opacity:.9} 50%{opacity:1} }

@@ -19,8 +19,12 @@ const html = read("index.html");
 const css = read(path.join("css", "styles.css"));
 const mainJs = read(path.join("js", "main.js"));
 const bgJs = read(path.join("js", "background.js"));
+const animationsJs = read(path.join("js", "animations.js"));
 const vercel = read("vercel.json");
 const gitignore = read(".gitignore");
+const robots = read("robots.txt");
+const sitemap = read("sitemap.xml");
+const securityTxt = read(path.join(".well-known", "security.txt"));
 const pages = {
   "index.html": html,
   "privacy.html": read("privacy.html"),
@@ -56,7 +60,7 @@ function trackedSet() {
   }
 }
 
-const allJs = mainJs + "\n" + bgJs;
+const allJs = mainJs + "\n" + bgJs + "\n" + animationsJs;
 const allHtml = Object.values(pages).join("\n");
 
 /* ------------------------------------------------------------------ */
@@ -159,8 +163,12 @@ const shipped = Object.entries(pages).concat([
   ["css/styles.css", css],
   ["js/main.js", mainJs],
   ["js/background.js", bgJs],
+  ["js/animations.js", animationsJs],
   ["vercel.json", vercel],
   [".gitignore", gitignore],
+  ["robots.txt", robots],
+  ["sitemap.xml", sitemap],
+  [".well-known/security.txt", securityTxt],
 ]);
 const leaked = shipped.filter(([, body]) => SECRET.some((re) => re.test(body))).map(([f]) => f);
 check("no credentials in shipped files", leaked.length === 0, leaked.join(", "));
@@ -202,6 +210,88 @@ check("no analytics or tag managers",
   !/googletagmanager|google-analytics|gtag\(|hotjar|clarity\.ms|mixpanel/i.test(markupOnly));
 check("no third-party script tag", !/<script[^>]+src="https?:/i.test(html));
 check("no service worker registration", !/navigator\.serviceWorker/.test(allJs));
+
+/* ------------------------------------------------------------------ */
+section("crawlability and discovery");
+
+check("robots.txt allows public pages and points to the sitemap",
+  /^User-agent:\s*\*\s*$/m.test(robots) && /^Allow:\s*\/$/m.test(robots) &&
+  robots.includes("Sitemap: https://gurwinder-portfolio.vercel.app/sitemap.xml"));
+const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+check("sitemap is validly structured and lists canonical pages",
+  sitemap.includes('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">') &&
+  sitemapUrls.includes("https://gurwinder-portfolio.vercel.app/") &&
+  sitemapUrls.includes("https://gurwinder-portfolio.vercel.app/privacy.html") &&
+  sitemapUrls.includes("https://gurwinder-portfolio.vercel.app/terms.html"));
+check("all sitemap paths resolve to shipped HTML",
+  sitemapUrls.length > 0 && sitemapUrls.every((url) => {
+    try {
+      const pathname = new URL(url).pathname;
+      const file = pathname.endsWith("/") ? "index.html" : pathname.slice(1);
+      return fs.existsSync(path.join(ROOT, file));
+    } catch { return false; }
+  }));
+const securityExpiry = securityTxt.match(/^Expires:\s*(.+)$/m);
+check("security.txt has a contact, canonical URL and future expiry",
+  /^Contact:\s*mailto:/m.test(securityTxt) &&
+  securityTxt.includes("Canonical: https://gurwinder-portfolio.vercel.app/.well-known/security.txt") &&
+  !!securityExpiry && Number.isFinite(Date.parse(securityExpiry[1])) &&
+  Date.parse(securityExpiry[1]) > Date.now());
+check("no unresolved hosting-provider placeholder remains",
+  !/(?:&lt;|<)HOSTING PROVIDER(?:&gt;|>)/i.test(pages["privacy.html"]));
+
+const localRefs = Object.entries(pages).flatMap(([file, body]) =>
+  [...body.matchAll(/(?:href|src)="([^"]+)"/g)].map((m) => ({ file, ref: m[1] }))
+).filter(({ ref }) => !/^(?:#|https?:|mailto:|tel:|data:|javascript:)/i.test(ref));
+const missingLocal = localRefs.filter(({ file, ref }) => {
+  const pathname = decodeURIComponent(ref.split(/[?#]/)[0]);
+  if (!pathname) return false;
+  const target = path.join(ROOT, path.dirname(file), pathname);
+  return !fs.existsSync(target);
+});
+check("all local HTML asset and page links resolve", missingLocal.length === 0,
+  missingLocal.map(({ file, ref }) => file + " → " + ref).join(", "));
+
+/* ------------------------------------------------------------------ */
+section("metadata");
+for (const [file, body] of Object.entries(pages)) {
+  check(file + " declares language, viewport, description and canonical URL",
+    /<html[^>]+lang="[a-z-]+"/i.test(body) &&
+    /<meta[^>]+name="viewport"/i.test(body) &&
+    /<meta[^>]+name="description"/i.test(body) &&
+    /<link[^>]+rel="canonical"[^>]+href="https:\/\/gurwinder-portfolio\.vercel\.app\//i.test(body));
+}
+check("home page has Open Graph and Twitter share metadata",
+  /property="og:title"/.test(html) && /property="og:description"/.test(html) &&
+  /property="og:image"/.test(html) && /name="twitter:card"/.test(html));
+check("all published HTML documents have titles and no noindex directive",
+  Object.values(pages).every((body) => /<title>[^<]+<\/title>/i.test(body) &&
+    !/<meta[^>]+name="robots"[^>]+content="[^"]*noindex/i.test(body)));
+check("all HTML pages use the custom favicon and touch icon",
+  Object.values(pages).every((body) => /href="assets\/favicon-32\.png"/.test(body) &&
+    /href="assets\/apple-touch-icon\.png"/.test(body)));
+const faviconPng = fs.readFileSync(path.join(ROOT, "assets", "favicon-32.png"));
+const touchPng = fs.readFileSync(path.join(ROOT, "assets", "apple-touch-icon.png"));
+const faviconIco = fs.readFileSync(path.join(ROOT, "assets", "favicon.ico"));
+check("favicon PNGs and ICO have valid signatures and standard dimensions",
+  faviconPng.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])) &&
+    faviconPng.readUInt32BE(16) === 32 && faviconPng.readUInt32BE(20) === 32 &&
+    touchPng.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])) &&
+    touchPng.readUInt32BE(16) === 180 && touchPng.readUInt32BE(20) === 180 &&
+    faviconIco.readUInt16LE(0) === 0 && faviconIco.readUInt16LE(2) === 1);
+
+/* ------------------------------------------------------------------ */
+section("motion and accessibility");
+check("hero phrase rotator is disabled for reduced-motion users",
+  /if \(!el \|\| reduceMotion\) return;/.test(animationsJs));
+check("rotating phrase is hidden from AT in favor of stable fallback text",
+  /accessible\.className = "sr-only"/.test(animationsJs) &&
+  /visual\.setAttribute\("aria-hidden", "true"\)/.test(animationsJs));
+check("phrase rotation pauses while the document is hidden",
+  /addEventListener\("visibilitychange"/.test(animationsJs) &&
+  /clearTimeout\(holdTimer\)/.test(animationsJs));
+check("hero phrase transition uses opacity and transform only",
+  /transition: opacity 240ms var\(--ease\), transform 240ms var\(--ease\)/.test(css));
 
 /* ------------------------------------------------------------------ */
 section("resume");

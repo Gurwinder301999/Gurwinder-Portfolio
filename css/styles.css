@@ -1808,7 +1808,7 @@ a, button, input, textarea, select, label, .filter {
 }
 /* ──────────────────────────────────────────────────────────
    Premium animation layer — Gurwinder Portfolio
-   1) Network mesh canvas  2) Marquee  3) Typewriter caret
+   1) Network mesh canvas  2) Marquee  3) Hero phrase rotator
    4) Spotlight cards  5) 3D tilt  6) Cursor aura  7) Parallax
    8) Skill stagger  9) Scanline  10) Floating accents
    ────────────────────────────────────────────────────────── */
@@ -1893,27 +1893,27 @@ a, button, input, textarea, select, label, .filter {
   to   { transform: translateX(-50%); }
 }
 
-/* --- Typewriter caret for hero role --- */
+/* --- Lightweight phrase rotator for the hero role --- */
 .hero__role {
   position: relative;
   min-height: 1.6em;
 }
-.hero__role .typed { color: var(--text-2); }
-.hero__role .typed em {
+.hero__role .phrase-rotator {
+  display: inline-block;
+  color: var(--text-2);
+  transition: opacity 240ms var(--ease), transform 240ms var(--ease);
+}
+.hero__role .phrase-rotator.is-changing {
+  opacity: 0;
+  transform: translateY(0.18em);
+}
+.hero__role .phrase-rotator em {
   font-style: normal;
   color: var(--accent-2);
 }
-.hero__role .caret {
-  display: inline-block;
-  width: 2px;
-  height: 0.95em;
-  margin-left: 2px;
-  background: var(--accent);
-  vertical-align: -2px;
-  animation: caret-blink 1s step-end infinite;
-  box-shadow: 0 0 6px rgba(59,130,246,0.7);
+@media (prefers-reduced-motion: reduce) {
+  .hero__role .phrase-rotator { transition: none; }
 }
-@keyframes caret-blink { 0%,50% { opacity:1 } 51%,100% { opacity:0 } }
 
 /* --- Spotlight cards (mouse-following glow) --- */
 .spotlight {
@@ -2147,7 +2147,6 @@ a, button, input, textarea, select, label, .filter {
   .portrait__node::before { animation: none; }
   .marquee__track { animation: none; transform: none; }
   .cursor-aura { display: none !important; }
-  .hero__role .caret { animation: none; opacity: 1; }
   .progress::after { animation: none; display: none; }
   .loader__mark::after { animation: none; }
   .spotlight::before, .spotlight::after,

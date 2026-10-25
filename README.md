@@ -21,7 +21,7 @@ or `npm start` (which shells out to `npx serve`). Any static server works; openi
 ## Security
 
 ```bash
-npm run check          # 40 assertions, no dependencies, exits non-zero on failure
+npm run check          # dependency-free security + crawlability assertions; exits non-zero on failure
 ```
 
 ### What this site is exposed to
@@ -82,10 +82,14 @@ stays true.
 | `css/styles.css` | Design tokens + every component. Sections are numbered in comments |
 | `js/background.js` | Scroll-scrubbed background: 240 frames mapped to whole-page scroll progress, with a frame-rate-independent lerp |
 | `js/main.js` | Sticky header, scroll spy, reveal-on-scroll, stat counters, portfolio filters, notes slider, radial-reveal buttons, name colour sweep, contact form |
+| `js/animations.js` | Lightweight visual phrase rotator and optional motion effects; no jQuery/plugin dependency, reduced-motion aware |
 | `vercel.json` | Security headers and cache policy for the Vercel deployment |
-| `scripts/security-check.js` | The `npm run check` assertions |
-| `frames/` | 240 JPEGs used by the background animation (~34 MB) |
-| `assets/` | `Gurwinder-Singh-Resume.pdf` |
+| `robots.txt`, `sitemap.xml` | Crawler access rules and canonical page index |
+| `.well-known/security.txt` | Security disclosure contact and expiry |
+| `scripts/security-check.js` | Dependency-free security, metadata, link and crawlability assertions |
+| `frames-webp/` | 240 WebP animation frames (~6.6 MB), preferred when supported |
+| `frames/` | 240 JPEG fallback frames (~35 MB) for browsers without WebP support |
+| `assets/` | Resume PDF and custom favicon master + browser-size PNG/ICO assets |
 | `docs/` | `prompts.md` — the hero design brief written as a build prompt and as an image prompt, plus the concept mockup |
 
 ## Things worth knowing before you edit
@@ -193,11 +197,9 @@ Copy-Item public\Gurwinder-Singh-Resume.pdf "C:\Users\Lenovo\Desktop\Gurwinder S
 - **Contact form:** `data-endpoint=""` means it opens the visitor's mail app pre-filled to
   `data-mailto`. Set `data-endpoint="https://…"` to POST real submissions instead. If you
   do, update `privacy.html` section 1.
-- **Before publishing**, fill in the two placeholders that are still marked in the text
-  itself:
-  - `<HOSTING PROVIDER>` in `privacy.html` section 5 — name whoever serves the files and
-    check their log-retention period.
-  - Governing law in `terms.html` section 9 is currently set to India / courts of New Delhi.
+- The privacy policy names Vercel and GitHub Pages and does not guess their log-retention
+  periods; those depend on each provider's current operational policy. Terms section 9
+  specifies India / courts of New Delhi.
 
 ### Privacy claims must stay true
 
@@ -205,13 +207,17 @@ The site sets no cookies and loads no analytics; the only third-party request is
 Fonts. If you add a tracker or connect the form to a backend, add a consent banner and
 update `privacy.html` first — otherwise the policy becomes untrue.
 
-### Still to verify
+### Verification limits
 
-None outstanding. The LinkedIn slug that used to read
-`gurwinder-undefined-583937437` (a JavaScript interpolation bug baked into the
-data, so it always 404ed) has been replaced with the real profile,
-`linkedin.com/in/gurwinder07`, in `index.html` and in `profile.linkedin` in
-`portfolio.ts`. `npm run check` fails if a placeholder slug reappears.
+`npm run check` covers source-level security, metadata, local links and crawlability;
+it does not prove the deployed DNS, TLS, response headers, exposed ports, reputation,
+or Lighthouse scores. Those are live-host checks and can change after deploy. Use
+Web-Check against the deployed Vercel URL to verify them after publishing. This session
+could fetch the live page, but could not run Web-Check's authenticated/API-backed full
+scan, so no live security grade or Lighthouse score is claimed.
+
+The LinkedIn slug that used to read `gurwinder-undefined-583937437` has been replaced
+with `linkedin.com/in/gurwinder07`; `npm run check` fails if a placeholder reappears.
 
 ## Browser support
 
